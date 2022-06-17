@@ -1,5 +1,6 @@
 .babelrc
 .husky/
+.vscode/
 .eslintignore
 .eslintrc.js
 .github/

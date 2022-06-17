@@ -14,14 +14,4 @@ module.exports = {
   globals: {
     testRule: true,
   },
-  rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        printWidth: 100,
-        singleQuote: true,
-        trailingComma: 'es5',
-      },
-    ],
-  },
 };
