@@ -14,7 +14,7 @@ Why? [Because](https://www.w3.org/TR/2008/REC-WCAG20-20081211/#navigation-mechan
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 .foo:focus {

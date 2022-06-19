@@ -15,7 +15,7 @@ The `--fix` option on the command line can automatically fix all of the problems
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 a:hover {

@@ -10,7 +10,7 @@ Sources that will help you do without `{ display: none; }` and hide the content:
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 .foo {

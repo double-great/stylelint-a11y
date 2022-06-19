@@ -11,7 +11,7 @@ Disallow CSS generated content except aria-label attribute content and empty str
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 .foo::before {

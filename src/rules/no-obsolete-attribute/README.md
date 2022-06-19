@@ -12,7 +12,7 @@ Disallow obsolete attribute using.
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 body[link] {

@@ -11,7 +11,7 @@ Disallow `{ text-align: justify; }` anywhere.
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 .foo {

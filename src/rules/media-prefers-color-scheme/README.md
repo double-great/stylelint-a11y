@@ -14,7 +14,7 @@ Require implementation of certain styles for selectors with colors.
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 .foo {

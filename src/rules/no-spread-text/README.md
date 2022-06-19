@@ -13,7 +13,7 @@ Require width of text greater than 45 characters and less than 80 characters.
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 .foo {

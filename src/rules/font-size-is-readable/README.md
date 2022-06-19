@@ -11,7 +11,7 @@ Disallow font sizes less than 15px (or 11.25pt).
 
 ### true
 
-The following pattern are considered violations:
+The following pattern is considered a violation:
 
 ```css
 .foo {
