@@ -1,9 +1,9 @@
-import { utils } from 'stylelint';
-import { parse } from 'postcss';
+import isCustomSelector from 'stylelint/lib/utils/isCustomSelector';
+import isStandardSyntaxAtRule from 'stylelint/lib/utils/isStandardSyntaxAtRule';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
 import isStandardSyntaxSelector from 'stylelint/lib/utils/isStandardSyntaxSelector';
-import isStandardSyntaxAtRule from 'stylelint/lib/utils/isStandardSyntaxAtRule';
-import isCustomSelector from 'stylelint/lib/utils/isCustomSelector';
+import { parse } from 'postcss';
+import { utils } from 'stylelint';
 
 export const ruleName = 'a11y/media-prefers-reduced-motion';
 
@@ -15,9 +15,12 @@ const targetProperties = ['transition', 'animation', 'animation-name'];
 function checkChildrenNodes(childrenNodes, currentSelector, parentNode) {
   return childrenNodes.some((declaration) => {
     const index = targetProperties.indexOf(declaration.prop);
+
     if (currentSelector === 'animation-name' && targetProperties[index] === 'animation')
       return true;
+
     if (currentSelector !== targetProperties[index]) return false;
+
     if (declaration.value !== 'none') return false;
 
     return index >= 0 && parentNode.params.indexOf('prefers-reduced-motion') >= 0;
@@ -44,7 +47,9 @@ function check(selector, node) {
   const declarationsIsMatched = declarations.some((declaration) => {
     const noMatchedParams = !params || params.indexOf('prefers-reduced-motion') === -1;
     const index = targetProperties.indexOf(declaration.prop);
+
     currentSelector = targetProperties[index];
+
     if (targetProperties.indexOf(declaration.prop) >= 0 && declaration.value === 'none') {
       return false;
     }
@@ -56,7 +61,8 @@ function check(selector, node) {
 
   if (declarationsIsMatched) {
     const parentMatchedNode = parentNodes.some((parentNode) => {
-      if (!parentNode || !parentNode.nodes) return;
+      if (!parentNode || !parentNode.nodes) return false;
+
       return parentNode.nodes.some((childrenNode) => {
         const childrenNodes = childrenNode.nodes;
 
@@ -66,9 +72,12 @@ function check(selector, node) {
         ) {
           return childrenNodes.some((declaration) => {
             const index = targetProperties.indexOf(declaration.prop);
+
             if (currentSelector === 'animation-name' && targetProperties[index] === 'animation')
               return true;
+
             if (currentSelector !== targetProperties[index]) return false;
+
             if (declaration.value !== 'none') return false;
 
             return index >= 0;
@@ -127,10 +136,12 @@ export default function (actual, _, context) {
 
       if (context.fix && !isAccepted) {
         const media = parse('@media screen and (prefers-reduced-motion: reduce) {}');
+
         media.nodes.forEach((o) => {
           o.raws.after = '\n';
         });
         const cloneRule = node.clone();
+
         cloneRule.raws = {
           ...cloneRule.raws,
           before: '\n',
@@ -141,12 +152,14 @@ export default function (actual, _, context) {
           if (o.prop === 'animation-name') {
             o.prop = 'animation';
           }
+
           if (targetProperties.indexOf(o.prop) >= 0) {
             o.value = 'none';
           }
         });
         media.first.append(cloneRule);
         node.before(media);
+
         return;
       }
 

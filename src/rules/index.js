@@ -1,6 +1,7 @@
 import contentPropertyNoStaticValue from './content-property-no-static-value';
 import fontSizeIsReadable from './font-size-is-readable';
 import lineHeightIsVerticalRhythmed from './line-height-is-vertical-rhythmed';
+import mediaPrefersColorScheme from './media-prefers-color-scheme';
 import mediaPrefersReducedMotion from './media-prefers-reduced-motion';
 import noDisplayNone from './no-display-none';
 import noObsoleteAttribute from './no-obsolete-attribute';
@@ -9,7 +10,6 @@ import noOutlineNone from './no-outline-none';
 import noSpreadText from './no-spread-text';
 import noTextAlignJustify from './no-text-align-justify';
 import selectorPseudoClassFocus from './selector-pseudo-class-focus';
-import mediaPrefersColorScheme from './media-prefers-color-scheme';
 
 export default {
   'content-property-no-static-value': contentPropertyNoStaticValue,

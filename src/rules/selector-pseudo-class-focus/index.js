@@ -1,5 +1,5 @@
-import { utils } from 'stylelint';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
+import { utils } from 'stylelint';
 
 const deepFlatten = (arr) => [].concat(...arr.map((v) => (Array.isArray(v) ? deepFlatten(v) : v)));
 
@@ -9,10 +9,13 @@ export const messages = utils.ruleMessages(ruleName, {
   expected: (value) => `Expected that ${value} is used together with :focus pseudo-class`,
 });
 
-function hasAlready(parent, repalcedSelector, selector) {
-  const nodes = parent.nodes.map((i) => {
-    if (i.type === 'rule') return i.selectors;
-  });
+function hasAlready(parent, replacedSelector, selector) {
+  const nodes = parent.nodes.reduce((arr, i) => {
+    if (i.type === 'rule') arr.push(i.selectors);
+
+    return arr;
+  }, []);
+
   const hoveredSelector = selector
     .split(',')
     .filter((o) => o.match(/:hover/gi))
@@ -20,10 +23,11 @@ function hasAlready(parent, repalcedSelector, selector) {
   const returned = hoveredSelector.some((o) => {
     return deepFlatten(nodes).indexOf(o.replace(/:hover/gi, ':focus')) >= 0;
   });
+
   if (returned) return true;
 
   return parent.nodes.some((i) => {
-    return i.type === 'rule' && i.selectors.indexOf(repalcedSelector) !== -1;
+    return i.type === 'rule' && i.selectors.indexOf(replacedSelector) !== -1;
   });
 }
 
@@ -68,6 +72,7 @@ export default function (actual, _, context) {
             node.selector = `${node.selector}, ${node.selector.replace(/:hover/g, ':focus')}`;
           }
         });
+
         return;
       }
 

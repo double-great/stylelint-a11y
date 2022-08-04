@@ -1,5 +1,5 @@
-import { utils } from 'stylelint';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
+import { utils } from 'stylelint';
 
 export const ruleName = 'a11y/no-text-align-justify';
 
@@ -35,6 +35,7 @@ export default function (actual) {
         if (!isStandardSyntaxRule(node)) {
           return;
         }
+
         selector = node.selector;
       } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
         selector = node.params;

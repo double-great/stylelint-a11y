@@ -1,4 +1,4 @@
-import { ruleName, messages } from '../index';
+import { messages, ruleName } from '../index';
 
 testRule({
   ruleName,

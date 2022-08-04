@@ -1,8 +1,9 @@
-import { utils } from 'stylelint';
+import isCustomSelector from 'stylelint/lib/utils/isCustomSelector';
+import isStandardSyntaxAtRule from 'stylelint/lib/utils/isStandardSyntaxAtRule';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
 import isStandardSyntaxSelector from 'stylelint/lib/utils/isStandardSyntaxSelector';
-import isStandardSyntaxAtRule from 'stylelint/lib/utils/isStandardSyntaxAtRule';
-import isCustomSelector from 'stylelint/lib/utils/isCustomSelector';
+
+import { utils } from 'stylelint';
 
 export const ruleName = 'a11y/media-prefers-color-scheme';
 
@@ -31,6 +32,7 @@ function check(selector, node) {
   const declarationsIsMatched = declarations.some((declaration) => {
     const noMatchedParams = !params || params.indexOf('prefers-color-scheme') === -1;
     const index = targetProperties.indexOf(declaration.prop);
+
     currentSelector = targetProperties[index];
 
     return index >= 0 && noMatchedParams;
@@ -40,7 +42,8 @@ function check(selector, node) {
 
   if (declarationsIsMatched) {
     const parentMatchedNode = parentNodes.some((parentNode) => {
-      if (!parentNode || !parentNode.nodes) return;
+      if (!parentNode || !parentNode.nodes) return false;
+
       return parentNode.nodes.some((childrenNode) => {
         const childrenNodes = childrenNode.nodes;
 
@@ -53,6 +56,7 @@ function check(selector, node) {
 
         const matchedChildrenNodes = childrenNodes.some((declaration) => {
           const index = targetProperties.indexOf(declaration.prop);
+
           if (currentSelector !== targetProperties[index]) return false;
 
           return index >= 0 && parentNode.params.indexOf('prefers-color-scheme') >= 0;

@@ -1,5 +1,5 @@
-import { utils } from 'stylelint';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
+import { utils } from 'stylelint';
 
 export const ruleName = 'a11y/content-property-no-static-value';
 
@@ -13,7 +13,7 @@ const isContentPropertyUsedCorrectly = (selectors) =>
   });
 
 const checkNodesForContentProperty = (node) =>
-  node.nodes.filter((node) => node.prop).some((node) => node.prop.toLowerCase() === 'content');
+  node.nodes.filter((n) => n.prop).some((n) => n.prop.toLowerCase() === 'content');
 
 function check(node) {
   if (node.type !== 'rule' || !checkNodesForContentProperty(node) || !node.first) {
@@ -47,6 +47,7 @@ export default function (actual) {
         if (!isStandardSyntaxRule(node)) {
           return;
         }
+
         selector = node.selector;
       } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
         selector = node.params;

@@ -13,7 +13,7 @@ module.exports = {
       statements: 75,
     },
   },
-  setupFiles: ['./jest.setup.js'],
+  setupFiles: ['./jest.setup.cjs'],
   testEnvironment: 'node',
   roots: ['src'],
   testRegex: '.*\\.test\\.js$|src/.*/__tests__/.*\\.js$',
