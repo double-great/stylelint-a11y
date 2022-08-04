@@ -32,3 +32,21 @@ The following patterns are _not_ considered violations:
   font-size: 1em;
 }
 ```
+
+## Optional secondary options
+
+### `thresholdInPixels: number`
+
+Given:
+
+```
+16
+```
+
+The following pattern is considered a violation:
+
+```css
+.foo {
+  font-size: 15px;
+}
+```
