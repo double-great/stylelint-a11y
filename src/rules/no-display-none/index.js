@@ -18,7 +18,7 @@ function check(selector, node) {
   );
 }
 
-export default function (actual) {
+export default function noDisplayNone(actual) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

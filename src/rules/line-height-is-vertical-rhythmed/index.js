@@ -21,7 +21,7 @@ function check(node) {
   );
 }
 
-export default function (actual) {
+export default function lineHeightIsVerticalRhythmed(actual) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

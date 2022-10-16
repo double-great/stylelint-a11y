@@ -28,7 +28,7 @@ const nodesProbablyForText = (nodes) =>
     .map((prop) => prop.toLowerCase())
     .some((prop) => textStyles.includes(prop));
 
-export default function (actual) {
+export default function noSpreadText(actual) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

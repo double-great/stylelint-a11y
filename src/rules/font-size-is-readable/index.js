@@ -14,7 +14,7 @@ const checkInPx = (value, THRESHOLD_IN_PX) =>
 const checkInPt = (value, THRESHOLD_IN_PX) =>
   value.toLowerCase().endsWith('pt') && parseFloat(value) < pxToPt(THRESHOLD_IN_PX);
 
-export default function (actual, options) {
+export default function fontSizeIsReadable(actual, options) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

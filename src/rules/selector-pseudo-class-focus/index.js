@@ -31,7 +31,7 @@ function hasAlready(parent, replacedSelector, selector) {
   });
 }
 
-export default function (actual, _, context) {
+export default function selectorPseudoClassFocus(actual, _, context) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

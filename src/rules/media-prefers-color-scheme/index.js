@@ -74,7 +74,7 @@ function check(selector, node) {
   return true;
 }
 
-export default function (actual) {
+export default function mediaPrefersColorScheme(actual) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

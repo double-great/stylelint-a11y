@@ -36,7 +36,7 @@ function check(selector, node) {
   return true;
 }
 
-export default function (actual) {
+export default function noOutlineNone(actual) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

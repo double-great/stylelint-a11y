@@ -103,7 +103,7 @@ function check(selector, node) {
   return true;
 }
 
-export default function (actual, _, context) {
+export default function mediaPrefersReducedMotion(actual, _, context) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 

@@ -20,7 +20,7 @@ function check(node) {
   );
 }
 
-export default function (actual) {
+export default function noTextAlignJustify(actual) {
   return (root, result) => {
     const validOptions = utils.validateOptions(result, ruleName, { actual });
 
