@@ -44,7 +44,7 @@
     "@babel/preset-env": "^7.20.2",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-config-stylelint": "^17.1.0",
+    "eslint-config-stylelint": "^18.0.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
