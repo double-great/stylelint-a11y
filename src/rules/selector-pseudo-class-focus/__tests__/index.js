@@ -1,4 +1,4 @@
-import { messages, ruleName } from '../index'; // eslint-disable-line
+import { messages, ruleName } from '../index.js'; // eslint-disable-line
 
 testRule({
   ruleName,

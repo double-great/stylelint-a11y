@@ -1,13 +1,16 @@
-import isCustomSelector from 'stylelint/lib/utils/isCustomSelector';
-import isStandardSyntaxAtRule from 'stylelint/lib/utils/isStandardSyntaxAtRule';
-import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
-import isStandardSyntaxSelector from 'stylelint/lib/utils/isStandardSyntaxSelector';
+import isCustomSelector from 'stylelint/lib/utils/isCustomSelector.mjs';
+import isStandardSyntaxAtRule from 'stylelint/lib/utils/isStandardSyntaxAtRule.mjs';
+import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxAtRule.mjs';
+import isStandardSyntaxSelector from 'stylelint/lib/utils/isStandardSyntaxSelector.mjs';
 import { parse } from 'postcss';
-import { utils } from 'stylelint';
+import stylelint from 'stylelint';
+const {
+  utils: { report, ruleMessages, validateOptions },
+} = stylelint;
 
 export const ruleName = 'a11y/media-prefers-reduced-motion';
 
-export const messages = utils.ruleMessages(ruleName, {
+export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected ${selector} is used with @media (prefers-reduced-motion)`,
 });
 const targetProperties = ['transition', 'animation', 'animation-name'];
@@ -105,7 +108,7 @@ function check(selector, node) {
 
 export default function mediaPrefersReducedMotion(actual, _, context) {
   return (root, result) => {
-    const validOptions = utils.validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(result, ruleName, { actual });
 
     if (!validOptions || !actual) {
       return;
@@ -164,7 +167,7 @@ export default function mediaPrefersReducedMotion(actual, _, context) {
       }
 
       if (!isAccepted) {
-        utils.report({
+        report({
           index: node.lastEach,
           message: messages.expected(selector),
           node,

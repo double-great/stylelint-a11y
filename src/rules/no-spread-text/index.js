@@ -1,9 +1,12 @@
-import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
-import { utils } from 'stylelint';
+import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxAtRule.mjs';
+import stylelint from 'stylelint';
+const {
+  utils: { report, ruleMessages, validateOptions },
+} = stylelint;
 
 export const ruleName = 'a11y/no-spread-text';
 
-export const messages = utils.ruleMessages(ruleName, {
+export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Unexpected max-width in ${selector}`,
 });
 
@@ -30,7 +33,7 @@ const nodesProbablyForText = (nodes) =>
 
 export default function noSpreadText(actual) {
   return (root, result) => {
-    const validOptions = utils.validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(result, ruleName, { actual });
 
     if (!validOptions || !actual) {
       return;
@@ -61,7 +64,7 @@ export default function noSpreadText(actual) {
         });
 
       if (isRejected) {
-        utils.report({
+        report({
           index: rule.lastEach,
           message: messages.expected(selector),
           node: rule,

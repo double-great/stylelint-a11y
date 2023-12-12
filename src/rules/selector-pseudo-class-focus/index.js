@@ -1,11 +1,14 @@
-import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
-import { utils } from 'stylelint';
+import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxAtRule.mjs';
+import stylelint from 'stylelint';
+const {
+  utils: { report, ruleMessages, validateOptions },
+} = stylelint;
 
 const deepFlatten = (arr) => [].concat(...arr.map((v) => (Array.isArray(v) ? deepFlatten(v) : v)));
 
 export const ruleName = 'a11y/selector-pseudo-class-focus';
 
-export const messages = utils.ruleMessages(ruleName, {
+export const messages = ruleMessages(ruleName, {
   expected: (value) => `Expected that ${value} is used together with :focus pseudo-class`,
 });
 
@@ -33,7 +36,7 @@ function hasAlready(parent, replacedSelector, selector) {
 
 export default function selectorPseudoClassFocus(actual, _, context) {
   return (root, result) => {
-    const validOptions = utils.validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(result, ruleName, { actual });
 
     if (!validOptions || !actual) {
       return;
@@ -77,7 +80,7 @@ export default function selectorPseudoClassFocus(actual, _, context) {
       }
 
       if (!isAccepted) {
-        utils.report({
+        report({
           index: rule.lastEach,
           message: messages.expected(selector),
           node: rule,

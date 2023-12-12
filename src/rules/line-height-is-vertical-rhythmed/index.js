@@ -1,9 +1,12 @@
-import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
-import { utils } from 'stylelint';
+import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxAtRule.mjs';
+import stylelint from 'stylelint';
+const {
+  utils: { report, ruleMessages, validateOptions },
+} = stylelint;
 
 export const ruleName = 'a11y/line-height-is-vertical-rhythmed';
 
-export const messages = utils.ruleMessages(ruleName, {
+export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected a vertical rhythmed line-height in ${selector}`,
 });
 
@@ -23,7 +26,7 @@ function check(node) {
 
 export default function lineHeightIsVerticalRhythmed(actual) {
   return (root, result) => {
-    const validOptions = utils.validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(result, ruleName, { actual });
 
     if (!validOptions || !actual) {
       return;
@@ -49,7 +52,7 @@ export default function lineHeightIsVerticalRhythmed(actual) {
       const isAccepted = check(node);
 
       if (!isAccepted) {
-        utils.report({
+        report({
           index: node.lastEach,
           message: messages.expected(selector),
           node,

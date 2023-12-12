@@ -1,5 +1,8 @@
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   preset: 'jest-preset-stylelint',
+  setupFiles: ['<rootDir>/jest.setup.js'],
+  runner: 'jest-light-runner',
   clearMocks: true,
   collectCoverage: false,
   collectCoverageFrom: ['src/**/*.js'],
@@ -13,8 +16,10 @@ module.exports = {
       statements: 75,
     },
   },
-  setupFiles: ['./jest.setup.cjs'],
   testEnvironment: 'node',
   roots: ['src'],
   testRegex: '.*\\.test\\.js$|src/.*/__tests__/.*\\.js$',
+  transform: {},
 };
+
+export default config;

@@ -1,9 +1,12 @@
-import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule';
-import { utils } from 'stylelint';
+import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxAtRule.mjs';
+import stylelint from 'stylelint';
+const {
+  utils: { report, ruleMessages, validateOptions },
+} = stylelint;
 
 export const ruleName = 'a11y/font-size-is-readable';
 
-export const messages = utils.ruleMessages(ruleName, {
+export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected a larger font-size in ${selector}`,
 });
 
@@ -16,7 +19,7 @@ const checkInPt = (value, THRESHOLD_IN_PX) =>
 
 export default function fontSizeIsReadable(actual, options) {
   return (root, result) => {
-    const validOptions = utils.validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(result, ruleName, { actual });
 
     if (!validOptions || !actual) {
       return;
@@ -46,7 +49,7 @@ export default function fontSizeIsReadable(actual, options) {
       });
 
       if (isRejected) {
-        utils.report({
+        report({
           index: rule.lastEach,
           message: messages.expected(selector),
           node: rule,
