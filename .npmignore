@@ -7,5 +7,4 @@
 babel.config.json
 jest.config.js
 jest.setup.js
-src
 **/__tests__/*
