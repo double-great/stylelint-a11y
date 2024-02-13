@@ -27,6 +27,5 @@ export const obsoleteElements = new Set([
   'spacer',
   'tt',
   'keygen',
-  'menu',
   'menuitem',
 ]);
