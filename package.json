@@ -4,8 +4,8 @@
   "description": "Plugin for stylelint with a11y rules",
   "main": "src/index.js",
   "type": "module",
-  "exports":{
-    "." : "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
     "./recommended": "./recommended.js"
   },
   "repository": {
