@@ -53,6 +53,7 @@ export default function noTextAlignJustify(actual) {
       if (!isAccepted) {
         report({
           index: node.lastEach,
+          endIndex: node.lastEach,
           message: messages.expected(selector),
           node,
           ruleName,

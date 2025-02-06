@@ -68,6 +68,7 @@ export default function noOutlineNone(actual) {
       if (!isAccepted) {
         report({
           index: node.lastEach,
+          endIndex: node.lastEach,
           message: messages.expected(selector),
           node,
           ruleName,
