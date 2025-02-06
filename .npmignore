@@ -8,3 +8,4 @@ babel.config.json
 jest.config.js
 jest.setup.js
 **/__tests__/*
+.coverage
