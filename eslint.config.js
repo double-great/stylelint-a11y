@@ -1,5 +1,6 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
+import stylelintConfig from 'eslint-config-stylelint';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -12,4 +13,5 @@ export default [
     },
   },
   pluginJs.configs.recommended,
+  ...stylelintConfig,
 ];

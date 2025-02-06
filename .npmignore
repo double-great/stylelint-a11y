@@ -1,10 +1,6 @@
-.babelrc
-.husky/
 .vscode/
-.eslintignore
-.eslintrc.cjs
+eslint.config.js
 .github/
-babel.config.json
 jest.config.js
 jest.setup.js
 **/__tests__/*
