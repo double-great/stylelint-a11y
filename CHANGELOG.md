@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Large codebase performance testing
 - CLI integration tests with full stylelint compatibility
 - Development documentation in README
+- Pull request template for consistent PR descriptions
 
 ### Changed
 
