@@ -15,19 +15,19 @@ testRule({
       code: 'body[link] { color: pink; }',
       message: messages.expected('body[link]'),
       line: 1,
-      column: 3,
+      column: 1,
     },
     {
       code: 'a, img[datasrc] { color: pink; }',
       message: messages.expected('a, img[datasrc]'),
       line: 1,
-      column: 3,
+      column: 1,
     },
     {
       code: 'img[align], a[name] { color: pink; }',
       message: messages.expected('img[align], a[name]'),
       line: 1,
-      column: 3,
+      column: 1,
     },
   ],
 });
