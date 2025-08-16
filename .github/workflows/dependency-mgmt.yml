@@ -2,6 +2,8 @@ name: NPM dependency update
 
 on:
   workflow_dispatch: # enable run button in GitHub UI
+  schedule:
+    - cron: '0 0 1,15 * *' # run twice a month at midnight (UTC)
 
 jobs:
   update:
@@ -22,7 +24,7 @@ jobs:
         run: npx npm-check-updates -u
       - name: Install dependencies, build, and test
         run: npm install
-      - name: Build site
+      - name: Run tests
         run: npm run test
       - name: Remove git hooks (Husky)
         run: rm -rf .git/hooks
