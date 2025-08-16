@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced ESLint configuration for E2E tests
 - Updated actions/checkout from v4 to v5 (#77)
 
+### Fixed
+
+- Fixed `media-prefers-reduced-motion` rule incorrectly adding duplicate media queries when `prefers-reduced-motion` is already nested inside another media query (#66)
+
 ### Developer Experience
 
 - Added npm scripts for granular test execution (`test:unit`, `test:integration`, `test:e2e`, `test:all`)

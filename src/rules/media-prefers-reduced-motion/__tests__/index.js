@@ -24,6 +24,14 @@ testRule({
     {
       code: '.foo { transition: all; @media (prefers-reduced-motion: reduce) { transition: none; } }',
     },
+    {
+      code: '@media (hover: hover) { &:hover, &:focus { background-color: blue; transition: all 0.15s; } @media screen and (prefers-reduced-motion: reduce) { &:hover, &:focus { background-color: blue; transition: none; } } }',
+      description: 'accepts nested media query with prefers-reduced-motion already present',
+    },
+    {
+      code: '@mixin safe-hover { @media (hover: hover) { &:hover { transition: all 0.15s; } @media screen and (prefers-reduced-motion: reduce) { &:hover { transition: none; } } } }',
+      description: 'accepts SCSS mixin with nested media query already present',
+    },
   ],
 
   reject: [
@@ -50,6 +58,13 @@ testRule({
       message: messages.expected('.foo'),
       line: 1,
       column: 1,
+    },
+    {
+      code: '@media (hover: hover) { &:hover { transition: all 0.15s; } }',
+      fixed:
+        '@media (hover: hover) { &:hover { transition: all 0.15s;@media screen and (prefers-reduced-motion: reduce) {\n&:hover { transition: none;\n}\n} } }',
+      message: messages.expected('&:hover'),
+      description: 'should add prefers-reduced-motion when not present in nested media query',
     },
   ],
 });
