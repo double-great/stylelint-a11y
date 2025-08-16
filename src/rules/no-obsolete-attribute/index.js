@@ -1,5 +1,7 @@
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
+
 import { obsoleteAttributes } from './obsoleteAttributes.js';
+
 import stylelint from 'stylelint';
 const {
   utils: { report, ruleMessages, validateOptions },
