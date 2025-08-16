@@ -2,6 +2,8 @@
 
 ## Installation and usage
 
+This plugin requires Stylelint 16.0.0 or higher.
+
 ```bash
 npm i --save-dev stylelint @double-great/stylelint-a11y
 ```
