@@ -51,20 +51,3 @@ This shareable config contains the following:
 ```
 
 Since it adds stylelint-a11y to `plugins`, you don't have to do this yourself when extending this config.
-
-## Help out
-
-There work on the plugin's rules is still in progress, so if you feel like it, you're welcome to help out in any of these (the plugin follows stylelint guidelines so most part of this is based on its docs):
-
-- Create, enhance, and debug rules (see stylelint's guide to "[Working on rules](https://github.com/stylelint/stylelint/blob/main/docs/developer-guide/rules.md)").
-- Improve documentation.
-- Chime in on any open issue or pull request.
-- Open new issues about your ideas on new rules, or for how to improve the existing ones, and pull requests to show us how your idea works.
-- Add new tests to absolutely anything.
-- Work on improving performance of rules.
-- Contribute to [stylelint](https://github.com/stylelint/stylelint)
-- Spread the word.
-
-We communicate via [issues](https://github.com/double-great/stylelint-a11y/issues) and [pull requests](https://github.com/double-great/stylelint-a11y/pulls).
-
-There is also [stackoverflow](https://stackoverflow.com/questions/tagged/stylelint), which would be the preferred QA forum.
