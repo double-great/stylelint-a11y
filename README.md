@@ -51,3 +51,32 @@ This shareable config contains the following:
 ```
 
 Since it adds stylelint-a11y to `plugins`, you don't have to do this yourself when extending this config.
+
+## Development
+
+### Testing
+
+Run tests with the following commands:
+
+- `npm run test` - Run unit tests for all rules
+- `npm run test:unit` - Run unit tests only
+- `npm run test:integration` - Run integration tests
+- `npm run test:e2e` - Run end-to-end tests with real projects
+- `npm run test:performance` - Run performance benchmarks
+- `npm run test:all` - Run complete test suite
+
+### Testing Infrastructure
+
+This project includes testing at a few levels:
+
+- **Unit tests** - Individual rule functionality
+- **Integration tests** - Plugin integration with stylelint
+- **E2E tests** - Real-world project testing with intentional violations
+- **Performance tests** - Benchmark testing for large codebases
+
+### Other Commands
+
+- `npm run lint` - Run ESLint
+- `npm run format:check` - Check code formatting
+- `npm run format:fix` - Fix code formatting
+- `npm run coverage` - Run tests with coverage report
