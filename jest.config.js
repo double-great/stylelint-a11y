@@ -17,8 +17,8 @@ const config = {
     },
   },
   testEnvironment: 'node',
-  roots: ['src'],
-  testRegex: '.*\\.test\\.js$|src/.*/__tests__/.*\\.js$',
+  roots: ['src', 'test'],
+  testRegex: '.*\\.test\\.js$|src/.*/__tests__/.*\\.js$|test/.*/.*\\.test\\.js$',
   transform: {},
 };
 
