@@ -1,7 +1,7 @@
 name: Test
 
 on:
-  workflow_dispatch: # enable run button on github.com
+  workflow_dispatch: # enable run button in GitHub UI
   pull_request: # run on all pull requests
   push:
     branches: [main]
