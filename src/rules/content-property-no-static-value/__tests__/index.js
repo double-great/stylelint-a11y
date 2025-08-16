@@ -30,19 +30,19 @@ testRule({
       code: '.foo::before { content: "bar"; }',
       message: messages.expected('.foo::before'),
       line: 1,
-      column: 3,
+      column: 1,
     },
     {
       code: '.bar::before { content: 23; }',
       message: messages.expected('.bar::before'),
       line: 1,
-      column: 3,
+      column: 1,
     },
     {
       code: ".foo:before, .bar { content: ''; }",
       message: messages.expected('.foo:before, .bar'),
       line: 1,
-      column: 3,
+      column: 1,
     },
   ],
 });

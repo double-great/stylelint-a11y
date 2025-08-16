@@ -15,7 +15,7 @@ testRule({
       code: '.foo { display: none; }',
       message: messages.expected('.foo'),
       line: 1,
-      column: 3,
+      column: 1,
     },
   ],
 });

@@ -1,21 +1,38 @@
 name: Test
 
 on:
-  pull_request:
+  workflow_dispatch: # enable run button on github.com
+  pull_request: # run on all pull requests
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 0' # run weekly on Sunday at midnight (UTC)
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-npm:
-    name: Run NPM install and test
+  build:
+    name: Build and Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 'lts/*'
           cache: 'npm'
-      - name: Test
-        run: |
-          node -v
-          npm -v
-          npm ci
-          npm run test
+          cache-dependency-path: './package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test

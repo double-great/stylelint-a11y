@@ -30,13 +30,13 @@ testRule({
       code: '.foo { text-transform: lowercase; max-width: 40ch; }',
       message: messages.expected('.foo'),
       line: 1,
-      column: 3,
+      column: 1,
     },
     {
       code: '.bar { LINE-HEIGHT: 1.8; MAX-WIDTH: 81CH; }',
       message: messages.expected('.bar'),
       line: 1,
-      column: 3,
+      column: 1,
     },
   ],
 });
