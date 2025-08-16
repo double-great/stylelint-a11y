@@ -29,6 +29,9 @@
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "test": "jest",
+    "test:unit": "jest src",
+    "test:integration": "jest --config jest.config.integration.js",
+    "test:all": "jest",
     "coverage": "jest --coverage"
   },
   "prettier": {
