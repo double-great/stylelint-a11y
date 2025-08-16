@@ -28,11 +28,14 @@
     "pretest": "npm run lint && npm run format:check",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "test": "jest",
-    "test:unit": "jest src",
-    "test:integration": "jest --config jest.config.integration.js",
-    "test:all": "jest",
-    "coverage": "jest --coverage"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js src",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js test/integration",
+    "test:e2e": "node --experimental-vm-modules node_modules/jest/bin/jest.js test/e2e",
+    "test:performance": "node --experimental-vm-modules node_modules/jest/bin/jest.js test/e2e/performance.test.js",
+    "test:all": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "coverage:all": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
   },
   "prettier": {
     "printWidth": 100,
@@ -51,6 +54,7 @@
     "jest": "^30.0.5",
     "jest-light-runner": "^0.7.9",
     "jest-preset-stylelint": "^8.0.0",
+    "postcss-scss": "^4.0.9",
     "prettier": "^3.6.2",
     "stylelint": "^16.23.1"
   },

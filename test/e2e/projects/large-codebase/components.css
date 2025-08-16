@@ -1,0 +1,329 @@
+/* Large codebase test - Components */
+
+/* Button Components */
+.btn {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0;
+  font-size: 11px; /* Should trigger a11y/font-size-is-readable */
+  font-weight: 400;
+  line-height: 1.1; /* Should trigger a11y/line-height-is-vertical-rhythmed */
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  text-decoration: none;
+}
+
+.btn:focus {
+  outline: none; /* Should trigger a11y/no-outline-none */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn:hover {
+  text-decoration: none; /* Should trigger a11y/selector-pseudo-class-focus */
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+.btn-info {
+  background-color: #17a2b8;
+  color: #fff;
+}
+.btn-light {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+.btn-dark {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 10px;
+} /* Should trigger a11y/font-size-is-readable */
+.btn-lg {
+  padding: 0.5rem 1rem;
+  font-size: 16px;
+}
+
+/* Card Components */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 1.25rem;
+  line-height: 1; /* Should trigger a11y/line-height-is-vertical-rhythmed */
+}
+
+.card-title {
+  margin-bottom: 0.75rem;
+  font-size: 9px; /* Should trigger a11y/font-size-is-readable */
+}
+
+.card-text {
+  text-align: justify; /* Should trigger a11y/no-text-align-justify */
+}
+
+.card-link:hover {
+  text-decoration: none; /* Should trigger a11y/selector-pseudo-class-focus */
+}
+
+/* Modal Components */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  outline: 0;
+  animation: fadeIn 0.15s linear; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 0.5rem;
+  pointer-events: none;
+  animation: slideDown 0.3s ease-out; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  line-height: 1;
+  font-size: 8px; /* Should trigger a11y/font-size-is-readable */
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+/* Form Components */
+.form-control {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 10px; /* Should trigger a11y/font-size-is-readable */
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0; /* Should trigger a11y/no-outline-none */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Navigation Components */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 12px;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+.nav-link:hover {
+  color: #0056b3; /* Should trigger a11y/selector-pseudo-class-focus */
+  text-decoration: none;
+}
+
+.nav-link.disabled {
+  color: #6c757d;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Utility Classes */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  display: none; /* Should trigger a11y/no-display-none */
+}
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+} /* Should trigger a11y/no-text-align-justify */
+
+.font-weight-bold {
+  font-weight: 700;
+}
+.font-weight-normal {
+  font-weight: 400;
+}
+.font-weight-light {
+  font-weight: 300;
+}
+
+.text-xs {
+  font-size: 8px;
+} /* Should trigger a11y/font-size-is-readable */
+.text-sm {
+  font-size: 10px;
+} /* Should trigger a11y/font-size-is-readable */
+.text-base {
+  font-size: 14px;
+}
+.text-lg {
+  font-size: 18px;
+}
+.text-xl {
+  font-size: 20px;
+}
+
+/* Animation Classes */
+.fade {
+  transition: opacity 0.15s linear; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+.slide {
+  animation: slide 0.5s ease-in-out; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+.bounce {
+  animation: bounce 1s infinite; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}

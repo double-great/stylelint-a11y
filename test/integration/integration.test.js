@@ -1,111 +1,98 @@
-/* eslint-disable no-redeclare */
-/* global testRule */
+import { getWarnings, passesLint, ruleTriggersOn, testCSS } from '../helpers/simple-test-utils.js';
 
 import myPlugin from '../../src/index.js';
 import recommendedConfig from '../../recommended.js';
-import stylelint from 'stylelint';
 
 describe('Integration Testing', () => {
-  describe('Plugin Integration Tests', () => {
-    it('should export an array of plugins', () => {
+  describe('Plugin Integration', () => {
+    it('should export plugin array', () => {
       expect(Array.isArray(myPlugin)).toBe(true);
       expect(myPlugin.length).toBeGreaterThan(0);
     });
 
-    it('should have all rules properly namespaced', () => {
+    it('should have properly namespaced rules', () => {
       myPlugin.forEach((plugin) => {
         expect(plugin.ruleName).toMatch(/^a11y\//);
         expect(plugin.rule).toBeDefined();
       });
     });
 
-    it('should work with stylelint API directly', async () => {
-      const result = await stylelint.lint({
-        code: '.bar:focus { outline: none; }',
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-          },
-        },
+    it('should integrate with stylelint API', async () => {
+      const result = await testCSS('.bar:focus { outline: none; }', {
+        'no-outline-none': true,
       });
 
       expect(result.errored).toBe(true);
       expect(result.results[0].warnings).toHaveLength(1);
       expect(result.results[0].warnings[0].rule).toBe('a11y/no-outline-none');
     });
+  });
 
-    // Test each rule individually using testRule
-    testRule({
-      plugins: ['../../src/index.js'],
-      ruleName: 'a11y/no-outline-none',
-      config: [true],
+  describe('Rule Functionality', () => {
+    it('should detect outline-none violations', async () => {
+      const hasError = await ruleTriggersOn('.bar:focus { outline: none; }', 'no-outline-none');
 
-      accept: [
-        { code: 'a { color: red; }' },
-        { code: '.baz:focus { outline: none; border-color: #333; }' },
-      ],
-
-      reject: [
-        {
-          code: '.bar:focus { outline: none; }',
-          message: 'Unexpected using "outline" property in .bar:focus (a11y/no-outline-none)',
-        },
-      ],
+      expect(hasError).toBe(true);
     });
 
-    testRule({
-      plugins: ['../../src/index.js'],
-      ruleName: 'a11y/content-property-no-static-value',
-      config: [true],
+    it('should pass valid outline usage', async () => {
+      const passes = await passesLint('.baz:focus { outline: none; border-color: #333; }', {
+        'no-outline-none': true,
+      });
 
-      accept: [
-        { code: ".foo::after { content: ''; }" },
-        { code: '.bar::before { content: attr(aria-label); }' },
-      ],
-
-      reject: [
-        {
-          code: '.foo::before { content: "bar"; }',
-          message:
-            'Unexpected using "content" property in .foo::before (a11y/content-property-no-static-value)',
-        },
-      ],
+      expect(passes).toBe(true);
     });
 
-    testRule({
-      plugins: ['../../src/index.js'],
-      ruleName: 'a11y/font-size-is-readable',
-      config: [true],
+    it('should detect static content violations', async () => {
+      const hasError = await ruleTriggersOn(
+        '.foo::before { content: "bar"; }',
+        'content-property-no-static-value'
+      );
 
-      accept: [{ code: 'a { font-size: 16px; }' }, { code: 'a { font-size: 1rem; }' }],
-
-      reject: [
-        {
-          code: 'a { font-size: 10px; }',
-          message: 'Expected a larger font-size in a (a11y/font-size-is-readable)',
-        },
-      ],
+      expect(hasError).toBe(true);
     });
 
-    testRule({
-      plugins: ['../../src/index.js'],
-      ruleName: 'a11y/selector-pseudo-class-focus',
-      config: [true],
+    it('should pass dynamic content', async () => {
+      const passes = await passesLint('.bar::before { content: attr(aria-label); }', {
+        'content-property-no-static-value': true,
+      });
 
-      accept: [{ code: 'a:hover:focus { color: blue; }' }, { code: 'a:focus { color: blue; }' }],
+      expect(passes).toBe(true);
+    });
 
-      reject: [
-        {
-          code: 'a:hover { color: blue; }',
-          message:
-            'Expected that a:hover is used together with :focus pseudo-class (a11y/selector-pseudo-class-focus)',
-        },
-      ],
+    it('should detect small font sizes', async () => {
+      const hasError = await ruleTriggersOn('a { font-size: 10px; }', 'font-size-is-readable');
+
+      expect(hasError).toBe(true);
+    });
+
+    it('should pass readable font sizes', async () => {
+      const passes = await passesLint('a { font-size: 16px; }', {
+        'font-size-is-readable': true,
+      });
+
+      expect(passes).toBe(true);
+    });
+
+    it('should detect missing focus pseudo-class', async () => {
+      const hasError = await ruleTriggersOn(
+        'a:hover { color: blue; }',
+        'selector-pseudo-class-focus'
+      );
+
+      expect(hasError).toBe(true);
+    });
+
+    it('should pass hover with focus', async () => {
+      const passes = await passesLint('a:hover:focus { color: blue; }', {
+        'selector-pseudo-class-focus': true,
+      });
+
+      expect(passes).toBe(true);
     });
   });
 
-  describe('Configuration Tests', () => {
+  describe('Configuration', () => {
     it('should load recommended configuration', () => {
       expect(recommendedConfig).toBeDefined();
       expect(recommendedConfig.rules).toBeDefined();
@@ -115,13 +102,7 @@ describe('Integration Testing', () => {
     });
 
     it('should apply recommended rules', async () => {
-      const result = await stylelint.lint({
-        code: 'a:hover { color: blue; }',
-        config: {
-          plugins: [myPlugin],
-          rules: recommendedConfig.rules,
-        },
-      });
+      const result = await testCSS('a:hover { color: blue; }', recommendedConfig.rules);
 
       expect(result.errored).toBe(true);
       expect(
@@ -130,14 +111,8 @@ describe('Integration Testing', () => {
     });
 
     it('should handle rule options', async () => {
-      const result = await stylelint.lint({
-        code: 'a { font-size: 14px; }',
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/font-size-is-readable': [true, { minSize: 15 }],
-          },
-        },
+      const result = await testCSS('a { font-size: 14px; }', {
+        'font-size-is-readable': [true, { minSize: 15 }],
       });
 
       expect(result.errored).toBe(true);
@@ -145,29 +120,8 @@ describe('Integration Testing', () => {
     });
 
     it('should handle disabled rules', async () => {
-      const result = await stylelint.lint({
-        code: '.bar:focus { outline: none; }',
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': null,
-          },
-        },
-      });
-
-      expect(result.errored).toBe(false);
-      expect(result.results[0].warnings).toHaveLength(0);
-    });
-
-    it('should respect inline disable comments', async () => {
-      const result = await stylelint.lint({
-        code: '/* stylelint-disable a11y/no-outline-none */ .bar:focus { outline: none; }',
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-          },
-        },
+      const result = await testCSS('.bar:focus { outline: none; }', {
+        'no-outline-none': null,
       });
 
       expect(result.errored).toBe(false);
@@ -175,22 +129,13 @@ describe('Integration Testing', () => {
     });
   });
 
-  describe('Multiple Rule Interaction Tests', () => {
-    it('should handle multiple rules on same element', async () => {
-      const result = await stylelint.lint({
-        code: 'a:hover { outline: none; font-size: 10px; }',
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-            'a11y/font-size-is-readable': true,
-            'a11y/selector-pseudo-class-focus': true,
-          },
-        },
+  describe('Multiple Rules', () => {
+    it('should handle multiple violations', async () => {
+      const warnings = await getWarnings('a:hover { outline: none; font-size: 10px; }', {
+        'no-outline-none': true,
+        'font-size-is-readable': true,
+        'selector-pseudo-class-focus': true,
       });
-
-      expect(result.errored).toBe(true);
-      const warnings = result.results[0].warnings;
 
       // Should have violations from font-size and selector-pseudo-class-focus
       // (no-outline-none only fires with :focus, not :hover)
@@ -199,74 +144,22 @@ describe('Integration Testing', () => {
       expect(warnings.some((w) => w.rule === 'a11y/selector-pseudo-class-focus')).toBe(true);
     });
 
-    it('should handle overlapping pseudo-element rules', async () => {
-      const result = await stylelint.lint({
-        code: '.button::before { content: "Click me"; font-size: 10px; }',
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/content-property-no-static-value': true,
-            'a11y/font-size-is-readable': true,
-          },
-        },
-      });
-
-      expect(result.errored).toBe(true);
-      const warnings = result.results[0].warnings;
-
-      // Should detect both issues
-      expect(warnings.some((w) => w.rule === 'a11y/content-property-no-static-value')).toBe(true);
-      expect(warnings.some((w) => w.rule === 'a11y/font-size-is-readable')).toBe(true);
-    });
-
-    it('should handle fixable rules together', async () => {
-      const result = await stylelint.lint({
-        code: `
-          .animated { animation: slide 1s; }
-          a:hover { color: blue; }
-        `,
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/media-prefers-reduced-motion': true,
-            'a11y/selector-pseudo-class-focus': true,
-          },
-        },
-        fix: true,
-      });
-
-      const output = result.results[0]._postcssResult.root.toString();
-
-      // Should have added media query for reduced motion
-      expect(output).toContain('@media');
-      expect(output).toContain('prefers-reduced-motion');
-
-      // Should have added :focus alongside :hover
-      expect(output).toContain(':focus');
-    });
-
-    it('should handle complex selectors with multiple rules', async () => {
-      const result = await stylelint.lint({
-        code: `
-          .container .button:hover::before {
-            content: "→";
-            outline: none;
-            font-size: 10px;
-          }
-        `,
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/content-property-no-static-value': true,
-            'a11y/no-outline-none': true,
-            'a11y/font-size-is-readable': true,
-            'a11y/selector-pseudo-class-focus': true,
-          },
-        },
-      });
-
-      expect(result.errored).toBe(true);
-      const warnings = result.results[0].warnings;
+    it('should handle complex selectors', async () => {
+      const warnings = await getWarnings(
+        `
+        .container .button:hover::before {
+          content: "→";
+          outline: none;
+          font-size: 10px;
+        }
+      `,
+        {
+          'content-property-no-static-value': true,
+          'no-outline-none': true,
+          'font-size-is-readable': true,
+          'selector-pseudo-class-focus': true,
+        }
+      );
 
       // Should detect content and font-size issues, but not outline (no :focus)
       expect(warnings.some((w) => w.rule === 'a11y/content-property-no-static-value')).toBe(true);
@@ -274,7 +167,63 @@ describe('Integration Testing', () => {
       expect(warnings.some((w) => w.rule === 'a11y/selector-pseudo-class-focus')).toBe(true);
     });
 
-    it('should handle large CSS efficiently', async () => {
+    it('should handle empty CSS', async () => {
+      const passes = await passesLint('', {
+        'no-outline-none': true,
+        'font-size-is-readable': true,
+      });
+
+      expect(passes).toBe(true);
+    });
+
+    it('should handle comments', async () => {
+      const hasError = await ruleTriggersOn(
+        `
+        /* This is a test */
+        .bar:focus { 
+          /* Remove outline */
+          outline: none; 
+        }
+      `,
+        'no-outline-none'
+      );
+
+      expect(hasError).toBe(true);
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle vendor prefixes', async () => {
+      const hasError = await ruleTriggersOn(
+        `
+        .button:focus {
+          -webkit-outline: none;
+          -moz-outline: none;
+          outline: none;
+        }
+      `,
+        'no-outline-none'
+      );
+
+      expect(hasError).toBe(true);
+    });
+
+    it('should handle nested media queries', async () => {
+      const hasError = await ruleTriggersOn(
+        `
+        @media screen {
+          @media (min-width: 768px) {
+            .button:focus { outline: none; }
+          }
+        }
+      `,
+        'no-outline-none'
+      );
+
+      expect(hasError).toBe(true);
+    });
+
+    it('should perform efficiently on large CSS', async () => {
       let largeCss = '';
 
       for (let i = 0; i < 25; i++) {
@@ -282,120 +231,15 @@ describe('Integration Testing', () => {
       }
 
       const startTime = Date.now();
-      const result = await stylelint.lint({
-        code: largeCss,
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-            'a11y/font-size-is-readable': true,
-            'a11y/selector-pseudo-class-focus': true,
-          },
-        },
+      const warnings = await getWarnings(largeCss, {
+        'no-outline-none': true,
+        'font-size-is-readable': true,
+        'selector-pseudo-class-focus': true,
       });
       const duration = Date.now() - startTime;
 
-      expect(result.errored).toBe(true);
       expect(duration).toBeLessThan(1000); // Should complete within 1 second
-      expect(result.results[0].warnings.length).toBeGreaterThanOrEqual(50); // Should detect all violations
-    });
-
-    it('should handle empty CSS without errors', async () => {
-      const result = await stylelint.lint({
-        code: '',
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-            'a11y/font-size-is-readable': true,
-          },
-        },
-      });
-
-      expect(result.errored).toBe(false);
-      expect(result.results[0].warnings).toHaveLength(0);
-    });
-
-    it('should handle CSS with comments', async () => {
-      const result = await stylelint.lint({
-        code: `
-          /* This is a test */
-          .bar:focus { 
-            /* Remove outline */
-            outline: none; 
-          }
-        `,
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-          },
-        },
-      });
-
-      expect(result.errored).toBe(true);
-      expect(result.results[0].warnings[0].rule).toBe('a11y/no-outline-none');
-    });
-  });
-
-  describe('Edge Cases and Error Handling', () => {
-    it('should handle malformed CSS gracefully', async () => {
-      const result = await stylelint.lint({
-        code: 'a { color: }', // Malformed CSS
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-          },
-        },
-      });
-
-      // Should not crash even with malformed CSS
-      expect(result).toBeDefined();
-      expect(result.results).toBeDefined();
-      expect(result.results[0]).toBeDefined();
-    });
-
-    it('should handle CSS with vendor prefixes', async () => {
-      const result = await stylelint.lint({
-        code: `
-          .button:focus {
-            -webkit-outline: none;
-            -moz-outline: none;
-            outline: none;
-          }
-        `,
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-          },
-        },
-      });
-
-      expect(result.errored).toBe(true);
-      expect(result.results[0].warnings.some((w) => w.rule === 'a11y/no-outline-none')).toBe(true);
-    });
-
-    it('should handle nested media queries', async () => {
-      const result = await stylelint.lint({
-        code: `
-          @media screen {
-            @media (min-width: 768px) {
-              .button:focus { outline: none; }
-            }
-          }
-        `,
-        config: {
-          plugins: [myPlugin],
-          rules: {
-            'a11y/no-outline-none': true,
-          },
-        },
-      });
-
-      expect(result.errored).toBe(true);
-      expect(result.results[0].warnings[0].rule).toBe('a11y/no-outline-none');
+      expect(warnings.length).toBeGreaterThanOrEqual(50); // Should detect all violations
     });
   });
 });

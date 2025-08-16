@@ -1,0 +1,81 @@
+/* Basic CSS project for E2E testing */
+
+/* Navigation styles */
+.nav {
+  background: #333;
+  padding: 1rem;
+}
+
+.nav a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav .active {
+  font-weight: bold;
+}
+
+/* Button styles */
+.btn:focus {
+  outline: none; /* Should trigger a11y/no-outline-none */
+  background: #007bff;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  font-size: 12px; /* Should trigger a11y/font-size-is-readable */
+}
+
+.btn-secondary:hover {
+  background: #6c757d; /* Should trigger a11y/selector-pseudo-class-focus */
+}
+
+/* Content styles */
+.content::before {
+  content: '★'; /* Should trigger a11y/content-property-no-static-value */
+  color: gold;
+}
+
+.article {
+  line-height: 1.2; /* Should trigger a11y/line-height-is-vertical-rhythmed */
+  text-align: justify; /* Should trigger a11y/no-text-align-justify */
+}
+
+/* Animations */
+.slide-in {
+  animation: slideIn 0.5s ease; /* Should trigger a11y/media-prefers-reduced-motion */
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Hidden elements */
+.sr-only {
+  display: none; /* Should trigger a11y/no-display-none */
+}
+
+/* Obsolete elements and attributes */
+center {
+  margin: 0 auto; /* Should trigger a11y/no-obsolete-element */
+}
+
+.old-style {
+  text-decoration: blink; /* Should trigger a11y/no-obsolete-attribute */
+}
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+  .mobile-nav a:hover {
+    color: blue; /* Should trigger a11y/selector-pseudo-class-focus */
+    font-size: 10px; /* Should trigger a11y/font-size-is-readable */
+  }
+}

@@ -16,4 +16,16 @@ export default [
   pluginJs.configs.recommended,
   ...stylelintConfig,
   ...stylelintJestConfig,
+  {
+    files: ['test/e2e/**/*.js'],
+    rules: {
+      'jest/no-conditional-expect': 'off',
+      'jest/no-jasmine-globals': 'off',
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+      'sort-imports': 'off',
+      'n/prefer-global/process': 'off',
+      'no-console': 'off',
+    },
+  },
 ];
