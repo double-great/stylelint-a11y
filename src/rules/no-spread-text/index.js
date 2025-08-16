@@ -65,8 +65,6 @@ export default function noSpreadText(actual) {
 
       if (isRejected) {
         report({
-          index: rule.lastEach,
-          endIndex: rule.lastEach,
           message: messages.expected(selector),
           node: rule,
           ruleName,

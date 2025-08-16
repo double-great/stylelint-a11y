@@ -81,8 +81,6 @@ export default function selectorPseudoClassFocus(actual, _, context) {
 
       if (!isAccepted) {
         report({
-          index: rule.lastEach,
-          endIndex: rule.lastEach,
           message: messages.expected(selector),
           node: rule,
           ruleName,
