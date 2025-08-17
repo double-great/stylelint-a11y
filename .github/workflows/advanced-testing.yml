@@ -2,7 +2,7 @@ name: Advanced Testing & Performance Monitoring
 
 on:
   push:
-    branches: [main, 'more-structure']
+    branches: [main]
   pull_request:
     branches: [main]
   schedule:
@@ -266,7 +266,7 @@ jobs:
           echo "" >> summary.md
           echo "## Test Results" >> summary.md
           echo "- System Compatibility: ${{ needs.system-compatibility.result }}" >> summary.md
-          echo "- Cross Platform: ${{ needs.cross-platform.result }}" >> summary.md  
+          echo "- Cross Platform: ${{ needs.cross-platform.result }}" >> summary.md
           echo "- Performance Regression: ${{ needs.performance-regression.result }}" >> summary.md
           echo "- Integration Matrix: ${{ needs.integration-matrix.result }}" >> summary.md
           echo "" >> summary.md
