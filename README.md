@@ -1,5 +1,10 @@
 # @double-great/stylelint-a11y
 
+[![npm version](https://img.shields.io/npm/v/@double-great/stylelint-a11y.svg)](https://www.npmjs.com/package/@double-great/stylelint-a11y)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Stylelint plugin for CSS accessibility rules.
+
 ## Installation and usage
 
 This plugin requires Stylelint 16.0.0 or higher.
@@ -11,6 +16,33 @@ npm i --save-dev stylelint @double-great/stylelint-a11y
 Create the `.stylelintrc.json` config file (or open the existing one), add `stylelint-a11y` to the plugins array and the rules you need to the rules list. All rules from stylelint-a11y need to be namespaced with `a11y`.
 
 Please refer to [stylelint docs](https://stylelint.io/user-guide/) for the detailed info on using this linter.
+
+## Basic Configuration
+
+Here's a basic `.stylelintrc.json` configuration:
+
+```json
+{
+  "plugins": ["@double-great/stylelint-a11y"],
+  "rules": {
+    "a11y/no-outline-none": true,
+    "a11y/font-size-is-readable": true,
+    "a11y/media-prefers-reduced-motion": true,
+    "a11y/selector-pseudo-class-focus": true
+  }
+}
+```
+
+Or extend the recommended config:
+
+```json
+{
+  "extends": ["@double-great/stylelint-a11y/recommended"],
+  "rules": {
+    // Add any additional rules or overrides here
+  }
+}
+```
 
 ## Rules
 
@@ -99,6 +131,39 @@ Many rules support additional configuration options for customization. For examp
 
 Refer to individual rule documentation for available options.
 
+## Disabling Rules
+
+You can disable rules inline using stylelint's comment syntax:
+
+```css
+/* stylelint-disable a11y/no-outline-none */
+.button:focus {
+  outline: none;
+}
+/* stylelint-enable a11y/no-outline-none */
+```
+
+Or for a single line:
+
+```css
+.button:focus {
+  outline: none; /* stylelint-disable-line a11y/no-outline-none */
+}
+```
+
+## Contributing
+
+We welcome contributions! Please see our [GitHub repository](https://github.com/double-great/stylelint-a11y) for:
+
+- [Issue reporting](https://github.com/double-great/stylelint-a11y/issues)
+- [Pull requests](https://github.com/double-great/stylelint-a11y/pulls)
+- [Changelog](https://github.com/double-great/stylelint-a11y/blob/main/CHANGELOG.md)
+
+### Requirements
+
+- Node.js >=18.12.0
+- npm or yarn
+
 ## Development
 
 ### Testing
@@ -127,3 +192,7 @@ This project includes testing at a few levels:
 - `npm run format:check` - Check code formatting
 - `npm run format:fix` - Fix code formatting
 - `npm run coverage` - Run tests with coverage report
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
