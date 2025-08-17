@@ -13,6 +13,25 @@ Require width of text greater than 45 characters and less than 80 characters.
 
 ### true
 
+The rule is enabled with default values (45ch minimum, 80ch maximum).
+
+### { minWidth: number, maxWidth: number }
+
+- `minWidth` (default: `45`): Minimum allowed width in `ch` units
+- `maxWidth` (default: `80`): Maximum allowed width in `ch` units
+
+#### Example configuration
+
+```javascript
+{
+  "a11y/no-spread-text": [true, { "minWidth": 30, "maxWidth": 60 }]
+}
+```
+
+### Examples
+
+#### ✓ Default configuration (`true`)
+
 The following pattern is considered a violation:
 
 ```css

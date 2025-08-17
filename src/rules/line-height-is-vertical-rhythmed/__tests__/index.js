@@ -73,3 +73,41 @@ testRule({
     },
   ],
 });
+
+// Test enhanced options
+testRule({
+  ruleName,
+  config: [true, { baselineGrid: 20, minRelativeLineHeight: 1.3 }],
+
+  accept: [
+    {
+      code: '.custom { line-height: 20px; }',
+      description: 'accepts 20px with custom baselineGrid: 20',
+    },
+    {
+      code: '.custom { line-height: 40px; }',
+      description: 'accepts 40px (20px multiple) with custom baselineGrid: 20',
+    },
+    {
+      code: '.custom { line-height: 1.4; }',
+      description: 'accepts 1.4 with custom minRelativeLineHeight: 1.3',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.custom { line-height: 24px; }',
+      message: messages.expected('.custom'),
+      line: 1,
+      column: 1,
+      description: 'rejects 24px with custom baselineGrid: 20 (not multiple)',
+    },
+    {
+      code: '.custom { line-height: 1.2; }',
+      message: messages.expected('.custom'),
+      line: 1,
+      column: 1,
+      description: 'rejects 1.2 with custom minRelativeLineHeight: 1.3',
+    },
+  ],
+});

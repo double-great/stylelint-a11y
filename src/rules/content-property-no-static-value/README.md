@@ -11,6 +11,26 @@ Disallow CSS generated content except aria-label attribute content and empty str
 
 ### true
 
+The rule is enabled with default allowed values: `['""', "''", 'attr(aria-label)']`.
+
+### { allowedValues: string[] }
+
+- `allowedValues` (default: `['""', "''", 'attr(aria-label)']`): Array of allowed content values
+
+#### Example configuration
+
+```javascript
+{
+  "a11y/content-property-no-static-value": [true, {
+    "allowedValues": ["''", '""', "attr(title)", "counter(section)"]
+  }]
+}
+```
+
+### Examples
+
+#### ✓ Default configuration (`true`)
+
 The following pattern is considered a violation:
 
 ```css

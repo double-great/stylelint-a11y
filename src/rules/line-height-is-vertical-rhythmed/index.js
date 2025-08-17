@@ -10,13 +10,23 @@ export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected a vertical rhythmed line-height in ${selector}`,
 });
 
-function check(node) {
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/line-height-is-vertical-rhythmed/README.md',
+  fixable: false,
+  deprecated: false,
+};
+
+function check(node, options = {}) {
   if (node.type !== 'rule') {
     return true;
   }
 
-  const checkInPx = (o) => o.value.toLowerCase().endsWith('px') && parseInt(o.value) % 24 !== 0;
-  const checkInRel = (o) => !isNaN(o.value) && parseFloat(o.value) < 1.5;
+  const baselineGrid = options.baselineGrid || 24;
+  const minRelativeLineHeight = options.minRelativeLineHeight || 1.5;
+
+  const checkInPx = (o) =>
+    o.value.toLowerCase().endsWith('px') && parseInt(o.value) % baselineGrid !== 0;
+  const checkInRel = (o) => !isNaN(o.value) && parseFloat(o.value) < minRelativeLineHeight;
 
   return !node.nodes.some(
     (o) =>
@@ -24,7 +34,7 @@ function check(node) {
   );
 }
 
-export default function lineHeightIsVerticalRhythmed(actual) {
+export default function lineHeightIsVerticalRhythmed(actual, options) {
   return (root, result) => {
     const validOptions = validateOptions(result, ruleName, { actual });
 
@@ -49,7 +59,7 @@ export default function lineHeightIsVerticalRhythmed(actual) {
         return;
       }
 
-      const isAccepted = check(node);
+      const isAccepted = check(node, options);
 
       if (!isAccepted) {
         report({

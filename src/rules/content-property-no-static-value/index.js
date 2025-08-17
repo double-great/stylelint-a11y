@@ -7,8 +7,14 @@ const {
 export const ruleName = 'a11y/content-property-no-static-value';
 
 export const messages = ruleMessages(ruleName, {
-  expected: (selector) => `Unexpected using "content" property in ${selector}`,
+  expected: (selector) => `Expected "content" property to not be used in ${selector}`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/content-property-no-static-value/README.md',
+  fixable: false,
+  deprecated: false,
+};
 
 const isContentPropertyUsedCorrectly = (selectors) =>
   selectors.every((selector) => {
@@ -18,24 +24,24 @@ const isContentPropertyUsedCorrectly = (selectors) =>
 const checkNodesForContentProperty = (node) =>
   node.nodes.filter((n) => n.prop).some((n) => n.prop.toLowerCase() === 'content');
 
-function check(node) {
+function check(node, options = {}) {
   if (node.type !== 'rule' || !checkNodesForContentProperty(node) || !node.first) {
     return true;
   }
+
+  const allowedValues = options.allowedValues || ["''", '""', 'attr(aria-label)'];
 
   return node.nodes.some((o) => {
     return (
       o.type === 'decl' &&
       o.prop.toLowerCase() === 'content' &&
       isContentPropertyUsedCorrectly(o.parent.selectors) &&
-      (o.value.toLowerCase() === "''" ||
-        o.value.toLowerCase() === '""' ||
-        o.value.toLowerCase() === 'attr(aria-label)')
+      allowedValues.some((allowed) => o.value.toLowerCase() === allowed.toLowerCase())
     );
   });
 }
 
-export default function contentPropertyNoStaticValue(actual) {
+export default function contentPropertyNoStaticValue(actual, options) {
   return (root, result) => {
     const validOptions = validateOptions(result, ruleName, { actual });
 
@@ -60,7 +66,7 @@ export default function contentPropertyNoStaticValue(actual) {
         return;
       }
 
-      const isAccepted = check(node);
+      const isAccepted = check(node, options);
 
       if (!isAccepted) {
         report({

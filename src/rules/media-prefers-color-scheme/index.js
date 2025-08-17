@@ -13,6 +13,12 @@ export const ruleName = 'a11y/media-prefers-color-scheme';
 export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected ${selector} is used with @media (prefers-color-scheme)`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/media-prefers-color-scheme/README.md',
+  fixable: false,
+  deprecated: false,
+};
 const targetProperties = ['background-color', 'color'];
 
 function check(selector, node) {

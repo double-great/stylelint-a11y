@@ -10,6 +10,12 @@ export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected a larger font-size in ${selector}`,
 });
 
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/font-size-is-readable/README.md',
+  fixable: false,
+  deprecated: false,
+};
+
 const pxToPt = (v) => 0.75 * v;
 
 const checkInPx = (value, THRESHOLD_IN_PX) =>

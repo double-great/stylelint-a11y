@@ -7,8 +7,14 @@ const {
 export const ruleName = 'a11y/no-display-none';
 
 export const messages = ruleMessages(ruleName, {
-  expected: (selector) => `Unexpected using "{ display: none; }" in ${selector}`,
+  expected: (selector) => `Expected "display: none" to not be used in ${selector}`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/no-display-none/README.md',
+  fixable: false,
+  deprecated: false,
+};
 
 function check(selector, node) {
   if (node.type !== 'rule') {
