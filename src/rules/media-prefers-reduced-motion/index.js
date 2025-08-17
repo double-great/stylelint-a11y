@@ -2,7 +2,9 @@ import isCustomSelector from 'stylelint/lib/utils/isCustomSelector.mjs';
 import isStandardSyntaxAtRule from 'stylelint/lib/utils/isStandardSyntaxAtRule.mjs';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 import isStandardSyntaxSelector from 'stylelint/lib/utils/isStandardSyntaxSelector.mjs';
+
 import { parse } from 'postcss';
+
 import stylelint from 'stylelint';
 const {
   utils: { report, ruleMessages, validateOptions },
@@ -61,6 +63,30 @@ function check(selector, node) {
   });
 
   if (!declarationsIsMatched) return true;
+
+  // Check if there's a nested media query with prefers-reduced-motion inside the current rule
+  const hasNestedPrefersReducedMotion = declarations.some((childNode) => {
+    if (childNode.type === 'atrule' && childNode.name === 'media') {
+      return childNode.params && childNode.params.indexOf('prefers-reduced-motion') >= 0;
+    }
+
+    return false;
+  });
+
+  if (hasNestedPrefersReducedMotion) return true;
+
+  // Check if there's a sibling media query with prefers-reduced-motion at the same level
+  if (node.parent && node.parent.type === 'atrule' && node.parent.name === 'media') {
+    const siblingHasPrefersReducedMotion = node.parent.nodes.some((siblingNode) => {
+      if (siblingNode.type === 'atrule' && siblingNode.name === 'media') {
+        return siblingNode.params && siblingNode.params.indexOf('prefers-reduced-motion') >= 0;
+      }
+
+      return false;
+    });
+
+    if (siblingHasPrefersReducedMotion) return true;
+  }
 
   if (declarationsIsMatched) {
     const parentMatchedNode = parentNodes.some((parentNode) => {
@@ -143,25 +169,62 @@ export default function mediaPrefersReducedMotion(actual, _, context) {
         media.nodes.forEach((o) => {
           o.raws.after = '\n';
         });
-        const cloneRule = node.clone();
 
-        cloneRule.raws = {
-          ...cloneRule.raws,
-          before: '\n',
-          after: '\n',
-          semicolon: true,
-        };
-        cloneRule.nodes.forEach((o) => {
-          if (o.prop === 'animation-name') {
-            o.prop = 'animation';
-          }
+        // Check if we're already inside a media query
+        if (node.parent && node.parent.type === 'atrule' && node.parent.name === 'media') {
+          // Create a clone with only the animation/transition properties set to none
+          const cloneRule = node.clone();
 
-          if (targetProperties.indexOf(o.prop) >= 0) {
-            o.value = 'none';
-          }
-        });
-        media.first.append(cloneRule);
-        node.before(media);
+          cloneRule.nodes = cloneRule.nodes.filter((o) => {
+            if (o.prop === 'animation-name') {
+              o.prop = 'animation';
+              o.value = 'none';
+
+              return true;
+            }
+
+            if (targetProperties.indexOf(o.prop) >= 0) {
+              o.value = 'none';
+
+              return true;
+            }
+
+            return false;
+          });
+
+          cloneRule.raws = {
+            ...cloneRule.raws,
+            before: '\n',
+            after: '\n',
+            semicolon: true,
+          };
+
+          media.first.append(cloneRule);
+          // Insert the nested media query inside the current rule
+          node.append(media.first);
+        } else {
+          // Original logic for non-nested case
+          const cloneRule = node.clone();
+
+          cloneRule.raws = {
+            ...cloneRule.raws,
+            before: '\n',
+            after: '\n',
+            semicolon: true,
+          };
+          cloneRule.nodes.forEach((o) => {
+            if (o.prop === 'animation-name') {
+              o.prop = 'animation';
+            }
+
+            if (targetProperties.indexOf(o.prop) >= 0) {
+              o.value = 'none';
+            }
+          });
+          media.first.append(cloneRule);
+          // Insert the media query before the current node
+          node.before(media);
+        }
 
         return;
       }

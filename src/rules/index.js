@@ -15,6 +15,7 @@ export default {
   'content-property-no-static-value': contentPropertyNoStaticValue,
   'font-size-is-readable': fontSizeIsReadable,
   'line-height-is-vertical-rhythmed': lineHeightIsVerticalRhythmed,
+  'media-prefers-color-scheme': mediaPrefersColorScheme,
   'media-prefers-reduced-motion': mediaPrefersReducedMotion,
   'no-display-none': noDisplayNone,
   'no-obsolete-attribute': noObsoleteAttribute,
@@ -23,5 +24,4 @@ export default {
   'no-spread-text': noSpreadText,
   'no-text-align-justify': noTextAlignJustify,
   'selector-pseudo-class-focus': selectorPseudoClassFocus,
-  'media-prefers-color-scheme': mediaPrefersColorScheme,
 };
