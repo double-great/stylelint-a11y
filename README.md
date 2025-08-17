@@ -54,6 +54,37 @@ Since it adds stylelint-a11y to `plugins`, you don't have to do this yourself wh
 
 ## Rule Configuration
 
+### Severity Levels
+
+Stylelint supports configuring rules with different severity levels. You can set rules to either "error" or "warning":
+
+```json
+{
+  "rules": {
+    "a11y/no-outline-none": "error",
+    "a11y/font-size-is-readable": "warning",
+    "a11y/media-prefers-reduced-motion": ["warning", { "ignore": ["animation"] }]
+  }
+}
+```
+
+You can also use array syntax with severity as the first element:
+
+```json
+{
+  "rules": {
+    "a11y/no-outline-none": ["error"],
+    "a11y/font-size-is-readable": ["warning", { "thresholdInPixels": 14 }],
+    "a11y/selector-pseudo-class-focus": ["error", "always"]
+  }
+}
+```
+
+- **"error"** - The rule will report an error (exit code 2 when running stylelint)
+- **"warning"** - The rule will report a warning (exit code 0 unless there are errors)
+
+### Rule Options
+
 Many rules support additional configuration options for customization. For example:
 
 ```json
