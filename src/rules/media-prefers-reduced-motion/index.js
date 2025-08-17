@@ -75,6 +75,19 @@ function check(selector, node) {
 
   if (hasNestedPrefersReducedMotion) return true;
 
+  // Check if there's a sibling media query with prefers-reduced-motion at the same level
+  if (node.parent && node.parent.type === 'atrule' && node.parent.name === 'media') {
+    const siblingHasPrefersReducedMotion = node.parent.nodes.some((siblingNode) => {
+      if (siblingNode.type === 'atrule' && siblingNode.name === 'media') {
+        return siblingNode.params && siblingNode.params.indexOf('prefers-reduced-motion') >= 0;
+      }
+
+      return false;
+    });
+
+    if (siblingHasPrefersReducedMotion) return true;
+  }
+
   if (declarationsIsMatched) {
     const parentMatchedNode = parentNodes.some((parentNode) => {
       if (!parentNode || !parentNode.nodes) return false;

@@ -32,6 +32,11 @@ testRule({
       code: '@mixin safe-hover { @media (hover: hover) { &:hover { transition: all 0.15s; } @media screen and (prefers-reduced-motion: reduce) { &:hover { transition: none; } } } }',
       description: 'accepts SCSS mixin with nested media query already present',
     },
+    {
+      code: '@media (hover: hover) { &:hover, &:focus { background-color: blue; transition: all 0.15s; } @media screen and (prefers-reduced-motion: reduce) { &:hover, &:focus { background-color: blue; transition: none; } } }',
+      description:
+        'accepts exact code from issue #66 - sibling media query with prefers-reduced-motion',
+    },
   ],
 
   reject: [
