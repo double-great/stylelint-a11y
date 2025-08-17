@@ -33,13 +33,24 @@ Here's a basic `.stylelintrc.json` configuration:
 }
 ```
 
-Or extend the recommended config:
+Or extend one of the provided configs:
 
 ```json
 {
   "extends": ["@double-great/stylelint-a11y/recommended"],
   "rules": {
     // Add any additional rules or overrides here
+  }
+}
+```
+
+For stricter accessibility checks:
+
+```json
+{
+  "extends": ["@double-great/stylelint-a11y/strict"],
+  "rules": {
+    // Override any rules if needed
   }
 }
 ```
@@ -61,7 +72,9 @@ Or extend the recommended config:
 | [no-text-align-justify](./src/rules/no-text-align-justify/README.md)                       | Disallow content with `text-align: justify`                             |                      |
 | [selector-pseudo-class-focus](./src/rules/selector-pseudo-class-focus/README.md)           | Require or disallow a pseudo-element to the selectors with `:hover`     | Recommended, Fixable |
 
-## Recommended config
+## Configurations
+
+### Recommended config
 
 Add recommended configuration by adding the following to `extends` in your stylelint configuration:
 
@@ -82,7 +95,37 @@ This shareable config contains the following:
 }
 ```
 
-Since it adds stylelint-a11y to `plugins`, you don't have to do this yourself when extending this config.
+### Strict config
+
+For a more comprehensive accessibility check, use the strict configuration:
+
+```
+@double-great/stylelint-a11y/strict
+```
+
+This config enables ALL accessibility rules:
+
+```json
+{
+  "plugins": ["@double-great/stylelint-a11y"],
+  "rules": {
+    "a11y/content-property-no-static-value": true,
+    "a11y/font-size-is-readable": true,
+    "a11y/line-height-is-vertical-rhythmed": true,
+    "a11y/media-prefers-color-scheme": true,
+    "a11y/media-prefers-reduced-motion": true,
+    "a11y/no-display-none": true,
+    "a11y/no-obsolete-attribute": true,
+    "a11y/no-obsolete-element": true,
+    "a11y/no-outline-none": true,
+    "a11y/no-spread-text": true,
+    "a11y/no-text-align-justify": true,
+    "a11y/selector-pseudo-class-focus": true
+  }
+}
+```
+
+Since both configs add stylelint-a11y to `plugins`, you don't have to do this yourself when extending these configs.
 
 ## Rule Configuration
 

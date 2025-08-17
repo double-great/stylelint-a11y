@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.js",
-    "./recommended": "./recommended.js"
+    "./recommended": "./recommended.js",
+    "./strict": "./strict.js"
   },
   "repository": {
     "type": "git",
