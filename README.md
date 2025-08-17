@@ -181,10 +181,10 @@ Run tests with the following commands:
 
 This project includes testing at a few levels:
 
-- **Unit tests** - Individual rule functionality
-- **Integration tests** - Plugin integration with stylelint
-- **E2E tests** - Real-world project testing with intentional violations
-- **Performance tests** - Benchmark testing for large codebases
+- [Unit tests](./src/rules) - Individual rule functionality
+- [Integration tests](./test/integration) - Plugin integration with stylelint
+- [E2E tests](./test/e2e) - Real-world project testing with intentional violations
+- [Performance tests](./test/e2e/performance.test.js) - Benchmark testing for large codebases
 
 ### Other Commands
 
