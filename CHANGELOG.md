@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2025-08-17
+
+### Added
+
+- Advanced testing infrastructure with comprehensive CI/CD workflows
+- System-level performance regression testing suite
+- Cross-platform compatibility testing for Node.js environments
+- Integration tests for real-world stylelint plugin functionality
+- Enhanced rule configuration options with customizable parameters
+- Meta objects for all rules with documentation URLs and fixable status
+- Comprehensive rule documentation with examples and configuration options
+
+### Changed
+
+- Enhanced stylelint standards compliance with proper meta objects across all rules
+- Standardized rule message formatting for consistent error reporting
+- Improved Jest configuration with proper Node.js module support
+- Updated all rule implementations to follow modern stylelint plugin patterns
+- Enhanced rule functionality with configurable options for better customization
+- Improved error messages for better developer experience
+
+### Fixed
+
+- Removed deprecated experimental VM modules flag from Jest scripts for Node.js compatibility
+- Resolved CI performance test expectations for consistent build environments
+- Cleaned up test infrastructure and removed redundant configuration files
+- Fixed rule message clarity and consistency across all accessibility rules
+
 ## [3.2.0] - 2025-08-16
 
 ### Added
