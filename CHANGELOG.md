@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2025-08-17
+
+### Added
+
+- Strict configuration (`@double-great/stylelint-a11y/strict`) that enables all accessibility rules
+- CONTRIBUTING.md with comprehensive guide for adding new rules
+- Severity levels documentation showing how to configure rules as errors or warnings
+- Basic configuration examples in README
+- Inline rule disabling documentation
+- Badges for npm version and MIT license
+- Links to test directories in Testing Infrastructure section
+- Test coverage for strict configuration
+
+### Changed
+
+- Enhanced README with better organization and more comprehensive documentation
+- Updated Testing Infrastructure section with links instead of bold text
+
+### Fixed
+
+- Corrected `plugin` to `plugins` in recommended.js configuration
+
 ## [3.3.0] - 2025-08-17
 
 ### Added
