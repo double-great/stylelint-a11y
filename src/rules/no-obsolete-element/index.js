@@ -10,8 +10,14 @@ const {
 export const ruleName = 'a11y/no-obsolete-element';
 
 export const messages = ruleMessages(ruleName, {
-  expected: (selector) => `Unexpected using obsolete selector "${selector}"`,
+  expected: (selector) => `Expected obsolete selector "${selector}" to not be used`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/no-obsolete-element/README.md',
+  fixable: false,
+  deprecated: false,
+};
 
 function check(selector, node) {
   if (node.type !== 'rule') {

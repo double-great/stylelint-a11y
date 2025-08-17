@@ -7,8 +7,14 @@ const {
 export const ruleName = 'a11y/no-outline-none';
 
 export const messages = ruleMessages(ruleName, {
-  expected: (selector) => `Unexpected using "outline" property in ${selector}`,
+  expected: (selector) => `Expected "outline" to not be removed without alternative in ${selector}`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/no-outline-none/README.md',
+  fixable: false,
+  deprecated: false,
+};
 
 function check(selector, node) {
   if (node.type !== 'rule') {

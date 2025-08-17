@@ -7,8 +7,14 @@ const {
 export const ruleName = 'a11y/no-spread-text';
 
 export const messages = ruleMessages(ruleName, {
-  expected: (selector) => `Unexpected max-width in ${selector}`,
+  expected: (selector) => `Expected max-width to be between 45ch and 80ch in ${selector}`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/no-spread-text/README.md',
+  fixable: false,
+  deprecated: false,
+};
 
 const textStyles = [
   'text-decoration',
@@ -31,13 +37,16 @@ const nodesProbablyForText = (nodes) =>
     .map((prop) => prop.toLowerCase())
     .some((prop) => textStyles.includes(prop));
 
-export default function noSpreadText(actual) {
+export default function noSpreadText(actual, options) {
   return (root, result) => {
     const validOptions = validateOptions(result, ruleName, { actual });
 
     if (!validOptions || !actual) {
       return;
     }
+
+    const minWidth = (options && options.minWidth) || 45;
+    const maxWidth = (options && options.maxWidth) || 80;
 
     root.walkRules((rule) => {
       let selector = null;
@@ -59,7 +68,7 @@ export default function noSpreadText(actual) {
             o.type === 'decl' &&
             o.prop.toLowerCase() === 'max-width' &&
             o.value.toLowerCase().endsWith('ch') &&
-            (parseFloat(o.value) < 45 || parseFloat(o.value) > 80)
+            (parseFloat(o.value) < minWidth || parseFloat(o.value) > maxWidth)
           );
         });
 

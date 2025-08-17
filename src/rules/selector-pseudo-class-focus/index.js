@@ -12,6 +12,12 @@ export const messages = ruleMessages(ruleName, {
   expected: (value) => `Expected that ${value} is used together with :focus pseudo-class`,
 });
 
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/selector-pseudo-class-focus/README.md',
+  fixable: true,
+  deprecated: false,
+};
+
 function hasAlready(parent, replacedSelector, selector) {
   const nodes = parent.nodes.reduce((arr, i) => {
     if (i.type === 'rule') arr.push(i.selectors);

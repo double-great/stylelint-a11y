@@ -46,3 +46,41 @@ testRule({
     },
   ],
 });
+
+// Test enhanced options
+testRule({
+  ruleName,
+  config: [true, { allowedValues: ["''", '""', 'attr(title)', 'counter(section)'] }],
+
+  accept: [
+    {
+      code: ".foo::after { content: ''; }",
+      description: 'accepts empty string with custom allowedValues',
+    },
+    {
+      code: '.bar::before { content: attr(title); }',
+      description: 'accepts attr(title) with custom allowedValues',
+    },
+    {
+      code: '.baz::after { content: counter(section); }',
+      description: 'accepts counter(section) with custom allowedValues',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.foo::before { content: attr(aria-label); }',
+      message: messages.expected('.foo::before'),
+      line: 1,
+      column: 1,
+      description: 'rejects attr(aria-label) when not in custom allowedValues',
+    },
+    {
+      code: '.bar::after { content: "static text"; }',
+      message: messages.expected('.bar::after'),
+      line: 1,
+      column: 1,
+      description: 'rejects static text with custom allowedValues',
+    },
+  ],
+});

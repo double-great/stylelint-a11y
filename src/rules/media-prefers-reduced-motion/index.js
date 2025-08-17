@@ -15,6 +15,12 @@ export const ruleName = 'a11y/media-prefers-reduced-motion';
 export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected ${selector} is used with @media (prefers-reduced-motion)`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/media-prefers-reduced-motion/README.md',
+  fixable: true,
+  deprecated: false,
+};
 const targetProperties = ['transition', 'animation', 'animation-name'];
 
 function checkChildrenNodes(childrenNodes, currentSelector, parentNode) {

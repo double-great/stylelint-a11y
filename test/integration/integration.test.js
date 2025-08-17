@@ -17,6 +17,26 @@ describe('Integration Testing', () => {
       });
     });
 
+    it('should export meta objects for all rules', () => {
+      myPlugin.forEach((plugin) => {
+        expect(plugin.meta).toBeDefined();
+        expect(plugin.meta.url).toBeDefined();
+        expect(plugin.meta.url).toMatch(/^https:\/\/github\.com\/double-great\/stylelint-a11y/);
+        expect(typeof plugin.meta.fixable).toBe('boolean');
+        expect(typeof plugin.meta.deprecated).toBe('boolean');
+      });
+    });
+
+    it('should correctly identify fixable rules', () => {
+      const fixableRules = myPlugin.filter((plugin) => plugin.meta.fixable);
+      const fixableRuleNames = fixableRules.map((plugin) => plugin.ruleName);
+
+      expect(fixableRuleNames).toContain('a11y/media-prefers-reduced-motion');
+      expect(fixableRuleNames).toContain('a11y/selector-pseudo-class-focus');
+      // Should only have 2 fixable rules
+      expect(fixableRules).toHaveLength(2);
+    });
+
     it('should integrate with stylelint API', async () => {
       const result = await testCSS('.bar:focus { outline: none; }', {
         'no-outline-none': true,

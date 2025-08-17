@@ -52,6 +52,22 @@ This shareable config contains the following:
 
 Since it adds stylelint-a11y to `plugins`, you don't have to do this yourself when extending this config.
 
+## Rule Configuration
+
+Many rules support additional configuration options for customization. For example:
+
+```json
+{
+  "rules": {
+    "a11y/font-size-is-readable": [true, { "thresholdInPixels": 16 }],
+    "a11y/no-spread-text": [true, { "minWidth": 30, "maxWidth": 60 }],
+    "a11y/line-height-is-vertical-rhythmed": [true, { "baselineGrid": 20 }]
+  }
+}
+```
+
+Refer to individual rule documentation for available options.
+
 ## Development
 
 ### Testing

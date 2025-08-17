@@ -7,8 +7,14 @@ const {
 export const ruleName = 'a11y/no-text-align-justify';
 
 export const messages = ruleMessages(ruleName, {
-  expected: (selector) => `Unexpected using "{ text-align: justify; }" in ${selector}`,
+  expected: (selector) => `Expected "text-align: justify" to not be used in ${selector}`,
 });
+
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/no-text-align-justify/README.md',
+  fixable: false,
+  deprecated: false,
+};
 
 function check(node) {
   if (node.type !== 'rule') {

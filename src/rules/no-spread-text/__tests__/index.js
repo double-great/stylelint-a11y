@@ -40,3 +40,37 @@ testRule({
     },
   ],
 });
+
+// Test enhanced options
+testRule({
+  ruleName,
+  config: [true, { minWidth: 30, maxWidth: 60 }],
+
+  accept: [
+    {
+      code: '.foo { text-transform: lowercase; max-width: 40ch; }',
+      description: 'accepts 40ch with custom minWidth: 30',
+    },
+    {
+      code: '.bar { color: red; max-width: 55ch; }',
+      description: 'accepts 55ch with custom maxWidth: 60',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.foo { text-transform: lowercase; max-width: 25ch; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects 25ch with custom minWidth: 30',
+    },
+    {
+      code: '.bar { color: red; max-width: 65ch; }',
+      message: messages.expected('.bar'),
+      line: 1,
+      column: 1,
+      description: 'rejects 65ch with custom maxWidth: 60',
+    },
+  ],
+});
