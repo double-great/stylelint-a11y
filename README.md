@@ -153,16 +153,18 @@ Or for a single line:
 
 ## Contributing
 
-We welcome contributions! Please see our [GitHub repository](https://github.com/double-great/stylelint-a11y) for:
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for detailed information on:
+
+- How to add new rules
+- Code style guidelines
+- Testing requirements
+- Pull request process
+
+For quick links:
 
 - [Issue reporting](https://github.com/double-great/stylelint-a11y/issues)
 - [Pull requests](https://github.com/double-great/stylelint-a11y/pulls)
 - [Changelog](https://github.com/double-great/stylelint-a11y/blob/main/CHANGELOG.md)
-
-### Requirements
-
-- Node.js >=18.12.0
-- npm or yarn
 
 ## Development
 
