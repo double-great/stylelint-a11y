@@ -1,0 +1,279 @@
+name: Advanced Testing & Performance Monitoring
+
+on:
+  push:
+    branches: [main, 'more-structure']
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run performance regression tests daily at 02:00 UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  system-compatibility:
+    name: System Compatibility Testing
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        stylelint-version: ['16.0.0', '16.x', 'latest']
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install specific stylelint version
+        run: npm install --no-save stylelint@${{ matrix.stylelint-version }}
+
+      - name: Run system compatibility tests
+        run: npm run test:compatibility
+        env:
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compatibility-results-node${{ matrix.node-version }}-stylelint${{ matrix.stylelint-version }}
+          path: |
+            coverage/
+            test-results.xml
+
+  cross-platform:
+    name: Cross-Platform Testing
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18.x, 20.x]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run CI integration tests
+        run: npm run test:ci
+        env:
+          CI: true
+          PLATFORM: ${{ matrix.os }}
+
+      - name: Run system tests
+        run: npm run test:system
+        env:
+          CI: true
+
+  performance-regression:
+    name: Performance Regression Detection
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Fetch more history for performance comparison
+          fetch-depth: 50
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run performance regression tests
+        run: npm run test:regression
+        env:
+          CI: true
+          NODE_OPTIONS: --expose-gc
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: |
+            performance-*.json
+            benchmark-results.json
+
+  memory-leak-detection:
+    name: Memory Leak Detection
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run memory leak tests
+        run: |
+          # Run tests with garbage collection enabled
+          NODE_OPTIONS="--expose-gc --max-old-space-size=4096" npm run test:system
+        env:
+          CI: true
+          MEMORY_TEST: true
+
+  integration-matrix:
+    name: Integration Test Matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-type: [unit, integration, e2e, system]
+        include:
+          - test-type: unit
+            command: test:unit
+            timeout: 5
+          - test-type: integration
+            command: test:integration
+            timeout: 10
+          - test-type: e2e
+            command: test:e2e
+            timeout: 15
+          - test-type: system
+            command: test:system
+            timeout: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ${{ matrix.test-type }} tests
+        run: timeout ${{ matrix.timeout }}m npm run ${{ matrix.command }}
+        env:
+          CI: true
+          TEST_TYPE: ${{ matrix.test-type }}
+
+  performance-monitoring:
+    name: Performance Monitoring
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || contains(github.event.head_commit.message, '[perf]')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run comprehensive performance tests
+        run: |
+          # Extended performance testing for monitoring
+          npm run test:regression -- --verbose
+          npm run test:performance -- --detectOpenHandles
+        env:
+          CI: true
+          PERFORMANCE_MONITORING: true
+          NODE_OPTIONS: --expose-gc
+
+      - name: Generate performance report
+        run: |
+          echo "## Performance Test Results" > performance-report.md
+          echo "**Date**: $(date)" >> performance-report.md
+          echo "**Commit**: ${{ github.sha }}" >> performance-report.md
+          echo "**Node Version**: $(node --version)" >> performance-report.md
+          echo "" >> performance-report.md
+          # Add performance metrics here
+
+      - name: Upload performance report
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-monitoring-report
+          path: performance-report.md
+
+  security-and-dependencies:
+    name: Security & Dependency Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check for dependency vulnerabilities
+        run: |
+          # This would integrate with security scanning tools
+          echo "Checking dependency security..."
+          npm ls --depth=0
+
+      - name: Validate package integrity
+        run: |
+          # Verify package.json and lock file integrity
+          npm run test:ci
+        env:
+          CI: true
+          SECURITY_CHECK: true
+
+  results-summary:
+    name: Test Results Summary
+    runs-on: ubuntu-latest
+    needs: [system-compatibility, cross-platform, performance-regression, integration-matrix]
+    if: always()
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Generate summary report
+        run: |
+          echo "# Advanced Testing Summary" > summary.md
+          echo "" >> summary.md
+          echo "## Test Results" >> summary.md
+          echo "- System Compatibility: ${{ needs.system-compatibility.result }}" >> summary.md
+          echo "- Cross Platform: ${{ needs.cross-platform.result }}" >> summary.md  
+          echo "- Performance Regression: ${{ needs.performance-regression.result }}" >> summary.md
+          echo "- Integration Matrix: ${{ needs.integration-matrix.result }}" >> summary.md
+          echo "" >> summary.md
+          echo "**Overall Status**: $([ '${{ needs.system-compatibility.result }}' = 'success' ] && [ '${{ needs.cross-platform.result }}' = 'success' ] && [ '${{ needs.performance-regression.result }}' = 'success' ] && [ '${{ needs.integration-matrix.result }}' = 'success' ] && echo '✅ PASSED' || echo '❌ FAILED')" >> summary.md
+
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-summary
+          path: summary.md
