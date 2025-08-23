@@ -6,7 +6,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 0 * * 0' # run weekly on Sunday at midnight (UTC)
+    - cron: '0 0 * * 0' # run weekly on Sunday at 12:00am (UTC)
 
 concurrency:
   group: test-${{ github.ref }}

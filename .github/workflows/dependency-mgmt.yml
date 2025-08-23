@@ -3,7 +3,7 @@ name: NPM dependency update
 on:
   workflow_dispatch: # enable run button in GitHub UI
   schedule:
-    - cron: '0 0 1,15 * *' # run twice a month at midnight (UTC)
+    - cron: '0 0 1,15 * *' # run twice a month at 12:00am (UTC)
 
 jobs:
   update:
