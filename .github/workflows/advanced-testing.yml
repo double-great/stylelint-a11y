@@ -6,8 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # Run performance regression tests daily at 02:00 UTC
-    - cron: '0 2 * * *'
+    - cron: '15 0 * * 0' # run weekly on Sunday at 12:15am (UTC)
 
 jobs:
   system-compatibility:
