@@ -51,9 +51,9 @@
     "stylelint": ">=16.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
-    "eslint": "^9.36.0",
-    "eslint-config-stylelint": "^25.0.0",
+    "@eslint/js": "^9.37.0",
+    "eslint": "^9.37.0",
+    "eslint-config-stylelint": "^25.0.1",
     "eslint-plugin-jest": "^29.0.1",
     "globals": "^16.4.0",
     "jest": "^30.2.0",
@@ -61,7 +61,7 @@
     "jest-preset-stylelint": "^8.0.0",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.6.2",
-    "stylelint": "^16.24.0"
+    "stylelint": "^16.25.0"
   },
   "bugs": {
     "url": "https://github.com/double-great/stylelint-a11y/issues"
