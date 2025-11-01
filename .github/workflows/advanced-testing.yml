@@ -40,7 +40,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: compatibility-results-node${{ matrix.node-version }}-stylelint${{ matrix.stylelint-version }}
           path: |
@@ -105,7 +105,7 @@ jobs:
           NODE_OPTIONS: --expose-gc
 
       - name: Upload performance results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: performance-results
           path: |
@@ -211,7 +211,7 @@ jobs:
           # Add performance metrics here
 
       - name: Upload performance report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: performance-monitoring-report
           path: performance-report.md
@@ -272,7 +272,7 @@ jobs:
           echo "**Overall Status**: $([ '${{ needs.system-compatibility.result }}' = 'success' ] && [ '${{ needs.cross-platform.result }}' = 'success' ] && [ '${{ needs.performance-regression.result }}' = 'success' ] && [ '${{ needs.integration-matrix.result }}' = 'success' ] && echo '✅ PASSED' || echo '❌ FAILED')" >> summary.md
 
       - name: Upload summary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-summary
           path: summary.md
