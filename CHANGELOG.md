@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.1] - 2025-11-19
+
+### Changed
+
+- Updated NPM dependencies:
+  - @eslint/js from 9.33.0 to 9.39.1
+  - eslint from 9.33.0 to 9.39.1
+  - jest from 30.0.5 to 30.2.0
+  - prettier from 3.x to 3.6.2
+  - stylelint from 16.x to 16.25.0
+  - Updated indirect dependencies (js-yaml, glob)
+- Updated GitHub Actions workflows:
+  - actions/checkout from 4 to 5
+  - actions/setup-node from 4 to 6
+  - actions/upload-artifact from 4 to 5
+  - actions/download-artifact from 4 to 6
+- Adjusted GitHub Action workflow schedule and formatting
+
 ## [3.4.0] - 2025-08-17
 
 ### Added
