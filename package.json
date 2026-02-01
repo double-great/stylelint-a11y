@@ -61,7 +61,7 @@
     "jest-preset-stylelint": "^8.0.0",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.8.0",
-    "stylelint": "^16.26.1"
+    "stylelint": "^17.1.0"
   },
   "bugs": {
     "url": "https://github.com/double-great/stylelint-a11y/issues"
