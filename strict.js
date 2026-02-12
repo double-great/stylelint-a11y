@@ -1,7 +1,7 @@
 /** @type {import('stylelint').Config} */
 
 export default {
-  plugins: ['.'],
+  plugins: ['@double-great/stylelint-a11y'],
 
   rules: {
     'a11y/content-property-no-static-value': true,
