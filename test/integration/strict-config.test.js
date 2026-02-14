@@ -4,7 +4,7 @@ import stylelint from 'stylelint';
 describe('Strict Configuration', () => {
   it('should load the strict config without errors', () => {
     expect(strictConfig).toBeDefined();
-    expect(strictConfig.plugins).toEqual(['.']);
+    expect(strictConfig.plugins).toEqual(['@double-great/stylelint-a11y']);
     expect(strictConfig.rules).toBeDefined();
   });
 

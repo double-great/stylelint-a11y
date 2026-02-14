@@ -1,7 +1,7 @@
 /** @type {import('stylelint').Config} */
 
 export default {
-  plugins: ['.'],
+  plugins: ['@double-great/stylelint-a11y'],
 
   rules: {
     'a11y/media-prefers-reduced-motion': true,
