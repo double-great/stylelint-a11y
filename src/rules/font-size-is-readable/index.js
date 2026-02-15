@@ -34,13 +34,11 @@ export default function fontSizeIsReadable(actual, options) {
     const THRESHOLD_IN_PX = (options && options.thresholdInPixels) || 15;
 
     root.walkRules((rule) => {
-      let selector = null;
-
       if (!isStandardSyntaxRule(rule)) {
         return;
       }
 
-      selector = rule.selector;
+      const selector = rule.selector;
 
       if (!selector) {
         return;
