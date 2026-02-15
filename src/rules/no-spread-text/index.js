@@ -49,13 +49,11 @@ export default function noSpreadText(actual, options) {
     const maxWidth = (options && options.maxWidth) || 80;
 
     root.walkRules((rule) => {
-      let selector = null;
-
       if (!isStandardSyntaxRule(rule)) {
         return;
       }
 
-      selector = rule.selector;
+      const selector = rule.selector;
 
       if (!selector) {
         return;

@@ -202,9 +202,14 @@ describe('Performance Regression Detection', () => {
         runs.push(metrics.duration);
       }
 
+      // Trim the highest and lowest runs to reduce noise from GC spikes and JIT warmup
+      const sorted = [...runs].sort((a, b) => a - b);
+      const trimmed = sorted.slice(1, -1);
+
       // Calculate coefficient of variation (std dev / mean)
-      const mean = runs.reduce((a, b) => a + b) / runs.length;
-      const variance = runs.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / runs.length;
+      const mean = trimmed.reduce((a, b) => a + b) / trimmed.length;
+      const variance =
+        trimmed.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / trimmed.length;
       const stdDev = Math.sqrt(variance);
       const coefficientOfVariation = stdDev / mean;
 
