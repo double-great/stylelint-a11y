@@ -52,22 +52,22 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.3.0",
+    "eslint": "^10.4.0",
     "eslint-config-stylelint": "^27.0.0",
     "eslint-plugin-jest": "^29.15.2",
     "globals": "^17.6.0",
     "jest": "^30.4.2",
     "jest-light-runner": "^0.7.11",
-    "jest-preset-stylelint": "^9.1.0",
+    "jest-preset-stylelint": "^9.2.0",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.8.3",
-    "stylelint": "^17.11.1"
+    "stylelint": "^17.12.0"
   },
   "bugs": {
     "url": "https://github.com/double-great/stylelint-a11y/issues"
   },
   "homepage": "https://github.com/double-great/stylelint-a11y#readme",
   "dependencies": {
-    "postcss": "^8.5.14"
+    "postcss": "^8.5.15"
   }
 }
