@@ -15,7 +15,7 @@ npm i --save-dev stylelint @double-great/stylelint-a11y
 
 Create the `.stylelintrc.json` config file (or open the existing one), add `stylelint-a11y` to the plugins array and the rules you need to the rules list. All rules from stylelint-a11y need to be namespaced with `a11y`.
 
-Please refer to [stylelint docs](https://stylelint.io/user-guide/) for the detailed info on using this linter.
+Please refer to [stylelint docs](https://stylelint.io/#guides) for the detailed info on using this linter.
 
 ## Basic Configuration
 
