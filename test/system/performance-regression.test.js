@@ -246,8 +246,13 @@ describe('Performance Regression Detection', () => {
       const singleRuleTime = Math.max(results[0].duration, results[1].duration);
       const multiRuleTime = results[2].duration;
 
-      // Multi-rule should be less than 3x single rule time
-      expect(multiRuleTime).toBeLessThan(singleRuleTime * 3);
+      // Multi-rule should be less than 3x single rule time. Single-rule runs on
+      // trivial CSS are sub-millisecond, so the raw ratio is dominated by GC and
+      // JIT jitter; allow a small absolute noise floor (more lenient on CI) so a
+      // single GC pause can't fail the check.
+      const noiseFloorMs = process.env.CI ? 30 : 10;
+
+      expect(multiRuleTime).toBeLessThan(Math.max(singleRuleTime * 3, noiseFloorMs));
     });
   });
 
