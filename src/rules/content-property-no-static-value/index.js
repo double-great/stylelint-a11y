@@ -19,14 +19,18 @@ export const meta = {
 
 const isContentPropertyUsedCorrectly = (selectors) =>
   selectors.every((selector) => {
-    return /::?(?:before|after)/.test(selector);
+    return /::?(?:before|after)/i.test(selector);
   });
+
+// none and normal produce no content, and a trailing slash string gives the content alternative text
+const isAccessibleValue = (value) =>
+  /^(?:none|normal)$/i.test(value) || /\/\s*(?:"[^"]*"|'[^']*')\s*$/.test(value);
 
 const checkNodesForContentProperty = (node) =>
   node.nodes.filter((n) => n.prop).some((n) => n.prop.toLowerCase() === 'content');
 
 function check(node, options = {}) {
-  if (node.type !== 'rule' || !checkNodesForContentProperty(node) || !node.first) {
+  if (!node.nodes || !checkNodesForContentProperty(node) || !node.first) {
     return true;
   }
 
@@ -36,8 +40,9 @@ function check(node, options = {}) {
     return (
       o.type === 'decl' &&
       o.prop.toLowerCase() === 'content' &&
-      isContentPropertyUsedCorrectly(o.parent.selectors) &&
-      allowedValues.some((allowed) => o.value.toLowerCase() === allowed.toLowerCase())
+      (isAccessibleValue(o.value) ||
+        (isContentPropertyUsedCorrectly(o.parent.selectors || []) &&
+          allowedValues.some((allowed) => o.value.toLowerCase() === allowed.toLowerCase())))
     );
   });
 }
@@ -68,8 +73,8 @@ export default function contentPropertyNoStaticValue(actual, options) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
-        selector = node.params;
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page') {
+        selector = node.params || '@page';
       }
 
       if (!selector) {

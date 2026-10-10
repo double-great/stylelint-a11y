@@ -10,6 +10,8 @@ Require implementation of certain styles for selectors with colors.
 - [Safari TP](https://webkit.org/blog/8475/release-notes-for-safari-technology-preview-68)
 - [Mojave](https://www.apple.com/lae/macos/mojave)
 
+A color set through a custom property, such as `color: var(--text)`, is not checked because the theme lives where the property is defined. A `@media (prefers-color-scheme)` block nested inside the rule also satisfies the rule.
+
 ## Options
 
 ### true

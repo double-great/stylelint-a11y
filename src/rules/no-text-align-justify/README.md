@@ -7,6 +7,8 @@ Disallow `{ text-align: justify; }` anywhere.
 - [W3C](https://www.w3.org/TR/WCAG20-TECHS/G169.html)
 - [Design for Hackers](https://designforhackers.com/blog/justify-text-html-css/)
 
+Only the `text-align` property is checked. `text-align-last` and `text-justify` are ignored.
+
 ## Options
 
 ### true

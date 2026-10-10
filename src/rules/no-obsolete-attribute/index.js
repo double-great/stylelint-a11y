@@ -1,3 +1,4 @@
+import isNegatedSelectorNode from '../../utils/isNegatedSelectorNode.js';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 
 import { obsoleteAttributes } from './obsoleteAttributes.js';
@@ -44,6 +45,8 @@ function check(selector, node) {
     selectorParser()
       .astSync(selector)
       .walkAttributes((attribute) => {
+        if (isNegatedSelectorNode(attribute)) return;
+
         const name = `[${attribute.attribute.toLowerCase()}]`;
         const tag = compoundTag(attribute);
 

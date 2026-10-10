@@ -18,9 +18,25 @@ testRule({
       code: '.body[link] { color: pink; }',
       description: 'ignores an attribute that is only obsolete on a specific element',
     },
+    {
+      code: 'li:not([type]) { color: pink; }',
+      description: 'ignores an obsolete attribute inside :not()',
+    },
+    {
+      code: 'a:not(body[link]) { color: pink; }',
+      description: 'ignores an element-specific obsolete attribute inside :not()',
+    },
   ],
 
   reject: [
+    {
+      code: 'body[link] { color: pink; } img[align] { color: pink; }',
+      warnings: [
+        { message: messages.expected('body[link]'), line: 1, column: 1 },
+        { message: messages.expected('img[align]'), line: 1, column: 29 },
+      ],
+      description: 'reports every obsolete attribute',
+    },
     {
       code: 'body[link] { color: pink; }',
       message: messages.expected('body[link]'),
@@ -61,6 +77,27 @@ testRule({
       description: 'rejects an attribute that is obsolete on any element',
     },
     {
+      code: 'div [dropzone] { color: pink; }',
+      message: messages.expected('div [dropzone]'),
+      line: 1,
+      column: 1,
+      description: 'rejects a bare obsolete attribute after a combinator',
+    },
+    {
+      code: 'img[align="left"], a[name^="x"] { color: pink; }',
+      message: messages.expected('img[align="left"], a[name^="x"]'),
+      line: 1,
+      column: 1,
+      description: 'rejects obsolete attributes that have a value or an operator',
+    },
+    {
+      code: ':is(body[link]) { color: pink; }',
+      message: messages.expected(':is(body[link])'),
+      line: 1,
+      column: 1,
+      description: 'rejects an obsolete attribute inside :is() because it does match the element',
+    },
+    {
       code: 'a[href] IMG[DATASRC] { color: pink; }',
       message: messages.expected('a[href] IMG[DATASRC]'),
       line: 1,
@@ -68,4 +105,33 @@ testRule({
       description: 'rejects an uppercase obsolete attribute',
     },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel}[link] { color: pink; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { body[link] { color: pink; } }',
+      message: messages.expected('body[link]'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested obsolete attribute',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

@@ -6,6 +6,10 @@ Safari 10.1 [introduced](https://webkit.org/blog/7551/responsive-design-for-moti
 
 The `--fix` option on the command line can automatically fix all of the problems reported by this rule.
 
+The override has to live in a query for people who asked for less motion. A `prefers-reduced-motion: no-preference` query does not count as an override, but motion declared only inside such a query is accepted.
+
+Only the `transition`, `animation`, and `animation-name` properties are checked. Other longhands such as `transition-duration` and `animation-duration`, and `scroll-behavior`, are ignored.
+
 ## Options
 
 ### true

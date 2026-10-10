@@ -1,3 +1,4 @@
+import isNegatedSelectorNode from '../../utils/isNegatedSelectorNode.js';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 
 import { obsoleteElements } from './obsoleteElements.js';
@@ -31,7 +32,7 @@ function check(selector, node) {
     selectorParser()
       .astSync(selector)
       .walkTags((tag) => {
-        if (obsoleteElements.has(tag.value.toLowerCase())) {
+        if (obsoleteElements.has(tag.value.toLowerCase()) && !isNegatedSelectorNode(tag)) {
           hasObsoleteElement = true;
         }
       });

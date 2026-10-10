@@ -53,6 +53,15 @@ The following pattern is considered a violation:
 }
 ```
 
+```css
+.quux:focus {
+  outline: none;
+  box-shadow: none;
+}
+```
+
+A `border` or `box-shadow` only counts as an alternative when it is drawn with a visible color. Values such as `none`, `0`, and `transparent` do not.
+
 ```scss
 .quux {
   .quuux:focus {
@@ -91,11 +100,11 @@ $primary-color: #333;
 
 ## Note
 
-[Similar rule](https://github.com/stylelint/stylelint/blob/master/lib/rules/declaration-property-value-blacklist/README.md) is in [Stylelint](https://github.com/stylelint/stylelint), but it triggers another error message and does not check for `:focus` selector and `border` property.
+Stylelint's built-in [`declaration-property-value-disallowed-list`](https://stylelint.io/user-guide/rules/declaration-property-value-disallowed-list/) rule can also forbid these values, but it reports every `outline: none`, not only those on `:focus` selectors, and it does not accept a `border` or `box-shadow` alternative.
 
 ```json
 {
-  "declaration-property-value-blacklist": {
+  "declaration-property-value-disallowed-list": {
     "outline": ["none", "0"]
   }
 }

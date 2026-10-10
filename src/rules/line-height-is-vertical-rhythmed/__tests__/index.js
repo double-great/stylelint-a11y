@@ -6,6 +6,26 @@ testRule({
 
   accept: [
     {
+      code: '.foo { line-height: 72px; }',
+      description: 'accepts a larger multiple of the grid',
+    },
+    {
+      code: 'p { line-height: 150%; }',
+      description: 'ignores percentage values',
+    },
+    {
+      code: 'p { line-height: 1.2em; }',
+      description: 'ignores em and rem values',
+    },
+    {
+      code: 'p { line-height: normal; }',
+      description: 'ignores the normal keyword',
+    },
+    {
+      code: 'p { font: 16px/23px sans-serif; }',
+      description: 'ignores the font shorthand',
+    },
+    {
       code: 'a { }',
     },
     {
@@ -33,6 +53,35 @@ testRule({
   ],
 
   reject: [
+    {
+      code: '.foo { line-height: 1.49; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects just below the relative minimum',
+    },
+    {
+      code: '.foo { line-height: 36px; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects a value between grid multiples',
+    },
+    {
+      code: '.foo { line-height: 23px !important; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.a { line-height: 23px; } .b { line-height: 1; }',
+      warnings: [
+        { message: messages.expected('.a'), line: 1, column: 1 },
+        { message: messages.expected('.b'), line: 1, column: 27 },
+      ],
+      description: 'reports every rule off the grid',
+    },
     {
       code: '.foo { line-height: 12px; }',
       message: messages.expected('.foo'),
@@ -82,6 +131,20 @@ testRule({
       column: 1,
       description: 'rejects a decimal value that is off the baseline grid',
     },
+    {
+      code: '@page { line-height: 23px; }',
+      message: messages.expected('@page'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule that has no page selector',
+    },
+    {
+      code: '@page :first { line-height: 23px; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule with a page selector',
+    },
   ],
 });
 
@@ -128,6 +191,7 @@ testRuleConfigs({
 
   accept: [
     { config: true },
+    { config: null },
     { config: [true, {}] },
     { config: [true, { baselineGrid: 20, minRelativeLineHeight: 1.3 }] },
     { config: [true, { severity: 'warning' }] },
@@ -139,12 +203,47 @@ testRuleConfigs({
       description: 'rejects an option with the wrong type',
     },
     {
+      config: [true, { baselineGrid: 0 }],
+      description: 'rejects a zero baseline grid',
+    },
+    {
+      config: [true, { minRelativeLineHeight: -1 }],
+      description: 'rejects a negative minimum line height',
+    },
+    {
       config: [true, { grid: 20 }],
       description: 'rejects an unknown option name',
     },
     {
       config: [true, 'not-an-object'],
       description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} { line-height: 23px; }',
+      description: 'skips a selector with interpolation',
+    },
+    {
+      code: '.a { line-height: $lh; }',
+      description: 'ignores a variable value',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { .b { line-height: 23px; } }',
+      message: messages.expected('.b'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested rule',
     },
   ],
 });

@@ -57,20 +57,20 @@ For stricter accessibility checks:
 
 ## Rules
 
-| Rule ID                                                                                    | Description                                                             |                      |
-| :----------------------------------------------------------------------------------------- | :---------------------------------------------------------------------- | -------------------- |
-| [content-property-no-static-value](./src/rules/content-property-no-static-value/README.md) | Disallow unaccessible CSS generated content in pseudo-elements          |                      |
-| [font-size-is-readable](./src/rules/font-size-is-readable/README.md)                       | Disallow font sizes less than `15px`                                    |                      |
-| [line-height-is-vertical-rhythmed](./src/rules/line-height-is-vertical-rhythmed/README.md) | Disallow not vertical rhythmed `line-height`                            |                      |
-| [media-prefers-reduced-motion](./src/rules/media-prefers-reduced-motion/README.md)         | Require certain styles if the animation or transition in media features | Recommended, Fixable |
-| [media-prefers-color-scheme](./src/rules/media-prefers-color-scheme/README.md)             | Require implementation of certain styles for selectors with colors.     |                      |
-| [no-display-none](./src/rules/no-display-none/README.md)                                   | Disallow content hiding with `display: none` property                   |                      |
-| [no-obsolete-attribute](./src/rules/no-obsolete-attribute/README.md)                       | Disallow obsolete attribute using                                       |                      |
-| [no-obsolete-element](./src/rules/no-obsolete-element/README.md)                           | Disallow obsolete selectors using                                       |                      |
-| [no-spread-text](./src/rules/no-spread-text/README.md)                                     | Require width of text in a comfortable range                            |                      |
-| [no-outline-none](./src/rules/no-outline-none/README.md)                                   | Disallow outline clearing                                               | Recommended          |
-| [no-text-align-justify](./src/rules/no-text-align-justify/README.md)                       | Disallow content with `text-align: justify`                             |                      |
-| [selector-pseudo-class-focus](./src/rules/selector-pseudo-class-focus/README.md)           | Require or disallow a pseudo-element to the selectors with `:hover`     | Recommended, Fixable |
+| Rule ID                                                                                    | Description                                                                |                      |
+| :----------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | -------------------- |
+| [content-property-no-static-value](./src/rules/content-property-no-static-value/README.md) | Disallow static text in the `content` property                             |                      |
+| [font-size-is-readable](./src/rules/font-size-is-readable/README.md)                       | Disallow font sizes smaller than 15px                                      |                      |
+| [line-height-is-vertical-rhythmed](./src/rules/line-height-is-vertical-rhythmed/README.md) | Require line heights that fit a baseline grid                              |                      |
+| [media-prefers-color-scheme](./src/rules/media-prefers-color-scheme/README.md)             | Require a `prefers-color-scheme` override for colors                       |                      |
+| [media-prefers-reduced-motion](./src/rules/media-prefers-reduced-motion/README.md)         | Require a `prefers-reduced-motion` override for transitions and animations | Recommended, Fixable |
+| [no-display-none](./src/rules/no-display-none/README.md)                                   | Disallow hiding content with `display: none`                               |                      |
+| [no-obsolete-attribute](./src/rules/no-obsolete-attribute/README.md)                       | Disallow selectors that target obsolete HTML attributes                    |                      |
+| [no-obsolete-element](./src/rules/no-obsolete-element/README.md)                           | Disallow selectors that target obsolete HTML elements                      |                      |
+| [no-outline-none](./src/rules/no-outline-none/README.md)                                   | Disallow removing the focus outline without an alternative                 | Recommended          |
+| [no-spread-text](./src/rules/no-spread-text/README.md)                                     | Require text `max-width` between 45ch and 80ch                             |                      |
+| [no-text-align-justify](./src/rules/no-text-align-justify/README.md)                       | Disallow `text-align: justify`                                             |                      |
+| [selector-pseudo-class-focus](./src/rules/selector-pseudo-class-focus/README.md)           | Require a `:focus` or `:focus-visible` companion for `:hover` selectors    | Recommended, Fixable |
 
 ## Configurations
 

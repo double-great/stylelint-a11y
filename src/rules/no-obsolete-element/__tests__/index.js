@@ -20,9 +20,25 @@ testRule({
       code: '[data-center] { color: pink; }',
       description: 'ignores an attribute that shares a name with an obsolete element',
     },
+    {
+      code: 'div:not(center) { color: pink; }',
+      description: 'ignores an obsolete element inside :not()',
+    },
+    {
+      code: 'div:NOT(center, font) { color: pink; }',
+      description: 'ignores a selector list inside an uppercase :not()',
+    },
   ],
 
   reject: [
+    {
+      code: 'center { color: pink; } font { color: pink; }',
+      warnings: [
+        { message: messages.expected('center'), line: 1, column: 1 },
+        { message: messages.expected('font'), line: 1, column: 25 },
+      ],
+      description: 'reports every obsolete element',
+    },
     {
       code: 'blink { color: pink; }',
       message: messages.expected('blink'),
@@ -63,6 +79,13 @@ testRule({
       description: 'rejects an obsolete element with a pseudo-class',
     },
     {
+      code: ':is(center, .x) { color: pink; }',
+      message: messages.expected(':is(center, .x)'),
+      line: 1,
+      column: 1,
+      description: 'rejects an obsolete element inside :is() because it does match the element',
+    },
+    {
       code: 'nav > CENTER, a { color: pink; }',
       message: messages.expected('nav > CENTER, a'),
       line: 1,
@@ -70,4 +93,33 @@ testRule({
       description: 'rejects an uppercase obsolete element in a selector list',
     },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} center { color: pink; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { center { color: pink; } }',
+      message: messages.expected('center'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested obsolete element',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });
