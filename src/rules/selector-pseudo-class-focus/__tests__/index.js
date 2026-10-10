@@ -21,6 +21,14 @@ testRule({
     {
       code: 'a:focus { outline: thin dotted; } a:active, a:hover { outline: 0; }',
     },
+    {
+      code: 'a:hover { } a:focus-visible { }',
+      description: 'accepts a separate :focus-visible rule as the companion',
+    },
+    {
+      code: 'a:hover, a:focus-visible { }',
+      description: 'accepts :focus-visible in the same selector list',
+    },
   ],
 
   reject: [
@@ -46,6 +54,12 @@ testRule({
       code: 'a:hover, a:focus { } b:hover { } b { }',
       fixed: 'a:hover, a:focus { } b:hover, b:focus { } b { }',
       message: messages.expected('b:hover'),
+    },
+    {
+      code: 'a:hover { } a:focus-within { }',
+      fixed: 'a:hover, a:focus { } a:focus-within { }',
+      message: messages.expected('a:hover'),
+      description: 'does not treat :focus-within as a companion',
     },
   ],
 });

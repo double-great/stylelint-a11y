@@ -18,7 +18,11 @@ export const meta = {
   deprecated: false,
 };
 
-function hasAlready(parent, replacedSelector, selector) {
+// Either :focus or :focus-visible in place of :hover counts as the companion selector
+const focusCompanions = (hovered) =>
+  [':focus', ':focus-visible'].map((pseudo) => hovered.replace(/:hover/gi, pseudo));
+
+function hasAlready(parent, selector) {
   const nodes = parent.nodes.reduce((arr, i) => {
     if (i.type === 'rule') arr.push(i.selectors);
 
@@ -30,13 +34,16 @@ function hasAlready(parent, replacedSelector, selector) {
     .filter((o) => o.match(/:hover/gi))
     .map((o) => o.trim());
   const returned = hoveredSelector.some((o) => {
-    return deepFlatten(nodes).indexOf(o.replace(/:hover/gi, ':focus')) >= 0;
+    return focusCompanions(o).some((companion) => deepFlatten(nodes).indexOf(companion) >= 0);
   });
 
   if (returned) return true;
 
   return parent.nodes.some((i) => {
-    return i.type === 'rule' && i.selectors.indexOf(replacedSelector) !== -1;
+    return (
+      i.type === 'rule' &&
+      focusCompanions(selector).some((companion) => i.selectors.indexOf(companion) !== -1)
+    );
   });
 }
 
@@ -73,7 +80,7 @@ export default function selectorPseudoClassFocus(actual, _, context) {
         return;
       }
 
-      const isAccepted = hasAlready(rule.parent, selector.replace(/:hover/g, ':focus'), selector);
+      const isAccepted = hasAlready(rule.parent, selector);
 
       if (context.fix && !isAccepted) {
         rule.parent.nodes.forEach((node) => {

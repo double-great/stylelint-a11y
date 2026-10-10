@@ -8,8 +8,8 @@ a:focus {
 }
 ```
 
-This rule considers :focus pseudo-class selector defined in the CSS Specifications.
-The `--fix` option on the command line can automatically fix all of the problems reported by this rule.
+This rule considers the `:focus` and `:focus-visible` pseudo-classes defined in the CSS Specifications. Either one satisfies the rule as a companion to `:hover`.
+The `--fix` option on the command line can automatically fix all of the problems reported by this rule by adding a `:focus` variant of the selector.
 
 ## Options
 
@@ -39,5 +39,18 @@ a:focus {
 a:hover {
 }
 a:focus {
+}
+```
+
+```css
+a:hover,
+a:focus-visible {
+}
+```
+
+```css
+a:hover {
+}
+a:focus-visible {
 }
 ```
