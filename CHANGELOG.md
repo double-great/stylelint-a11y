@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `selector-pseudo-class-focus` accepts `:focus-visible` as the companion to `:hover`
 - Secondary options are validated; unknown option names and values of the wrong type are reported as configuration errors
 - `postcss-selector-parser` dependency
+- README note pointing to stylelint's `declaration-property-unit-disallowed-list` for requiring relative font-size units
 
 ### Fixed
 
@@ -24,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README severity examples use stylelint's `severity` secondary option; the example of an unimplemented `ignore` option is removed
 - Tests use the `thresholdInPixels` option name, and Jest enforces the `lines` coverage threshold
 - `npm run coverage` reports real numbers; it ran under `jest-light-runner`, which collects no coverage without Babel, so it now uses Jest's default runner with the V8 provider
+
+### Removed
+
+- The `coverage:all` npm script, which duplicated `coverage`
 
 Releases 3.5.0 through 3.5.5 contained dependency updates only; see the git tags.
 
