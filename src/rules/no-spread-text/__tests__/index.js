@@ -74,3 +74,29 @@ testRule({
     },
   ],
 });
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [
+    { config: true },
+    { config: [true, {}] },
+    { config: [true, { minWidth: 30, maxWidth: 60 }] },
+    { config: [true, { severity: 'warning' }] },
+  ],
+
+  reject: [
+    {
+      config: [true, { maxWidth: '60ch' }],
+      description: 'rejects an option with the wrong type',
+    },
+    {
+      config: [true, { max: 60 }],
+      description: 'rejects an unknown option name',
+    },
+    {
+      config: [true, 'not-an-object'],
+      description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});

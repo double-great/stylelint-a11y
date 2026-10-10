@@ -122,3 +122,29 @@ testRule({
     },
   ],
 });
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [
+    { config: true },
+    { config: [true, {}] },
+    { config: [true, { baselineGrid: 20, minRelativeLineHeight: 1.3 }] },
+    { config: [true, { severity: 'warning' }] },
+  ],
+
+  reject: [
+    {
+      config: [true, { baselineGrid: '20' }],
+      description: 'rejects an option with the wrong type',
+    },
+    {
+      config: [true, { grid: 20 }],
+      description: 'rejects an unknown option name',
+    },
+    {
+      config: [true, 'not-an-object'],
+      description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});

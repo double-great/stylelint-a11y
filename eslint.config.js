@@ -10,6 +10,7 @@ export default [
       globals: {
         ...globals.node,
         testRule: 'readonly',
+        testRuleConfigs: 'readonly',
       },
     },
   },

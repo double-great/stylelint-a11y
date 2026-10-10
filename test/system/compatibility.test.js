@@ -134,8 +134,9 @@ describe('System Compatibility Testing', () => {
         'a11y/font-size-is-readable': [true, { thresholdInPixels: 'invalid' }],
       });
 
-      // Should handle invalid options without crashing
-      expect(result).toBeDefined();
+      // Stylelint reports the invalid option instead of silently using the default
+      expect(result.results[0].invalidOptionWarnings).toHaveLength(1);
+      expect(result.results[0].warnings).toHaveLength(0);
     });
 
     it('should handle missing secondary options', async () => {
