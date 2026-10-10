@@ -20,9 +20,39 @@ testRule({
     {
       code: '.quuux:focus { outline: none; box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }',
     },
+    {
+      code: '.longhand:focus { outline-style: none; box-shadow: 0 0 0 2px #000; }',
+      description: 'accepts a removed outline-style when box-shadow provides an alternative',
+    },
+    {
+      code: '.longhand:focus { outline-width: 2px; outline-color: #333; }',
+      description: 'accepts longhand properties that keep the outline visible',
+    },
   ],
 
   reject: [
+    {
+      code: 'a:focus { outline: none !important; }',
+      message: messages.expected('a:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: 'a:focus, b:focus { outline: none; }',
+      message: messages.expected('a:focus, b:focus'),
+      line: 1,
+      column: 1,
+      description: 'reports a selector list once',
+    },
+    {
+      code: '.a:focus { outline: none; } .b:focus { outline: 0; }',
+      warnings: [
+        { message: messages.expected('.a:focus'), line: 1, column: 1 },
+        { message: messages.expected('.b:focus'), line: 1, column: 29 },
+      ],
+      description: 'reports every rule that removes the outline',
+    },
     {
       code: '.foo1:focus { outline: none; } .foo2:focus { outline: 1px solid red; }',
       message: messages.expected('.foo1:focus'),
@@ -47,5 +77,94 @@ testRule({
       line: 1,
       column: 9,
     },
+    {
+      code: '.longhand:focus { outline-style: none; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects outline-style: none',
+    },
+    {
+      code: '.longhand:focus { outline-width: 0; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects outline-width: 0',
+    },
+    {
+      code: '.longhand:focus { outline-color: transparent; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects outline-color: transparent',
+    },
+    {
+      code: '.longhand:focus { outline-color: rgba(0, 0, 0, 0); border: transparent; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects a fully transparent outline-color without an alternative',
+    },
+    {
+      code: '.alt:focus { outline: none; box-shadow: none; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'does not accept box-shadow: none as an alternative',
+    },
+    {
+      code: '.alt:focus { outline: none; border: 0; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'does not accept border: 0 as an alternative',
+    },
+    {
+      code: '.alt:focus { outline: none; border: none; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'does not accept border: none as an alternative',
+    },
+    {
+      code: '.alt:focus { outline: 1px solid transparent; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'treats a transparent outline shorthand as a removed outline',
+    },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel}:focus { outline: none; }',
+      description: 'skips a selector with interpolation',
+    },
+    {
+      code: '.a { &:focus { outline: 2px solid $color; } }',
+      description: 'accepts a visible nested outline',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { &:focus { outline: 0; } }',
+      message: messages.expected('&:focus'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested focus rule',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

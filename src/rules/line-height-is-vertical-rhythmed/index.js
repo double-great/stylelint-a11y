@@ -1,3 +1,4 @@
+import { isNumber } from 'stylelint/lib/utils/validateTypes.mjs';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 import stylelint from 'stylelint';
 const {
@@ -5,6 +6,8 @@ const {
 } = stylelint;
 
 export const ruleName = 'a11y/line-height-is-vertical-rhythmed';
+
+const isPositiveNumber = (value) => isNumber(value) && value > 0;
 
 export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected a vertical rhythmed line-height in ${selector}`,
@@ -17,15 +20,15 @@ export const meta = {
 };
 
 function check(node, options = {}) {
-  if (node.type !== 'rule') {
+  if (!node.nodes) {
     return true;
   }
 
-  const baselineGrid = options.baselineGrid || 24;
-  const minRelativeLineHeight = options.minRelativeLineHeight || 1.5;
+  const baselineGrid = options.baselineGrid ?? 24;
+  const minRelativeLineHeight = options.minRelativeLineHeight ?? 1.5;
 
   const checkInPx = (o) =>
-    o.value.toLowerCase().endsWith('px') && parseInt(o.value) % baselineGrid !== 0;
+    o.value.toLowerCase().endsWith('px') && parseFloat(o.value) % baselineGrid !== 0;
   const checkInRel = (o) => !isNaN(o.value) && parseFloat(o.value) < minRelativeLineHeight;
 
   return !node.nodes.some(
@@ -36,7 +39,16 @@ function check(node, options = {}) {
 
 export default function lineHeightIsVerticalRhythmed(actual, options) {
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      { actual },
+      {
+        actual: options,
+        possible: { baselineGrid: [isPositiveNumber], minRelativeLineHeight: [isPositiveNumber] },
+        optional: true,
+      }
+    );
 
     if (!validOptions || !actual) {
       return;
@@ -51,8 +63,8 @@ export default function lineHeightIsVerticalRhythmed(actual, options) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
-        selector = node.params;
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page') {
+        selector = node.params || '@page';
       }
 
       if (!selector) {

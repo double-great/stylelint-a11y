@@ -7,6 +7,8 @@ Disallow CSS generated content except aria-label attribute content and empty str
 - [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/content)
 - [tink](https://tink.uk/accessibility-support-for-css-generated-content//)
 
+Values of `none` and `normal` are always accepted because they produce no content. A value that ends with a slash and a string, such as `content: "\2605" / "star"`, is accepted because the string gives the generated content alternative text.
+
 ## Options
 
 ### true

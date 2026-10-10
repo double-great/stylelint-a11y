@@ -16,8 +16,27 @@ export const meta = {
   deprecated: false,
 };
 
+// Hiding content only when printing does not affect people using a screen or assistive technology
+function isPrintOnly(node) {
+  let current = node.parent;
+
+  while (current) {
+    if (
+      current.type === 'atrule' &&
+      current.name.toLowerCase() === 'media' &&
+      /^\s*(?:only\s+)?print\b/i.test(current.params)
+    ) {
+      return true;
+    }
+
+    current = current.parent;
+  }
+
+  return false;
+}
+
 function check(selector, node) {
-  if (node.type !== 'rule') {
+  if (!node.nodes || isPrintOnly(node)) {
     return true;
   }
 
@@ -44,8 +63,8 @@ export default function noDisplayNone(actual) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
-        selector = node.params;
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page') {
+        selector = node.params || '@page';
       }
 
       if (!selector) {

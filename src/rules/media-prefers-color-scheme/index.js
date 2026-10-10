@@ -21,6 +21,15 @@ export const meta = {
 };
 const targetProperties = ['background-color', 'color'];
 
+// A color set through a custom property is themed where the property is defined
+const usesCustomProperty = (value) => /\bvar\(/i.test(value);
+
+const normalizeSelector = (selector) =>
+  selector
+    .split(',')
+    .map((part) => part.trim().replace(/\s+/g, ' '))
+    .join(', ');
+
 function check(selector, node) {
   const declarations = node.nodes;
   const params = node.parent.params;
@@ -36,21 +45,33 @@ function check(selector, node) {
     return true;
   }
 
-  let currentSelector = null;
+  const noMatchedParams = !params || params.indexOf('prefers-color-scheme') === -1;
 
-  const declarationsIsMatched = declarations.some((declaration) => {
-    const noMatchedParams = !params || params.indexOf('prefers-color-scheme') === -1;
-    const index = targetProperties.indexOf(declaration.prop);
+  // Every matched property needs its own override, not just the first one found
+  const matchedProperties = noMatchedParams
+    ? declarations
+        .filter(
+          (declaration) =>
+            targetProperties.indexOf(declaration.prop) >= 0 &&
+            !usesCustomProperty(declaration.value)
+        )
+        .map((declaration) => declaration.prop)
+    : [];
 
-    currentSelector = targetProperties[index];
+  if (matchedProperties.length === 0) return true;
 
-    return index >= 0 && noMatchedParams;
-  });
+  // A media query nested inside the rule counts as the override
+  const hasNestedPrefersColorScheme = declarations.some(
+    (childNode) =>
+      childNode.type === 'atrule' &&
+      childNode.name === 'media' &&
+      childNode.params.indexOf('prefers-color-scheme') >= 0
+  );
 
-  if (!declarationsIsMatched) return true;
+  if (hasNestedPrefersColorScheme) return true;
 
-  if (declarationsIsMatched) {
-    const parentMatchedNode = parentNodes.some((parentNode) => {
+  return matchedProperties.every((currentSelector) => {
+    return parentNodes.some((parentNode) => {
       if (!parentNode || !parentNode.nodes) return false;
 
       return parentNode.nodes.some((childrenNode) => {
@@ -59,7 +80,7 @@ function check(selector, node) {
         if (
           !parentNode.params ||
           !Array.isArray(childrenNodes) ||
-          selector !== childrenNode.selector
+          normalizeSelector(selector) !== normalizeSelector(childrenNode.selector)
         )
           return false;
 
@@ -74,13 +95,7 @@ function check(selector, node) {
         return matchedChildrenNodes;
       });
     });
-
-    if (!parentMatchedNode) return false;
-
-    return true;
-  }
-
-  return true;
+  });
 }
 
 export default function mediaPrefersColorScheme(actual) {
@@ -100,12 +115,12 @@ export default function mediaPrefersColorScheme(actual) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name === 'page' && node.params) {
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page') {
         if (!isStandardSyntaxAtRule(node)) {
           return;
         }
 
-        selector = node.params;
+        selector = node.params || '@page';
       }
 
       if (!selector) {

@@ -1,12 +1,14 @@
 # no-obsolete-attribute
 
-Disallow obsolete attribute using.
+Disallow selectors that target obsolete HTML attributes.
 
 **Sources:**
 
 - [W3G Obsolete features](https://www.w3.org/TR/html5/obsolete.html#obsolete)
 - [W3C Non-conforming features](https://w3c.github.io/html/obsolete.html#non-conforming-features)
 - [W3G Features removed](https://www.w3.org/TR/html52/changes.html#features-removed)
+
+A selector inside `:not()` is ignored because it names an element the rule does not style.
 
 ## Options
 
@@ -30,6 +32,12 @@ img[datasrc] {
 ```css
 img[align],
 a[name] {
+  color: pink;
+}
+```
+
+```css
+div body[link].old {
   color: pink;
 }
 ```

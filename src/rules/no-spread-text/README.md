@@ -9,6 +9,8 @@ Require width of text greater than 45 characters and less than 80 characters.
 
 > Warning! This rule use some heuristics for define css node with styles for text. It may be unstable.
 
+Only `max-width` values in `ch` are checked, and only in rules that also set a text property such as `color`, `line-height`, or `text-align`. `font-size` alone does not mark a rule as text, and `width` and `max-inline-size` are ignored.
+
 ## Options
 
 ### true

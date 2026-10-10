@@ -16,6 +16,30 @@ export const meta = {
   deprecated: false,
 };
 
+// transparent keyword, rgba()/hsla() with a zero alpha channel, or an 8-digit hex ending in 00
+const isTransparentColor = (value) =>
+  /transparent|(?:rgba?|hsla?)\([^)]*[,/]\s*0(?:\.0+)?%?\s*\)|#[0-9a-f]{6}00\b/.test(value);
+
+// The shorthand and each longhand that removes the visible outline on its own
+const removesOutline = (prop, value) => {
+  switch (prop) {
+    case 'outline':
+      return value === '0' || value === 'none' || isTransparentColor(value);
+    case 'outline-style':
+      return value === 'none';
+    case 'outline-width':
+      return /^0[a-z%]*$/.test(value);
+    case 'outline-color':
+      return isTransparentColor(value);
+    default:
+      return false;
+  }
+};
+
+// A border or box-shadow only replaces the outline when it is drawn with a visible color
+const isVisibleAlternative = (value) =>
+  !/^(?:none|0[a-z%]*|hidden)$/.test(value) && !isTransparentColor(value);
+
 function check(selector, node) {
   if (node.type !== 'rule') {
     return true;
@@ -26,10 +50,7 @@ function check(selector, node) {
   }
 
   const hasEmptyOutline = node.nodes.some(
-    (o) =>
-      o.type === 'decl' &&
-      o.prop.toLowerCase() === 'outline' &&
-      ['0', 'none'].indexOf(o.value.toLowerCase()) >= 0
+    (o) => o.type === 'decl' && removesOutline(o.prop.toLowerCase(), o.value.toLowerCase())
   );
 
   if (hasEmptyOutline) {
@@ -37,7 +58,7 @@ function check(selector, node) {
       (o) =>
         o.type === 'decl' &&
         ['border', 'border-color', 'box-shadow'].indexOf(o.prop.toLowerCase()) >= 0 &&
-        !o.value.toLowerCase().match(/transparent/gi)
+        isVisibleAlternative(o.value.toLowerCase())
     );
   }
 

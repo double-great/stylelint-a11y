@@ -23,14 +23,56 @@ testRule({
     {
       code: ".foo { font-size: '12px'; width: '200px'; }",
     },
+    {
+      code: '.foo::BEFORE { content: ""; }',
+      description: 'treats the pseudo-element name as case-insensitive',
+    },
+    {
+      code: '.foo::before { content: none; }',
+      description: 'accepts none because it produces no content',
+    },
+    {
+      code: '.foo::before { content: normal; }',
+      description: 'accepts normal because it produces no content',
+    },
+    {
+      code: '.foo::before { content: "\\2605" / "star"; }',
+      description: 'accepts static content that carries alternative text',
+    },
+    {
+      code: '.foo::before { content: url(icon.svg) / "Search"; }',
+      description: 'accepts an image with alternative text',
+    },
   ],
 
   reject: [
+    {
+      code: '.foo::before { content: "x" !important; }',
+      message: messages.expected('.foo::before'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.a::before { content: "x"; } .b::after { content: "y"; }',
+      warnings: [
+        { message: messages.expected('.a::before'), line: 1, column: 1 },
+        { message: messages.expected('.b::after'), line: 1, column: 30 },
+      ],
+      description: 'reports every rule with static content',
+    },
     {
       code: '.foo::before { content: "bar"; }',
       message: messages.expected('.foo::before'),
       line: 1,
       column: 1,
+    },
+    {
+      code: '.foo::before { content: "\\2605"; }',
+      message: messages.expected('.foo::before'),
+      line: 1,
+      column: 1,
+      description: 'rejects static content without alternative text',
     },
     {
       code: '.bar::before { content: 23; }',
@@ -43,6 +85,20 @@ testRule({
       message: messages.expected('.foo:before, .bar'),
       line: 1,
       column: 1,
+    },
+    {
+      code: '@page { content: "x"; }',
+      message: messages.expected('@page'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule that has no page selector',
+    },
+    {
+      code: '@page :first { content: "x"; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule with a page selector',
     },
   ],
 });
@@ -81,6 +137,56 @@ testRule({
       line: 1,
       column: 1,
       description: 'rejects static text with custom allowedValues',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [
+    { config: true },
+    { config: null },
+    { config: [true, {}] },
+    { config: [true, { allowedValues: ["''", 'attr(title)'] }] },
+    { config: [true, { severity: 'warning' }] },
+  ],
+
+  reject: [
+    {
+      config: [true, { allowedValues: [42] }],
+      description: 'rejects an option with the wrong type',
+    },
+    {
+      config: [true, { allowed: ["''"] }],
+      description: 'rejects an unknown option name',
+    },
+    {
+      config: [true, 'not-an-object'],
+      description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel}::before { content: "x"; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { &::before { content: "x"; } }',
+      message: messages.expected('&::before'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested pseudo-element rule',
     },
   ],
 });

@@ -132,11 +132,20 @@ describe('Integration Testing', () => {
 
     it('should handle rule options', async () => {
       const result = await testCSS('a { font-size: 14px; }', {
-        'font-size-is-readable': [true, { minSize: 15 }],
+        'font-size-is-readable': [true, { thresholdInPixels: 15 }],
       });
 
       expect(result.errored).toBe(true);
       expect(result.results[0].warnings[0].rule).toBe('a11y/font-size-is-readable');
+    });
+
+    it('should respect a lowered threshold option', async () => {
+      const result = await testCSS('a { font-size: 14px; }', {
+        'font-size-is-readable': [true, { thresholdInPixels: 14 }],
+      });
+
+      expect(result.errored).toBe(false);
+      expect(result.results[0].warnings).toHaveLength(0);
     });
 
     it('should handle disabled rules', async () => {
