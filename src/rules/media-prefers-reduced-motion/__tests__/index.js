@@ -129,6 +129,18 @@ testRule({
 
   accept: [
     {
+      code: 'a { transition-duration: 0.3s; }',
+      description: 'ignores transition longhands other than the shorthand',
+    },
+    {
+      code: 'a { animation-duration: 1s; }',
+      description: 'ignores animation longhands other than animation-name',
+    },
+    {
+      code: 'html { scroll-behavior: smooth; }',
+      description: 'ignores scroll-behavior',
+    },
+    {
       code: 'a { transition: NONE; }',
       description: 'treats the none keyword as case-insensitive',
     },

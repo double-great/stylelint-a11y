@@ -6,6 +6,14 @@ testRule({
 
   accept: [
     {
+      code: 'p { text-align-last: justify; }',
+      description: 'ignores text-align-last',
+    },
+    {
+      code: 'p { text-justify: inter-word; }',
+      description: 'ignores text-justify',
+    },
+    {
       code: '.foo { text-align: center; }',
     },
     {

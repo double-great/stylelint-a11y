@@ -6,6 +6,22 @@ testRule({
 
   accept: [
     {
+      code: 'p { font: 10px/1.2 sans-serif; }',
+      description: 'ignores the font shorthand',
+    },
+    {
+      code: 'p { font-size: 0.5rem; }',
+      description: 'ignores relative units',
+    },
+    {
+      code: 'p { font-size: xx-small; }',
+      description: 'ignores keyword sizes',
+    },
+    {
+      code: 'p { font-size: $small; }',
+      description: 'ignores a preprocessor variable',
+    },
+    {
       code: '.foo { }',
     },
     {

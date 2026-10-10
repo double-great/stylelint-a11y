@@ -7,6 +7,8 @@ Disallow font sizes less than 15px (or 11.25pt).
 - [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)
 - [Marvel](https://blog.marvelapp.com/body-text-small/)
 
+Only `px` and `pt` values of the `font-size` property are checked. The `font` shorthand, relative units such as `rem` and `em`, keyword sizes, and preprocessor variables are ignored.
+
 ## Options
 
 ### true

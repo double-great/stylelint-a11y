@@ -6,6 +6,18 @@ testRule({
 
   accept: [
     {
+      code: '.foo { font-size: 16px; max-width: 100ch; }',
+      description: 'ignores a rule whose only text property is font-size',
+    },
+    {
+      code: '.foo { color: red; width: 100ch; }',
+      description: 'ignores width',
+    },
+    {
+      code: '.foo { color: red; max-inline-size: 100ch; }',
+      description: 'ignores max-inline-size',
+    },
+    {
       code: '.foo { }',
     },
     {

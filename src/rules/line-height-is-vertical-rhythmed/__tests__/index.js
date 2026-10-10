@@ -6,6 +6,22 @@ testRule({
 
   accept: [
     {
+      code: 'p { line-height: 150%; }',
+      description: 'ignores percentage values',
+    },
+    {
+      code: 'p { line-height: 1.2em; }',
+      description: 'ignores em and rem values',
+    },
+    {
+      code: 'p { line-height: normal; }',
+      description: 'ignores the normal keyword',
+    },
+    {
+      code: 'p { font: 16px/23px sans-serif; }',
+      description: 'ignores the font shorthand',
+    },
+    {
       code: 'a { }',
     },
     {

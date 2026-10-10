@@ -6,6 +6,8 @@ Disallow not vertical rhythmed line-height.
 
 - [Zell Liew](https://zellwk.com/blog/why-vertical-rhythms/)
 
+Only `px` values and unitless numbers are checked. Percentages, `em` and `rem` values, keywords, and the `font` shorthand are ignored.
+
 ## Options
 
 ### true
