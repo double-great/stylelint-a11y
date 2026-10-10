@@ -21,6 +21,15 @@ export const meta = {
 };
 const targetProperties = ['background-color', 'color'];
 
+// A color set through a custom property is themed where the property is defined
+const usesCustomProperty = (value) => /\bvar\(/i.test(value);
+
+const normalizeSelector = (selector) =>
+  selector
+    .split(',')
+    .map((part) => part.trim().replace(/\s+/g, ' '))
+    .join(', ');
+
 function check(selector, node) {
   const declarations = node.nodes;
   const params = node.parent.params;
@@ -41,11 +50,25 @@ function check(selector, node) {
   // Every matched property needs its own override, not just the first one found
   const matchedProperties = noMatchedParams
     ? declarations
-        .filter((declaration) => targetProperties.indexOf(declaration.prop) >= 0)
+        .filter(
+          (declaration) =>
+            targetProperties.indexOf(declaration.prop) >= 0 &&
+            !usesCustomProperty(declaration.value)
+        )
         .map((declaration) => declaration.prop)
     : [];
 
   if (matchedProperties.length === 0) return true;
+
+  // A media query nested inside the rule counts as the override
+  const hasNestedPrefersColorScheme = declarations.some(
+    (childNode) =>
+      childNode.type === 'atrule' &&
+      childNode.name === 'media' &&
+      childNode.params.indexOf('prefers-color-scheme') >= 0
+  );
+
+  if (hasNestedPrefersColorScheme) return true;
 
   return matchedProperties.every((currentSelector) => {
     return parentNodes.some((parentNode) => {
@@ -57,7 +80,7 @@ function check(selector, node) {
         if (
           !parentNode.params ||
           !Array.isArray(childrenNodes) ||
-          selector !== childrenNode.selector
+          normalizeSelector(selector) !== normalizeSelector(childrenNode.selector)
         )
           return false;
 
