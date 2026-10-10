@@ -129,6 +129,10 @@ testRule({
 
   accept: [
     {
+      code: 'a { transition: none !important; }',
+      description: 'accepts an important none',
+    },
+    {
       code: 'a { transition-duration: 0.3s; }',
       description: 'ignores transition longhands other than the shorthand',
     },
@@ -156,6 +160,21 @@ testRule({
 
   reject: [
     {
+      code: 'a { animation: x 1s !important; }',
+      message: messages.expected('a'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.a { animation: x 1s; } .b { transition: all 1s; }',
+      warnings: [
+        { message: messages.expected('.a'), line: 1, column: 1 },
+        { message: messages.expected('.b'), line: 1, column: 25 },
+      ],
+      description: 'reports every rule without an override',
+    },
+    {
       code: 'a { animation: x 1s; } @media (prefers-reduced-motion: no-preference) { a { animation: none; } }',
       message: messages.expected('a'),
       line: 1,
@@ -163,4 +182,37 @@ testRule({
       description: 'rejects an override placed in a no-preference query',
     },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} { animation: x 1s; }',
+      description: 'skips a selector with interpolation',
+    },
+    {
+      code: '.a { animation: $anim; @media (prefers-reduced-motion: reduce) { animation: none; } }',
+      description: 'accepts a nested override for a variable value',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { .b { animation: x 1s; } }',
+      message: messages.expected('.b'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested rule',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

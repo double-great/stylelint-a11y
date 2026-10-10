@@ -6,6 +6,10 @@ testRule({
 
   accept: [
     {
+      code: '.foo { line-height: 72px; }',
+      description: 'accepts a larger multiple of the grid',
+    },
+    {
       code: 'p { line-height: 150%; }',
       description: 'ignores percentage values',
     },
@@ -49,6 +53,35 @@ testRule({
   ],
 
   reject: [
+    {
+      code: '.foo { line-height: 1.49; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects just below the relative minimum',
+    },
+    {
+      code: '.foo { line-height: 36px; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects a value between grid multiples',
+    },
+    {
+      code: '.foo { line-height: 23px !important; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.a { line-height: 23px; } .b { line-height: 1; }',
+      warnings: [
+        { message: messages.expected('.a'), line: 1, column: 1 },
+        { message: messages.expected('.b'), line: 1, column: 27 },
+      ],
+      description: 'reports every rule off the grid',
+    },
     {
       code: '.foo { line-height: 12px; }',
       message: messages.expected('.foo'),
@@ -158,6 +191,7 @@ testRuleConfigs({
 
   accept: [
     { config: true },
+    { config: null },
     { config: [true, {}] },
     { config: [true, { baselineGrid: 20, minRelativeLineHeight: 1.3 }] },
     { config: [true, { severity: 'warning' }] },
@@ -183,6 +217,33 @@ testRuleConfigs({
     {
       config: [true, 'not-an-object'],
       description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} { line-height: 23px; }',
+      description: 'skips a selector with interpolation',
+    },
+    {
+      code: '.a { line-height: $lh; }',
+      description: 'ignores a variable value',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { .b { line-height: 23px; } }',
+      message: messages.expected('.b'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested rule',
     },
   ],
 });

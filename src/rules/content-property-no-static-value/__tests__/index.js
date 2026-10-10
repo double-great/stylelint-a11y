@@ -47,6 +47,21 @@ testRule({
 
   reject: [
     {
+      code: '.foo::before { content: "x" !important; }',
+      message: messages.expected('.foo::before'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.a::before { content: "x"; } .b::after { content: "y"; }',
+      warnings: [
+        { message: messages.expected('.a::before'), line: 1, column: 1 },
+        { message: messages.expected('.b::after'), line: 1, column: 30 },
+      ],
+      description: 'reports every rule with static content',
+    },
+    {
       code: '.foo::before { content: "bar"; }',
       message: messages.expected('.foo::before'),
       line: 1,
@@ -131,6 +146,7 @@ testRuleConfigs({
 
   accept: [
     { config: true },
+    { config: null },
     { config: [true, {}] },
     { config: [true, { allowedValues: ["''", 'attr(title)'] }] },
     { config: [true, { severity: 'warning' }] },
@@ -148,6 +164,29 @@ testRuleConfigs({
     {
       config: [true, 'not-an-object'],
       description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel}::before { content: "x"; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { &::before { content: "x"; } }',
+      message: messages.expected('&::before'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested pseudo-element rule',
     },
   ],
 });

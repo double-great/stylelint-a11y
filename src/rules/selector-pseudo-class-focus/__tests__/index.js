@@ -110,6 +110,10 @@ testRule({
 
   accept: [
     {
+      code: '#{$sel}:hover { }',
+      description: 'skips a selector with interpolation',
+    },
+    {
       code: '.a { &:hover { } &:focus { } }',
       description: 'accepts a nested companion',
     },
@@ -129,4 +133,10 @@ testRule({
       description: 'does not accept a nested companion from a different parent block',
     },
   ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

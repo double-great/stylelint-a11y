@@ -32,6 +32,14 @@ testRule({
 
   reject: [
     {
+      code: 'center { color: pink; } font { color: pink; }',
+      warnings: [
+        { message: messages.expected('center'), line: 1, column: 1 },
+        { message: messages.expected('font'), line: 1, column: 25 },
+      ],
+      description: 'reports every obsolete element',
+    },
+    {
       code: 'blink { color: pink; }',
       message: messages.expected('blink'),
       line: 1,
@@ -85,4 +93,33 @@ testRule({
       description: 'rejects an uppercase obsolete element in a selector list',
     },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} center { color: pink; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { center { color: pink; } }',
+      message: messages.expected('center'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested obsolete element',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

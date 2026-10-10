@@ -35,6 +35,21 @@ testRule({
 
   reject: [
     {
+      code: '.foo { text-align: justify !important; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.a { text-align: justify; } .b { text-align: justify; }',
+      warnings: [
+        { message: messages.expected('.a'), line: 1, column: 1 },
+        { message: messages.expected('.b'), line: 1, column: 29 },
+      ],
+      description: 'reports every justified rule',
+    },
+    {
       code: '.foo { text-align: justify; }',
       message: messages.expected('.foo'),
       line: 1,
@@ -61,4 +76,33 @@ testRule({
       description: 'rejects a @page rule with a page selector',
     },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} { text-align: justify; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { .b { text-align: justify; } }',
+      message: messages.expected('.b'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested rule',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

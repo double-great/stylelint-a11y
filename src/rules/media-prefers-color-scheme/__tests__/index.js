@@ -34,6 +34,13 @@ testRule({
 
   reject: [
     {
+      code: 'a { color: red !important; }',
+      message: messages.expected('a'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
       code: 'a { color: red; }',
       message: messages.expected('a'),
       line: 1,
@@ -117,6 +124,10 @@ testRule({
 
   accept: [
     {
+      code: '#{$sel} { color: red; }',
+      description: 'skips a selector with interpolation',
+    },
+    {
       code: 'a { color: red; @media (prefers-color-scheme: dark) { color: blue; } }',
       description: 'accepts a media query nested inside the rule',
     },
@@ -136,4 +147,10 @@ testRule({
       description: 'rejects both the outer and the nested rule without a color scheme query',
     },
   ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

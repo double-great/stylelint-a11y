@@ -6,6 +6,14 @@ testRule({
 
   accept: [
     {
+      code: '.foo { color: red; max-width: 45ch; }',
+      description: 'accepts the lower boundary',
+    },
+    {
+      code: '.foo { color: red; max-width: 80ch; }',
+      description: 'accepts the upper boundary',
+    },
+    {
       code: '.foo { font-size: 16px; max-width: 100ch; }',
       description: 'ignores a rule whose only text property is font-size',
     },
@@ -38,6 +46,35 @@ testRule({
   ],
 
   reject: [
+    {
+      code: '.foo { color: red; max-width: 44.9ch; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects just below the lower boundary',
+    },
+    {
+      code: '.foo { color: red; max-width: 80.1ch; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects just above the upper boundary',
+    },
+    {
+      code: '.foo { color: red; max-width: 40ch !important; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.a { color: red; max-width: 40ch; } .b { color: red; max-width: 90ch; }',
+      warnings: [
+        { message: messages.expected('.a'), line: 1, column: 1 },
+        { message: messages.expected('.b'), line: 1, column: 37 },
+      ],
+      description: 'reports every rule outside the range',
+    },
     {
       code: '.foo { text-transform: lowercase; max-width: 40ch; }',
       message: messages.expected('.foo'),
@@ -92,6 +129,7 @@ testRuleConfigs({
 
   accept: [
     { config: true },
+    { config: null },
     { config: [true, {}] },
     { config: [true, { minWidth: 30, maxWidth: 60 }] },
     { config: [true, { severity: 'warning' }] },
@@ -109,6 +147,33 @@ testRuleConfigs({
     {
       config: [true, 'not-an-object'],
       description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} { color: red; max-width: 40ch; }',
+      description: 'skips a selector with interpolation',
+    },
+    {
+      code: '.a { color: red; max-width: $measure; }',
+      description: 'ignores a variable value',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { .b { color: red; max-width: 40ch; } }',
+      message: messages.expected('.b'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested rule',
     },
   ],
 });

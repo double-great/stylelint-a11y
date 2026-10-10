@@ -30,6 +30,14 @@ testRule({
 
   reject: [
     {
+      code: 'body[link] { color: pink; } img[align] { color: pink; }',
+      warnings: [
+        { message: messages.expected('body[link]'), line: 1, column: 1 },
+        { message: messages.expected('img[align]'), line: 1, column: 29 },
+      ],
+      description: 'reports every obsolete attribute',
+    },
+    {
       code: 'body[link] { color: pink; }',
       message: messages.expected('body[link]'),
       line: 1,
@@ -97,4 +105,33 @@ testRule({
       description: 'rejects an uppercase obsolete attribute',
     },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel}[link] { color: pink; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { body[link] { color: pink; } }',
+      message: messages.expected('body[link]'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested obsolete attribute',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });

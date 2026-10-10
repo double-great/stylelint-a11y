@@ -20,6 +20,28 @@ testRule({
 
   reject: [
     {
+      code: '.foo { display: none !important; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects an important declaration',
+    },
+    {
+      code: '.foo { DISPLAY: NONE; }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'treats the property and value as case-insensitive',
+    },
+    {
+      code: '.a { display: none; } .b { display: none; }',
+      warnings: [
+        { message: messages.expected('.a'), line: 1, column: 1 },
+        { message: messages.expected('.b'), line: 1, column: 23 },
+      ],
+      description: 'reports every hidden rule',
+    },
+    {
       code: '.foo { display: none; }',
       message: messages.expected('.foo'),
       line: 1,
@@ -54,4 +76,33 @@ testRule({
       description: 'rejects a @page rule with a page selector',
     },
   ],
+});
+
+testRule({
+  ruleName,
+  config: [true],
+  customSyntax: 'postcss-scss',
+
+  accept: [
+    {
+      code: '#{$sel} { display: none; }',
+      description: 'skips a selector with interpolation',
+    },
+  ],
+
+  reject: [
+    {
+      code: '.a { &.hidden { display: none; } }',
+      message: messages.expected('&.hidden'),
+      line: 1,
+      column: 6,
+      description: 'rejects a nested rule',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [{ config: true }, { config: null }, { config: [true, { severity: 'warning' }] }],
 });
