@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `selector-pseudo-class-focus` finds the focus companion anywhere in the stylesheet, so a hover rule inside `@media (hover: hover)` with its focus rule at the root is no longer reported
+- `media-prefers-color-scheme` accepts a nested `prefers-color-scheme` query and skips colors set through `var()`
+- `content-property-no-static-value` accepts `none`, `normal`, and values that end with a slash and alternative text
+- `no-display-none` skips rules inside a media query that starts with `print`
+- `no-obsolete-element` and `no-obsolete-attribute` ignore selectors inside `:not()`
+
+### Changed
+
+- `selector-pseudo-class-focus` collects the stylesheet selectors once per run instead of once per hover rule
+
+### Fixed
+
+- Every rule checks a bare `@page` block, and four rules check `@page` at all, where the branch was previously unreachable
+- `selector-pseudo-class-focus` requires a companion for every selector in a `:hover` list, treats `:hover` as case-insensitive, and ignores a `:hover` inside `:not()`
+- `no-outline-none` no longer accepts `box-shadow: none`, `border: 0`, or `border: none` as a visible alternative, and treats a transparent `outline` shorthand as removal
+- `media-prefers-reduced-motion` no longer accepts an override inside a `prefers-reduced-motion: no-preference` query and compares `none` case-insensitively
+- `media-prefers-color-scheme` matches the override selector regardless of whitespace
+- `content-property-no-static-value` treats pseudo-element names as case-insensitive
+- `thresholdInPixels`, `baselineGrid`, and `minRelativeLineHeight` must be positive numbers
+
+## [3.6.0] - 2026-10-10
+
+### Added
+
 - `no-outline-none` reports `outline-style: none`, `outline-width: 0`, and a transparent `outline-color`, not only the `outline` shorthand
 - `no-obsolete-element` and `no-obsolete-attribute` match obsolete selectors inside compound and descendant selectors
 - `selector-pseudo-class-focus` accepts `:focus-visible` as the companion to `:hover`
