@@ -26,6 +26,10 @@ testRule({
     {
       code: 'a { font-size: 15px; line-height: 1.6; }',
     },
+    {
+      code: '.decimal { line-height: 24.0px; }',
+      description: 'accepts a decimal value that is exactly on the baseline grid',
+    },
   ],
 
   reject: [
@@ -71,6 +75,13 @@ testRule({
       line: 1,
       column: 1,
     },
+    {
+      code: '.decimal { line-height: 24.5px; }',
+      message: messages.expected('.decimal'),
+      line: 1,
+      column: 1,
+      description: 'rejects a decimal value that is off the baseline grid',
+    },
   ],
 });
 
@@ -108,6 +119,32 @@ testRule({
       line: 1,
       column: 1,
       description: 'rejects 1.2 with custom minRelativeLineHeight: 1.3',
+    },
+  ],
+});
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [
+    { config: true },
+    { config: [true, {}] },
+    { config: [true, { baselineGrid: 20, minRelativeLineHeight: 1.3 }] },
+    { config: [true, { severity: 'warning' }] },
+  ],
+
+  reject: [
+    {
+      config: [true, { baselineGrid: '20' }],
+      description: 'rejects an option with the wrong type',
+    },
+    {
+      config: [true, { grid: 20 }],
+      description: 'rejects an unknown option name',
+    },
+    {
+      config: [true, 'not-an-object'],
+      description: 'rejects a secondary option that is not an object',
     },
   ],
 });

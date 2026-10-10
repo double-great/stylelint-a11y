@@ -35,6 +35,24 @@ The following pattern is considered a violation:
 }
 ```
 
+```css
+.qux:focus {
+  outline-style: none;
+}
+```
+
+```css
+.qux:focus {
+  outline-width: 0;
+}
+```
+
+```css
+.qux:focus {
+  outline-color: transparent;
+}
+```
+
 ```scss
 .quux {
   .quuux:focus {

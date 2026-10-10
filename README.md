@@ -131,27 +131,34 @@ Since both configs add stylelint-a11y to `plugins`, you don't have to do this yo
 
 ### Severity Levels
 
-Stylelint supports configuring rules with different severity levels. You can set rules to either "error" or "warning":
+Every rule reports an error by default. To report a warning instead, set `severity` in the rule's secondary options object:
 
 ```json
 {
   "rules": {
-    "a11y/no-outline-none": "error",
-    "a11y/font-size-is-readable": "warning",
-    "a11y/media-prefers-reduced-motion": ["warning", { "ignore": ["animation"] }]
+    "a11y/no-outline-none": true,
+    "a11y/font-size-is-readable": [true, { "severity": "warning" }],
+    "a11y/media-prefers-reduced-motion": [true, { "severity": "warning" }]
   }
 }
 ```
 
-You can also use array syntax with severity as the first element:
+Rule options and `severity` share the same object:
 
 ```json
 {
   "rules": {
-    "a11y/no-outline-none": ["error"],
-    "a11y/font-size-is-readable": ["warning", { "thresholdInPixels": 14 }],
-    "a11y/selector-pseudo-class-focus": ["error", "always"]
+    "a11y/font-size-is-readable": [true, { "thresholdInPixels": 14, "severity": "warning" }]
   }
+}
+```
+
+To report every rule as a warning, set `defaultSeverity` at the top level of the configuration:
+
+```json
+{
+  "defaultSeverity": "warning",
+  "extends": ["@double-great/stylelint-a11y/recommended"]
 }
 ```
 
@@ -172,7 +179,19 @@ Many rules support additional configuration options for customization. For examp
 }
 ```
 
-Refer to individual rule documentation for available options.
+Refer to individual rule documentation for available options. Unknown option names and values of the wrong type are reported as configuration errors.
+
+### Related Core Rules
+
+Some accessibility checks are already covered by stylelint's built-in rules. For example, to require relative units for font sizes, use [`declaration-property-unit-disallowed-list`](https://stylelint.io/user-guide/rules/declaration-property-unit-disallowed-list/):
+
+```json
+{
+  "rules": {
+    "declaration-property-unit-disallowed-list": { "font-size": ["px", "pt"] }
+  }
+}
+```
 
 ## Disabling Rules
 

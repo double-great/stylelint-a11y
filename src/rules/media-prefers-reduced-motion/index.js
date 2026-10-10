@@ -53,22 +53,19 @@ function check(selector, node) {
     return true;
   }
 
-  let currentSelector = null;
+  const noMatchedParams = !params || params.indexOf('prefers-reduced-motion') === -1;
 
-  const declarationsIsMatched = declarations.some((declaration) => {
-    const noMatchedParams = !params || params.indexOf('prefers-reduced-motion') === -1;
-    const index = targetProperties.indexOf(declaration.prop);
+  // Every matched property needs its own override, not just the first one found
+  const matchedProperties = noMatchedParams
+    ? declarations
+        .filter(
+          (declaration) =>
+            targetProperties.indexOf(declaration.prop) >= 0 && declaration.value !== 'none'
+        )
+        .map((declaration) => declaration.prop)
+    : [];
 
-    currentSelector = targetProperties[index];
-
-    if (targetProperties.indexOf(declaration.prop) >= 0 && declaration.value === 'none') {
-      return false;
-    }
-
-    return index >= 0 && noMatchedParams;
-  });
-
-  if (!declarationsIsMatched) return true;
+  if (matchedProperties.length === 0) return true;
 
   // Check if there's a nested media query with prefers-reduced-motion inside the current rule
   const hasNestedPrefersReducedMotion = declarations.some((childNode) => {
@@ -94,8 +91,8 @@ function check(selector, node) {
     if (siblingHasPrefersReducedMotion) return true;
   }
 
-  if (declarationsIsMatched) {
-    const parentMatchedNode = parentNodes.some((parentNode) => {
+  return matchedProperties.every((currentSelector) => {
+    return parentNodes.some((parentNode) => {
       if (!parentNode || !parentNode.nodes) return false;
 
       return parentNode.nodes.some((childrenNode) => {
@@ -129,13 +126,7 @@ function check(selector, node) {
         return checkChildrenNodes(childrenNodes, currentSelector, parentNode);
       });
     });
-
-    if (!parentMatchedNode) return false;
-
-    return true;
-  }
-
-  return true;
+  });
 }
 
 export default function mediaPrefersReducedMotion(actual, _, context) {
@@ -155,7 +146,7 @@ export default function mediaPrefersReducedMotion(actual, _, context) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name === 'page' && node.params) {
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
         if (!isStandardSyntaxAtRule(node)) {
           return;
         }

@@ -25,6 +25,10 @@ testRule({
       code: '.foo { transition: all; @media (prefers-reduced-motion: reduce) { transition: none; } }',
     },
     {
+      code: '.foo { transition: all 0.3s; animation: slide 1s; } @media (prefers-reduced-motion: reduce) { .foo { transition: none; animation: none; } }',
+      description: 'accepts when every motion property has an override',
+    },
+    {
       code: '@media (hover: hover) { &:hover, &:focus { background-color: blue; transition: all 0.15s; } @media screen and (prefers-reduced-motion: reduce) { &:hover, &:focus { background-color: blue; transition: none; } } }',
       description: 'accepts nested media query with prefers-reduced-motion already present',
     },
@@ -65,11 +69,48 @@ testRule({
       column: 1,
     },
     {
+      code: '.foo { transition: all 0.3s; animation: slide 1s; } @media (prefers-reduced-motion: reduce) { .foo { transition: none; } }',
+      fixed:
+        '@media screen and (prefers-reduced-motion: reduce) {\n.foo { transition: none; animation: none;\n}\n} .foo { transition: all 0.3s; animation: slide 1s; } @media (prefers-reduced-motion: reduce) { .foo { transition: none; } }',
+      message: messages.expected('.foo'),
+      line: 1,
+      column: 1,
+      description: 'rejects when only the first motion property has an override',
+    },
+    {
       code: '@media (hover: hover) { &:hover { transition: all 0.15s; } }',
       fixed:
         '@media (hover: hover) { &:hover { transition: all 0.15s;@media screen and (prefers-reduced-motion: reduce) {\n&:hover { transition: none;\n}\n} } }',
       message: messages.expected('&:hover'),
       description: 'should add prefers-reduced-motion when not present in nested media query',
+    },
+  ],
+});
+
+// @page at-rules are checked like rules; the at-rule name is case-insensitive
+testRule({
+  ruleName,
+  config: [true],
+
+  accept: [
+    {
+      code: '@page :first { transition: none; }',
+    },
+  ],
+
+  reject: [
+    {
+      code: '@page :first { transition: all 1s; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+    },
+    {
+      code: '@PAGE :first { transition: all 1s; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'treats the @page at-rule name as case-insensitive',
     },
   ],
 });

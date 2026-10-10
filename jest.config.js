@@ -5,14 +5,22 @@ const config = {
   runner: 'jest-light-runner',
   clearMocks: true,
   collectCoverage: false,
-  collectCoverageFrom: ['src/**/*.js'],
+  // Barrel and data files hold only top-level code, which V8 attributes to setup rather than to a test
+  collectCoverageFrom: [
+    'src/**/*.js',
+    '!src/index.js',
+    '!src/rules/index.js',
+    '!src/rules/*/obsolete*.js',
+  ],
+  // The coverage script swaps in Jest's default runner because jest-light-runner cannot instrument code without Babel
+  coverageProvider: 'v8',
   coverageDirectory: './.coverage/',
   coverageReporters: ['lcov', 'text'],
   coverageThreshold: {
     global: {
       branches: 75,
       functions: 75,
-      line: 75,
+      lines: 75,
       statements: 75,
     },
   },

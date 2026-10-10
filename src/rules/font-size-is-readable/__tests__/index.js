@@ -87,3 +87,29 @@ testRule({
     },
   ],
 });
+
+testRuleConfigs({
+  ruleName,
+
+  accept: [
+    { config: true },
+    { config: [true, {}] },
+    { config: [true, { thresholdInPixels: 16 }] },
+    { config: [true, { severity: 'warning' }] },
+  ],
+
+  reject: [
+    {
+      config: [true, { thresholdInPixels: 'invalid' }],
+      description: 'rejects an option with the wrong type',
+    },
+    {
+      config: [true, { minSize: 12 }],
+      description: 'rejects an unknown option name',
+    },
+    {
+      config: [true, 'not-an-object'],
+      description: 'rejects a secondary option that is not an object',
+    },
+  ],
+});

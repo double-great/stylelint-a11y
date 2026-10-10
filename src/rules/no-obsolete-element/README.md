@@ -18,3 +18,9 @@ blink {
   color: pink;
 }
 ```
+
+```css
+div center.active {
+  color: pink;
+}
+```

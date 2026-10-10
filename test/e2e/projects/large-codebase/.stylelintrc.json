@@ -2,7 +2,7 @@
   "plugins": ["../../../../src/index.js"],
   "rules": {
     "a11y/content-property-no-static-value": true,
-    "a11y/font-size-is-readable": [true, { "minSize": 12 }],
+    "a11y/font-size-is-readable": [true, { "thresholdInPixels": 12 }],
     "a11y/line-height-is-vertical-rhythmed": true,
     "a11y/media-prefers-color-scheme": true,
     "a11y/media-prefers-reduced-motion": true,

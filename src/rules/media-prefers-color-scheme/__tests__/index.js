@@ -14,6 +14,10 @@ testRule({
     {
       code: '.bar { background-color: red } @media screen and (prefers-color-scheme: dark) { .bar { background-color: blue } }',
     },
+    {
+      code: '.baz { color: red; background-color: blue } @media (prefers-color-scheme: dark) { .baz { color: white; background-color: black } }',
+      description: 'accepts when every color property has an override',
+    },
   ],
 
   reject: [
@@ -55,6 +59,27 @@ testRule({
       message: messages.expected('.foo'),
       line: 1,
       column: 1,
+    },
+    {
+      code: '.baz { color: red; background-color: blue } @media (prefers-color-scheme: dark) { .baz { color: white } }',
+      message: messages.expected('.baz'),
+      line: 1,
+      column: 1,
+      description: 'rejects when only the first color property has an override',
+    },
+    {
+      code: '@page :first { color: red; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule without a color scheme override',
+    },
+    {
+      code: '@PAGE :first { color: red; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'treats the @page at-rule name as case-insensitive',
     },
   ],
 });

@@ -1,3 +1,4 @@
+import { isNumber } from 'stylelint/lib/utils/validateTypes.mjs';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 import stylelint from 'stylelint';
 const {
@@ -39,14 +40,23 @@ const nodesProbablyForText = (nodes) =>
 
 export default function noSpreadText(actual, options) {
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      { actual },
+      {
+        actual: options,
+        possible: { minWidth: [isNumber], maxWidth: [isNumber] },
+        optional: true,
+      }
+    );
 
     if (!validOptions || !actual) {
       return;
     }
 
-    const minWidth = (options && options.minWidth) || 45;
-    const maxWidth = (options && options.maxWidth) || 80;
+    const minWidth = options?.minWidth ?? 45;
+    const maxWidth = options?.maxWidth ?? 80;
 
     root.walkRules((rule) => {
       if (!isStandardSyntaxRule(rule)) {

@@ -1,3 +1,4 @@
+import { isNumber } from 'stylelint/lib/utils/validateTypes.mjs';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 import stylelint from 'stylelint';
 const {
@@ -25,13 +26,22 @@ const checkInPt = (value, THRESHOLD_IN_PX) =>
 
 export default function fontSizeIsReadable(actual, options) {
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      { actual },
+      {
+        actual: options,
+        possible: { thresholdInPixels: [isNumber] },
+        optional: true,
+      }
+    );
 
     if (!validOptions || !actual) {
       return;
     }
 
-    const THRESHOLD_IN_PX = (options && options.thresholdInPixels) || 15;
+    const THRESHOLD_IN_PX = options?.thresholdInPixels ?? 15;
 
     root.walkRules((rule) => {
       if (!isStandardSyntaxRule(rule)) {

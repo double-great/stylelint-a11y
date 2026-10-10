@@ -1,4 +1,5 @@
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
+import { isString } from 'stylelint/lib/utils/validateTypes.mjs';
 import stylelint from 'stylelint';
 const {
   utils: { report, ruleMessages, validateOptions },
@@ -18,7 +19,7 @@ export const meta = {
 
 const isContentPropertyUsedCorrectly = (selectors) =>
   selectors.every((selector) => {
-    return /:before|:after/.test(selector);
+    return /::?(?:before|after)/.test(selector);
   });
 
 const checkNodesForContentProperty = (node) =>
@@ -29,7 +30,7 @@ function check(node, options = {}) {
     return true;
   }
 
-  const allowedValues = options.allowedValues || ["''", '""', 'attr(aria-label)'];
+  const allowedValues = options.allowedValues ?? ["''", '""', 'attr(aria-label)'];
 
   return node.nodes.some((o) => {
     return (
@@ -43,7 +44,16 @@ function check(node, options = {}) {
 
 export default function contentPropertyNoStaticValue(actual, options) {
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      { actual },
+      {
+        actual: options,
+        possible: { allowedValues: [isString] },
+        optional: true,
+      }
+    );
 
     if (!validOptions || !actual) {
       return;

@@ -1,3 +1,4 @@
+import { isNumber } from 'stylelint/lib/utils/validateTypes.mjs';
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 import stylelint from 'stylelint';
 const {
@@ -21,11 +22,11 @@ function check(node, options = {}) {
     return true;
   }
 
-  const baselineGrid = options.baselineGrid || 24;
-  const minRelativeLineHeight = options.minRelativeLineHeight || 1.5;
+  const baselineGrid = options.baselineGrid ?? 24;
+  const minRelativeLineHeight = options.minRelativeLineHeight ?? 1.5;
 
   const checkInPx = (o) =>
-    o.value.toLowerCase().endsWith('px') && parseInt(o.value) % baselineGrid !== 0;
+    o.value.toLowerCase().endsWith('px') && parseFloat(o.value) % baselineGrid !== 0;
   const checkInRel = (o) => !isNaN(o.value) && parseFloat(o.value) < minRelativeLineHeight;
 
   return !node.nodes.some(
@@ -36,7 +37,16 @@ function check(node, options = {}) {
 
 export default function lineHeightIsVerticalRhythmed(actual, options) {
   return (root, result) => {
-    const validOptions = validateOptions(result, ruleName, { actual });
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      { actual },
+      {
+        actual: options,
+        possible: { baselineGrid: [isNumber], minRelativeLineHeight: [isNumber] },
+        optional: true,
+      }
+    );
 
     if (!validOptions || !actual) {
       return;

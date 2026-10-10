@@ -1,6 +1,7 @@
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 
 import { obsoleteElements } from './obsoleteElements.js';
+import selectorParser from 'postcss-selector-parser';
 
 import stylelint from 'stylelint';
 const {
@@ -24,9 +25,21 @@ function check(selector, node) {
     return true;
   }
 
-  return !node.selectors.some((sel) => {
-    return obsoleteElements.has(sel);
-  });
+  let hasObsoleteElement = false;
+
+  try {
+    selectorParser()
+      .astSync(selector)
+      .walkTags((tag) => {
+        if (obsoleteElements.has(tag.value.toLowerCase())) {
+          hasObsoleteElement = true;
+        }
+      });
+  } catch {
+    return true;
+  }
+
+  return !hasObsoleteElement;
 }
 
 export default function noObsoleteElement(actual) {

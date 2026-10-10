@@ -8,6 +8,18 @@ testRule({
     {
       code: '.foo { color: pink; }',
     },
+    {
+      code: '.center { color: pink; }',
+      description: 'ignores a class that shares a name with an obsolete element',
+    },
+    {
+      code: '#center { color: pink; }',
+      description: 'ignores an id that shares a name with an obsolete element',
+    },
+    {
+      code: '[data-center] { color: pink; }',
+      description: 'ignores an attribute that shares a name with an obsolete element',
+    },
   ],
 
   reject: [
@@ -28,6 +40,34 @@ testRule({
       message: messages.expected('applet, blink'),
       line: 1,
       column: 1,
+    },
+    {
+      code: 'div center { color: pink; }',
+      message: messages.expected('div center'),
+      line: 1,
+      column: 1,
+      description: 'rejects an obsolete element inside a descendant selector',
+    },
+    {
+      code: 'center.active { color: pink; }',
+      message: messages.expected('center.active'),
+      line: 1,
+      column: 1,
+      description: 'rejects an obsolete element with a class',
+    },
+    {
+      code: 'center:hover { color: pink; }',
+      message: messages.expected('center:hover'),
+      line: 1,
+      column: 1,
+      description: 'rejects an obsolete element with a pseudo-class',
+    },
+    {
+      code: 'nav > CENTER, a { color: pink; }',
+      message: messages.expected('nav > CENTER, a'),
+      line: 1,
+      column: 1,
+      description: 'rejects an uppercase obsolete element in a selector list',
     },
   ],
 });
