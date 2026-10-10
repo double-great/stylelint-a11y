@@ -39,8 +39,7 @@
     "test:compatibility": "jest test/system/compatibility.test.js",
     "test:ci": "jest test/system/ci-integration.test.js",
     "test:all": "jest",
-    "coverage": "jest --coverage",
-    "coverage:all": "jest --coverage"
+    "coverage": "node --experimental-vm-modules --disable-warning=ExperimentalWarning node_modules/jest/bin/jest.js --coverage --runner=jest-runner src test/integration"
   },
   "prettier": {
     "printWidth": 100,

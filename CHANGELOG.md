@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Secondary options explicitly set to `0` are honored instead of falling back to the default
 - README severity examples use stylelint's `severity` secondary option; the example of an unimplemented `ignore` option is removed
 - Tests use the `thresholdInPixels` option name, and Jest enforces the `lines` coverage threshold
+- `npm run coverage` reports real numbers; it ran under `jest-light-runner`, which collects no coverage without Babel, so it now uses Jest's default runner with the V8 provider
 
 Releases 3.5.0 through 3.5.5 contained dependency updates only; see the git tags.
 
