@@ -1,6 +1,6 @@
 # no-obsolete-element
 
-Disallow obsolete selectors using.
+Disallow selectors that target obsolete HTML elements.
 
 **Sources:**
 

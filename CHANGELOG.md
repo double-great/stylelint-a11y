@@ -54,7 +54,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The `coverage:all` npm script, which duplicated `coverage`
 
-Releases 3.5.0 through 3.5.5 contained dependency updates only; see the git tags.
+## [3.5.5] - 2026-10-09
+
+### Changed
+
+- Updated indirect dependencies in the lockfile
+
+## [3.5.4] - 2026-09-13
+
+### Changed
+
+- Updated indirect dependency js-yaml
+
+## [3.5.3] - 2026-09-05
+
+### Changed
+
+- Updated NPM dependencies: eslint to 10.10, eslint-plugin-jest to 29.16.6, globals to 17.12, jest to 30.5, postcss to 8.5.28, and stylelint to 17.15
+
+## [3.5.2] - 2026-08-18
+
+### Changed
+
+- Updated NPM dependencies: eslint to 10.8.1, eslint-plugin-jest to 29.16.1, globals to 17.11, and postcss to 8.5.26
+
+## [3.5.1] - 2026-08-02
+
+### Changed
+
+- Updated NPM dependencies: eslint to 10.8, eslint-plugin-jest to 29.16, globals to 17.9, postcss to 8.5.25, prettier to 3.9.6, and stylelint to 17.14.1
+- Updated GitHub Actions, including actions/checkout to 7
+
+## [3.5.0] - 2026-06-29
+
+### Changed
+
+- Raised the supported Node.js version to 22 or later, and the CI matrix now tests Node 20, 22, and 24
+- Updated NPM dependencies: eslint to 10.6, jest-light-runner to 0.8, postcss to 8.5.16, prettier to 3.9.3, and stylelint to 17.14
+
+Releases 3.4.2 through 3.4.15 contained dependency updates and two fixes to the stylelint documentation links in the README.
 
 ## [3.4.1] - 2025-11-19
 

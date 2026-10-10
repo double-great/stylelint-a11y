@@ -1,6 +1,6 @@
 # no-obsolete-attribute
 
-Disallow obsolete attribute using.
+Disallow selectors that target obsolete HTML attributes.
 
 **Sources:**
 

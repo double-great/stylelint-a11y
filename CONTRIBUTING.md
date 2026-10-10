@@ -47,11 +47,12 @@ When adding a new accessibility rule to this plugin, please follow this checklis
   - [ ] Note if the rule is auto-fixable
 
 - [ ] **Register the rule**
-  - [ ] Add the rule to `src/rules/index.js`
-  - [ ] Export it from the main rules index
+  - [ ] Import the rule in `src/rules/index.js` and add it to the exported object, in alphabetical order
+  - [ ] Import the rule's `meta` in `src/index.js` and add it to `ruleMetaMap`
 
 - [ ] **Update plugin configuration**
-  - [ ] Add the rule to `src/index.js` in the rules export
+  - [ ] Add the rule to `strict.js`
+  - [ ] Add the rule name to `expectedRules` in `test/integration/strict-config.test.js`
   - [ ] Consider if it should be in `recommended.js` config
 
 - [ ] **Update main README**
@@ -82,29 +83,54 @@ Here's what a typical rule implementation looks like:
 
 ```javascript
 // src/rules/my-new-rule/index.js
+import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
+import { isNumber } from 'stylelint/lib/utils/validateTypes.mjs';
 import stylelint from 'stylelint';
+const {
+  utils: { report, ruleMessages, validateOptions },
+} = stylelint;
 
-const ruleName = 'a11y/my-new-rule';
-const messages = stylelint.utils.ruleMessages(ruleName, {
-  expected: 'Expected ...',
+export const ruleName = 'a11y/my-new-rule';
+
+export const messages = ruleMessages(ruleName, {
+  expected: (selector) => `Expected ... in ${selector}`,
 });
 
-const meta = {
-  url: 'https://github.com/double-great/stylelint-a11y/tree/main/src/rules/my-new-rule',
+export const meta = {
+  url: 'https://github.com/double-great/stylelint-a11y/blob/main/src/rules/my-new-rule/README.md',
+  fixable: false,
+  deprecated: false,
 };
 
-const ruleFunction = (primaryOption, secondaryOptions) => {
+export default function myNewRule(actual, options) {
   return (root, result) => {
-    // Rule implementation
+    const validOptions = validateOptions(
+      result,
+      ruleName,
+      { actual },
+      {
+        actual: options,
+        possible: { threshold: [isNumber] },
+        optional: true,
+      }
+    );
+
+    if (!validOptions || !actual) {
+      return;
+    }
+
+    root.walkRules((rule) => {
+      if (!isStandardSyntaxRule(rule)) {
+        return;
+      }
+
+      // Rule implementation; call report({ message: messages.expected(rule.selector), node: rule, ruleName, result }) for a violation
+    });
   };
-};
-
-ruleFunction.ruleName = ruleName;
-ruleFunction.messages = messages;
-ruleFunction.meta = meta;
-
-export default ruleFunction;
+}
 ```
+
+`ruleName`, `messages`, and `meta` are named exports so the tests and `src/index.js` can import them. Drop the secondary options descriptor when the rule takes no options.
 
 ## Code Style
 
