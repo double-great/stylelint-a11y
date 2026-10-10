@@ -83,5 +83,33 @@ testRule({
       column: 1,
       description: 'rejects a fully transparent outline-color without an alternative',
     },
+    {
+      code: '.alt:focus { outline: none; box-shadow: none; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'does not accept box-shadow: none as an alternative',
+    },
+    {
+      code: '.alt:focus { outline: none; border: 0; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'does not accept border: 0 as an alternative',
+    },
+    {
+      code: '.alt:focus { outline: none; border: none; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'does not accept border: none as an alternative',
+    },
+    {
+      code: '.alt:focus { outline: 1px solid transparent; }',
+      message: messages.expected('.alt:focus'),
+      line: 1,
+      column: 1,
+      description: 'treats a transparent outline shorthand as a removed outline',
+    },
   ],
 });

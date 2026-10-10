@@ -53,6 +53,15 @@ The following pattern is considered a violation:
 }
 ```
 
+```css
+.quux:focus {
+  outline: none;
+  box-shadow: none;
+}
+```
+
+A `border` or `box-shadow` only counts as an alternative when it is drawn with a visible color. Values such as `none`, `0`, and `transparent` do not.
+
 ```scss
 .quux {
   .quuux:focus {

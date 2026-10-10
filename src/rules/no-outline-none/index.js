@@ -24,7 +24,7 @@ const isTransparentColor = (value) =>
 const removesOutline = (prop, value) => {
   switch (prop) {
     case 'outline':
-      return value === '0' || value === 'none';
+      return value === '0' || value === 'none' || isTransparentColor(value);
     case 'outline-style':
       return value === 'none';
     case 'outline-width':
@@ -35,6 +35,10 @@ const removesOutline = (prop, value) => {
       return false;
   }
 };
+
+// A border or box-shadow only replaces the outline when it is drawn with a visible color
+const isVisibleAlternative = (value) =>
+  !/^(?:none|0[a-z%]*|hidden)$/.test(value) && !isTransparentColor(value);
 
 function check(selector, node) {
   if (node.type !== 'rule') {
@@ -54,7 +58,7 @@ function check(selector, node) {
       (o) =>
         o.type === 'decl' &&
         ['border', 'border-color', 'box-shadow'].indexOf(o.prop.toLowerCase()) >= 0 &&
-        !o.value.toLowerCase().match(/transparent/gi)
+        isVisibleAlternative(o.value.toLowerCase())
     );
   }
 
