@@ -22,28 +22,29 @@ export const meta = {
 const focusCompanions = (hovered) =>
   [':focus', ':focus-visible'].map((pseudo) => hovered.replace(/:hover/gi, pseudo));
 
-function hasAlready(parent, selector) {
-  const nodes = parent.nodes.reduce((arr, i) => {
-    if (i.type === 'rule') arr.push(i.selectors);
+// A :hover inside :not() does not style the hovered element
+const hasHover = (selector) => /:hover/i.test(selector.replace(/:not\([^)]*\)/gi, ''));
 
-    return arr;
-  }, []);
+// Every hovered selector needs a companion somewhere in the stylesheet, except that a nesting selector only means the same thing inside its own parent block
+function hasAlready(rule, selector) {
+  const nodes = [];
 
+  if (selector.includes('&')) {
+    rule.parent.each((node) => {
+      if (node.type === 'rule') nodes.push(node.selectors);
+    });
+  } else {
+    rule.root().walkRules((node) => nodes.push(node.selectors));
+  }
+
+  const flattened = deepFlatten(nodes);
   const hoveredSelector = selector
     .split(',')
-    .filter((o) => o.match(/:hover/gi))
-    .map((o) => o.trim());
-  const returned = hoveredSelector.some((o) => {
-    return focusCompanions(o).some((companion) => deepFlatten(nodes).indexOf(companion) >= 0);
-  });
+    .map((o) => o.trim())
+    .filter(hasHover);
 
-  if (returned) return true;
-
-  return parent.nodes.some((i) => {
-    return (
-      i.type === 'rule' &&
-      focusCompanions(selector).some((companion) => i.selectors.indexOf(companion) !== -1)
-    );
+  return hoveredSelector.every((o) => {
+    return focusCompanions(o).some((companion) => flattened.indexOf(companion) >= 0);
   });
 }
 
@@ -72,20 +73,20 @@ export default function selectorPseudoClassFocus(actual, _, context) {
         return;
       }
 
-      if (selector.indexOf(':hover') === -1) {
+      if (!hasHover(selector)) {
         return;
       }
 
-      if (selector.indexOf(':hover') >= 0 && selector.indexOf(':focus') >= 0) {
+      if (/:focus/i.test(selector)) {
         return;
       }
 
-      const isAccepted = hasAlready(rule.parent, selector);
+      const isAccepted = hasAlready(rule, selector);
 
       if (context.fix && !isAccepted) {
         rule.parent.nodes.forEach((node) => {
           if (node.type === 'rule' && node.selector === selector) {
-            node.selector = `${node.selector}, ${node.selector.replace(/:hover/g, ':focus')}`;
+            node.selector = `${node.selector}, ${node.selector.replace(/:hover/gi, ':focus')}`;
           }
         });
 
