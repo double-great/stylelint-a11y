@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `no-outline-none` reports `outline-style: none`, `outline-width: 0`, and a transparent `outline-color`, not only the `outline` shorthand
+- `no-obsolete-element` and `no-obsolete-attribute` match obsolete selectors inside compound and descendant selectors
+- `selector-pseudo-class-focus` accepts `:focus-visible` as the companion to `:hover`
+- Secondary options are validated; unknown option names and values of the wrong type are reported as configuration errors
+- `postcss-selector-parser` dependency
+
+### Fixed
+
+- `media-prefers-reduced-motion` and `media-prefers-color-scheme` require a media query override for every matched property instead of only the first one
+- `media-prefers-reduced-motion` and `media-prefers-color-scheme` treat the `@page` at-rule name as case-insensitive
+- `line-height-is-vertical-rhythmed` keeps decimal pixel values when checking the baseline grid
+- Secondary options explicitly set to `0` are honored instead of falling back to the default
+- README severity examples use stylelint's `severity` secondary option; the example of an unimplemented `ignore` option is removed
+- Tests use the `thresholdInPixels` option name, and Jest enforces the `lines` coverage threshold
+
+Releases 3.5.0 through 3.5.5 contained dependency updates only; see the git tags.
+
 ## [3.4.1] - 2025-11-19
 
 ### Changed
