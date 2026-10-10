@@ -7,6 +7,8 @@ Disallow obsolete selectors using.
 - [W3G Obsolete features](https://www.w3.org/TR/html5/obsolete.html#obsolete)
 - [W3G Features removed](https://www.w3.org/TR/html52/changes.html#features-removed)
 
+A selector inside `:not()` is ignored because it names an element the rule does not style.
+
 ## Options
 
 ### true

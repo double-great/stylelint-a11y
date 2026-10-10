@@ -18,6 +18,14 @@ testRule({
       code: '.body[link] { color: pink; }',
       description: 'ignores an attribute that is only obsolete on a specific element',
     },
+    {
+      code: 'li:not([type]) { color: pink; }',
+      description: 'ignores an obsolete attribute inside :not()',
+    },
+    {
+      code: 'a:not(body[link]) { color: pink; }',
+      description: 'ignores an element-specific obsolete attribute inside :not()',
+    },
   ],
 
   reject: [
@@ -59,6 +67,27 @@ testRule({
       line: 1,
       column: 1,
       description: 'rejects an attribute that is obsolete on any element',
+    },
+    {
+      code: 'div [dropzone] { color: pink; }',
+      message: messages.expected('div [dropzone]'),
+      line: 1,
+      column: 1,
+      description: 'rejects a bare obsolete attribute after a combinator',
+    },
+    {
+      code: 'img[align="left"], a[name^="x"] { color: pink; }',
+      message: messages.expected('img[align="left"], a[name^="x"]'),
+      line: 1,
+      column: 1,
+      description: 'rejects obsolete attributes that have a value or an operator',
+    },
+    {
+      code: ':is(body[link]) { color: pink; }',
+      message: messages.expected(':is(body[link])'),
+      line: 1,
+      column: 1,
+      description: 'rejects an obsolete attribute inside :is() because it does match the element',
     },
     {
       code: 'a[href] IMG[DATASRC] { color: pink; }',

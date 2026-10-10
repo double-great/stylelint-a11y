@@ -8,6 +8,8 @@ Disallow obsolete attribute using.
 - [W3C Non-conforming features](https://w3c.github.io/html/obsolete.html#non-conforming-features)
 - [W3G Features removed](https://www.w3.org/TR/html52/changes.html#features-removed)
 
+A selector inside `:not()` is ignored because it names an element the rule does not style.
+
 ## Options
 
 ### true

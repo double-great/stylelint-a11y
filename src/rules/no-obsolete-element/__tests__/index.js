@@ -20,6 +20,14 @@ testRule({
       code: '[data-center] { color: pink; }',
       description: 'ignores an attribute that shares a name with an obsolete element',
     },
+    {
+      code: 'div:not(center) { color: pink; }',
+      description: 'ignores an obsolete element inside :not()',
+    },
+    {
+      code: 'div:NOT(center, font) { color: pink; }',
+      description: 'ignores a selector list inside an uppercase :not()',
+    },
   ],
 
   reject: [
@@ -61,6 +69,13 @@ testRule({
       line: 1,
       column: 1,
       description: 'rejects an obsolete element with a pseudo-class',
+    },
+    {
+      code: ':is(center, .x) { color: pink; }',
+      message: messages.expected(':is(center, .x)'),
+      line: 1,
+      column: 1,
+      description: 'rejects an obsolete element inside :is() because it does match the element',
     },
     {
       code: 'nav > CENTER, a { color: pink; }',
