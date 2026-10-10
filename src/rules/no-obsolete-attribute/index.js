@@ -1,6 +1,7 @@
 import isStandardSyntaxRule from 'stylelint/lib/utils/isStandardSyntaxRule.mjs';
 
 import { obsoleteAttributes } from './obsoleteAttributes.js';
+import selectorParser from 'postcss-selector-parser';
 
 import stylelint from 'stylelint';
 const {
@@ -19,14 +20,42 @@ export const meta = {
   deprecated: false,
 };
 
+// The type selector in the same compound selector as the attribute, if there is one
+function compoundTag(attribute) {
+  const siblings = attribute.parent.nodes;
+
+  for (let i = siblings.indexOf(attribute) - 1; i >= 0; i--) {
+    if (siblings[i].type === 'combinator') return null;
+
+    if (siblings[i].type === 'tag') return siblings[i].value.toLowerCase();
+  }
+
+  return null;
+}
+
 function check(selector, node) {
   if (node.type !== 'rule') {
     return true;
   }
 
-  return !node.selectors.some((sel) => {
-    return obsoleteAttributes.has(sel);
-  });
+  let hasObsoleteAttribute = false;
+
+  try {
+    selectorParser()
+      .astSync(selector)
+      .walkAttributes((attribute) => {
+        const name = `[${attribute.attribute.toLowerCase()}]`;
+        const tag = compoundTag(attribute);
+
+        if (obsoleteAttributes.has(name) || (tag && obsoleteAttributes.has(`${tag}${name}`))) {
+          hasObsoleteAttribute = true;
+        }
+      });
+  } catch {
+    return true;
+  }
+
+  return !hasObsoleteAttribute;
 }
 
 export default function noObsoleteAttribute(actual) {

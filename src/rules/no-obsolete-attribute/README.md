@@ -33,3 +33,9 @@ a[name] {
   color: pink;
 }
 ```
+
+```css
+div body[link].old {
+  color: pink;
+}
+```
