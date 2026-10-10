@@ -23,6 +23,14 @@ export const meta = {
 };
 const targetProperties = ['transition', 'animation', 'animation-name'];
 
+// Any mention of the feature means the author is handling motion preference for that block
+const mentionsReducedMotion = (params) => /prefers-reduced-motion/i.test(params || '');
+
+// Only a query for people who asked for less motion can hold the override
+const isReduceQuery = (params) => mentionsReducedMotion(params) && !/no-preference/i.test(params);
+
+const isNone = (value) => value.toLowerCase() === 'none';
+
 function checkChildrenNodes(childrenNodes, currentSelector, parentNode) {
   return childrenNodes.some((declaration) => {
     const index = targetProperties.indexOf(declaration.prop);
@@ -32,9 +40,9 @@ function checkChildrenNodes(childrenNodes, currentSelector, parentNode) {
 
     if (currentSelector !== targetProperties[index]) return false;
 
-    if (declaration.value !== 'none') return false;
+    if (!isNone(declaration.value)) return false;
 
-    return index >= 0 && parentNode.params.indexOf('prefers-reduced-motion') >= 0;
+    return index >= 0 && isReduceQuery(parentNode.params);
   });
 }
 
@@ -53,14 +61,14 @@ function check(selector, node) {
     return true;
   }
 
-  const noMatchedParams = !params || params.indexOf('prefers-reduced-motion') === -1;
+  const noMatchedParams = !mentionsReducedMotion(params);
 
   // Every matched property needs its own override, not just the first one found
   const matchedProperties = noMatchedParams
     ? declarations
         .filter(
           (declaration) =>
-            targetProperties.indexOf(declaration.prop) >= 0 && declaration.value !== 'none'
+            targetProperties.indexOf(declaration.prop) >= 0 && !isNone(declaration.value)
         )
         .map((declaration) => declaration.prop)
     : [];
@@ -70,7 +78,7 @@ function check(selector, node) {
   // Check if there's a nested media query with prefers-reduced-motion inside the current rule
   const hasNestedPrefersReducedMotion = declarations.some((childNode) => {
     if (childNode.type === 'atrule' && childNode.name === 'media') {
-      return childNode.params && childNode.params.indexOf('prefers-reduced-motion') >= 0;
+      return isReduceQuery(childNode.params);
     }
 
     return false;
@@ -82,7 +90,7 @@ function check(selector, node) {
   if (node.parent && node.parent.type === 'atrule' && node.parent.name === 'media') {
     const siblingHasPrefersReducedMotion = node.parent.nodes.some((siblingNode) => {
       if (siblingNode.type === 'atrule' && siblingNode.name === 'media') {
-        return siblingNode.params && siblingNode.params.indexOf('prefers-reduced-motion') >= 0;
+        return isReduceQuery(siblingNode.params);
       }
 
       return false;
@@ -98,10 +106,7 @@ function check(selector, node) {
       return parentNode.nodes.some((childrenNode) => {
         const childrenNodes = childrenNode.nodes;
 
-        if (
-          childrenNode.type === 'atrule' &&
-          childrenNode.params.indexOf('prefers-reduced-motion') >= 0
-        ) {
+        if (childrenNode.type === 'atrule' && isReduceQuery(childrenNode.params)) {
           return childrenNodes.some((declaration) => {
             const index = targetProperties.indexOf(declaration.prop);
 
@@ -110,7 +115,7 @@ function check(selector, node) {
 
             if (currentSelector !== targetProperties[index]) return false;
 
-            if (declaration.value !== 'none') return false;
+            if (!isNone(declaration.value)) return false;
 
             return index >= 0;
           });

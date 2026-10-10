@@ -121,3 +121,34 @@ testRule({
     },
   ],
 });
+
+// Only a query for people who asked for less motion can hold the override, and keywords are case-insensitive
+testRule({
+  ruleName,
+  config: [true],
+
+  accept: [
+    {
+      code: 'a { transition: NONE; }',
+      description: 'treats the none keyword as case-insensitive',
+    },
+    {
+      code: '.foo { animation: x 1s; } @media (prefers-reduced-motion: reduce) { .foo { animation: None; } }',
+      description: 'accepts an override written with a capitalized none',
+    },
+    {
+      code: '@media (prefers-reduced-motion: no-preference) { a { animation: x 1s; } }',
+      description: 'accepts motion declared only for people who have not asked for less motion',
+    },
+  ],
+
+  reject: [
+    {
+      code: 'a { animation: x 1s; } @media (prefers-reduced-motion: no-preference) { a { animation: none; } }',
+      message: messages.expected('a'),
+      line: 1,
+      column: 1,
+      description: 'rejects an override placed in a no-preference query',
+    },
+  ],
+});
