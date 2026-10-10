@@ -20,6 +20,14 @@ testRule({
     {
       code: '.quuux:focus { outline: none; box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }',
     },
+    {
+      code: '.longhand:focus { outline-style: none; box-shadow: 0 0 0 2px #000; }',
+      description: 'accepts a removed outline-style when box-shadow provides an alternative',
+    },
+    {
+      code: '.longhand:focus { outline-width: 2px; outline-color: #333; }',
+      description: 'accepts longhand properties that keep the outline visible',
+    },
   ],
 
   reject: [
@@ -46,6 +54,34 @@ testRule({
       message: messages.expected('.quuux:focus'),
       line: 1,
       column: 9,
+    },
+    {
+      code: '.longhand:focus { outline-style: none; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects outline-style: none',
+    },
+    {
+      code: '.longhand:focus { outline-width: 0; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects outline-width: 0',
+    },
+    {
+      code: '.longhand:focus { outline-color: transparent; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects outline-color: transparent',
+    },
+    {
+      code: '.longhand:focus { outline-color: rgba(0, 0, 0, 0); border: transparent; }',
+      message: messages.expected('.longhand:focus'),
+      line: 1,
+      column: 1,
+      description: 'rejects a fully transparent outline-color without an alternative',
     },
   ],
 });
