@@ -155,7 +155,7 @@ export default function mediaPrefersReducedMotion(actual, _, context) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name === 'page' && node.params) {
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
         if (!isStandardSyntaxAtRule(node)) {
           return;
         }

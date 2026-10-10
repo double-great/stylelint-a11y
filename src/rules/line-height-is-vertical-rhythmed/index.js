@@ -25,7 +25,7 @@ function check(node, options = {}) {
   const minRelativeLineHeight = options.minRelativeLineHeight || 1.5;
 
   const checkInPx = (o) =>
-    o.value.toLowerCase().endsWith('px') && parseInt(o.value) % baselineGrid !== 0;
+    o.value.toLowerCase().endsWith('px') && parseFloat(o.value) % baselineGrid !== 0;
   const checkInRel = (o) => !isNaN(o.value) && parseFloat(o.value) < minRelativeLineHeight;
 
   return !node.nodes.some(

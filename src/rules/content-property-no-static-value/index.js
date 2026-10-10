@@ -18,7 +18,7 @@ export const meta = {
 
 const isContentPropertyUsedCorrectly = (selectors) =>
   selectors.every((selector) => {
-    return /:before|:after/.test(selector);
+    return /::?(?:before|after)/.test(selector);
   });
 
 const checkNodesForContentProperty = (node) =>

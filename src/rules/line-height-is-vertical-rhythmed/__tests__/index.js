@@ -26,6 +26,10 @@ testRule({
     {
       code: 'a { font-size: 15px; line-height: 1.6; }',
     },
+    {
+      code: '.decimal { line-height: 24.0px; }',
+      description: 'accepts a decimal value that is exactly on the baseline grid',
+    },
   ],
 
   reject: [
@@ -70,6 +74,13 @@ testRule({
       message: messages.expected('a'),
       line: 1,
       column: 1,
+    },
+    {
+      code: '.decimal { line-height: 24.5px; }',
+      message: messages.expected('.decimal'),
+      line: 1,
+      column: 1,
+      description: 'rejects a decimal value that is off the baseline grid',
     },
   ],
 });

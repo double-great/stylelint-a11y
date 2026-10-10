@@ -73,3 +73,31 @@ testRule({
     },
   ],
 });
+
+// @page at-rules are checked like rules; the at-rule name is case-insensitive
+testRule({
+  ruleName,
+  config: [true],
+
+  accept: [
+    {
+      code: '@page :first { transition: none; }',
+    },
+  ],
+
+  reject: [
+    {
+      code: '@page :first { transition: all 1s; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+    },
+    {
+      code: '@PAGE :first { transition: all 1s; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'treats the @page at-rule name as case-insensitive',
+    },
+  ],
+});

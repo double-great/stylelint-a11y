@@ -56,5 +56,19 @@ testRule({
       line: 1,
       column: 1,
     },
+    {
+      code: '@page :first { color: red; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule without a color scheme override',
+    },
+    {
+      code: '@PAGE :first { color: red; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'treats the @page at-rule name as case-insensitive',
+    },
   ],
 });
