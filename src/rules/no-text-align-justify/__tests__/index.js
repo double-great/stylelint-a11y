@@ -38,5 +38,19 @@ testRule({
       line: 1,
       column: 1,
     },
+    {
+      code: '@page { text-align: justify; }',
+      message: messages.expected('@page'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule that has no page selector',
+    },
+    {
+      code: '@page :first { text-align: justify; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule with a page selector',
+    },
   ],
 });

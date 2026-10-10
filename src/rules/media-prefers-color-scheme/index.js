@@ -92,12 +92,12 @@ export default function mediaPrefersColorScheme(actual) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page') {
         if (!isStandardSyntaxAtRule(node)) {
           return;
         }
 
-        selector = node.params;
+        selector = node.params || '@page';
       }
 
       if (!selector) {

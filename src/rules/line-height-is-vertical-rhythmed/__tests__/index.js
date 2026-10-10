@@ -82,6 +82,20 @@ testRule({
       column: 1,
       description: 'rejects a decimal value that is off the baseline grid',
     },
+    {
+      code: '@page { line-height: 23px; }',
+      message: messages.expected('@page'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule that has no page selector',
+    },
+    {
+      code: '@page :first { line-height: 23px; }',
+      message: messages.expected(':first'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule with a page selector',
+    },
   ],
 });
 

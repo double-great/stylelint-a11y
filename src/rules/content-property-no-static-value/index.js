@@ -26,7 +26,7 @@ const checkNodesForContentProperty = (node) =>
   node.nodes.filter((n) => n.prop).some((n) => n.prop.toLowerCase() === 'content');
 
 function check(node, options = {}) {
-  if (node.type !== 'rule' || !checkNodesForContentProperty(node) || !node.first) {
+  if (!node.nodes || !checkNodesForContentProperty(node) || !node.first) {
     return true;
   }
 
@@ -36,7 +36,7 @@ function check(node, options = {}) {
     return (
       o.type === 'decl' &&
       o.prop.toLowerCase() === 'content' &&
-      isContentPropertyUsedCorrectly(o.parent.selectors) &&
+      isContentPropertyUsedCorrectly(o.parent.selectors || []) &&
       allowedValues.some((allowed) => o.value.toLowerCase() === allowed.toLowerCase())
     );
   });
@@ -68,8 +68,8 @@ export default function contentPropertyNoStaticValue(actual, options) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
-        selector = node.params;
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page') {
+        selector = node.params || '@page';
       }
 
       if (!selector) {

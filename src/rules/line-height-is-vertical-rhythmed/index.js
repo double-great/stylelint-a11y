@@ -18,7 +18,7 @@ export const meta = {
 };
 
 function check(node, options = {}) {
-  if (node.type !== 'rule') {
+  if (!node.nodes) {
     return true;
   }
 
@@ -61,8 +61,8 @@ export default function lineHeightIsVerticalRhythmed(actual, options) {
         }
 
         selector = node.selector;
-      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page' && node.params) {
-        selector = node.params;
+      } else if (node.type === 'atrule' && node.name.toLowerCase() === 'page') {
+        selector = node.params || '@page';
       }
 
       if (!selector) {

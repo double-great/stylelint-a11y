@@ -112,5 +112,12 @@ testRule({
       column: 1,
       description: 'treats the @page at-rule name as case-insensitive',
     },
+    {
+      code: '@page { transition: all 1s; }',
+      message: messages.expected('@page'),
+      line: 1,
+      column: 1,
+      description: 'rejects a @page rule that has no page selector',
+    },
   ],
 });
