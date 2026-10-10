@@ -7,6 +7,8 @@ const {
 
 export const ruleName = 'a11y/font-size-is-readable';
 
+const isPositiveNumber = (value) => isNumber(value) && value > 0;
+
 export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected a larger font-size in ${selector}`,
 });
@@ -32,7 +34,7 @@ export default function fontSizeIsReadable(actual, options) {
       { actual },
       {
         actual: options,
-        possible: { thresholdInPixels: [isNumber] },
+        possible: { thresholdInPixels: [isPositiveNumber] },
         optional: true,
       }
     );

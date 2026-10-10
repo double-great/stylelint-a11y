@@ -7,6 +7,8 @@ const {
 
 export const ruleName = 'a11y/line-height-is-vertical-rhythmed';
 
+const isPositiveNumber = (value) => isNumber(value) && value > 0;
+
 export const messages = ruleMessages(ruleName, {
   expected: (selector) => `Expected a vertical rhythmed line-height in ${selector}`,
 });
@@ -43,7 +45,7 @@ export default function lineHeightIsVerticalRhythmed(actual, options) {
       { actual },
       {
         actual: options,
-        possible: { baselineGrid: [isNumber], minRelativeLineHeight: [isNumber] },
+        possible: { baselineGrid: [isPositiveNumber], minRelativeLineHeight: [isPositiveNumber] },
         optional: true,
       }
     );

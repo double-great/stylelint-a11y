@@ -153,6 +153,14 @@ testRuleConfigs({
       description: 'rejects an option with the wrong type',
     },
     {
+      config: [true, { baselineGrid: 0 }],
+      description: 'rejects a zero baseline grid',
+    },
+    {
+      config: [true, { minRelativeLineHeight: -1 }],
+      description: 'rejects a negative minimum line height',
+    },
+    {
       config: [true, { grid: 20 }],
       description: 'rejects an unknown option name',
     },

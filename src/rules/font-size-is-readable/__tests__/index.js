@@ -104,6 +104,10 @@ testRuleConfigs({
       description: 'rejects an option with the wrong type',
     },
     {
+      config: [true, { thresholdInPixels: 0 }],
+      description: 'rejects a zero threshold',
+    },
+    {
       config: [true, { minSize: 12 }],
       description: 'rejects an unknown option name',
     },
