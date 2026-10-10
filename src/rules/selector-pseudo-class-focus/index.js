@@ -4,8 +4,6 @@ const {
   utils: { report, ruleMessages, validateOptions },
 } = stylelint;
 
-const deepFlatten = (arr) => [].concat(...arr.map((v) => (Array.isArray(v) ? deepFlatten(v) : v)));
-
 export const ruleName = 'a11y/selector-pseudo-class-focus';
 
 export const messages = ruleMessages(ruleName, {
@@ -25,26 +23,27 @@ const focusCompanions = (hovered) =>
 // A :hover inside :not() does not style the hovered element
 const hasHover = (selector) => /:hover/i.test(selector.replace(/:not\([^)]*\)/gi, ''));
 
+// The selectors of a container's direct child rules
+const childSelectors = (container) => {
+  const selectors = new Set();
+
+  container.each((node) => {
+    if (node.type === 'rule') node.selectors.forEach((o) => selectors.add(o));
+  });
+
+  return selectors;
+};
+
 // Every hovered selector needs a companion somewhere in the stylesheet, except that a nesting selector only means the same thing inside its own parent block
-function hasAlready(rule, selector) {
-  const nodes = [];
-
-  if (selector.includes('&')) {
-    rule.parent.each((node) => {
-      if (node.type === 'rule') nodes.push(node.selectors);
-    });
-  } else {
-    rule.root().walkRules((node) => nodes.push(node.selectors));
-  }
-
-  const flattened = deepFlatten(nodes);
+function hasAlready(rule, selector, stylesheetSelectors) {
+  const candidates = selector.includes('&') ? childSelectors(rule.parent) : stylesheetSelectors();
   const hoveredSelector = selector
     .split(',')
     .map((o) => o.trim())
     .filter(hasHover);
 
   return hoveredSelector.every((o) => {
-    return focusCompanions(o).some((companion) => flattened.indexOf(companion) >= 0);
+    return focusCompanions(o).some((companion) => candidates.has(companion));
   });
 }
 
@@ -55,6 +54,17 @@ export default function selectorPseudoClassFocus(actual, _, context) {
     if (!validOptions || !actual) {
       return;
     }
+
+    // Collected once per stylesheet so the companion lookup stays linear
+    let allSelectors = null;
+    const stylesheetSelectors = () => {
+      if (!allSelectors) {
+        allSelectors = new Set();
+        root.walkRules((node) => node.selectors.forEach((o) => allSelectors.add(o)));
+      }
+
+      return allSelectors;
+    };
 
     root.walkRules((rule) => {
       let selector = null;
@@ -81,7 +91,7 @@ export default function selectorPseudoClassFocus(actual, _, context) {
         return;
       }
 
-      const isAccepted = hasAlready(rule, selector);
+      const isAccepted = hasAlready(rule, selector, stylesheetSelectors);
 
       if (context.fix && !isAccepted) {
         rule.parent.nodes.forEach((node) => {
