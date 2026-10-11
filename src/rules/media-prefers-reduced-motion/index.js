@@ -241,3 +241,5 @@ export default function mediaPrefersReducedMotion(actual) {
     });
   };
 }
+
+mediaPrefersReducedMotion.meta = meta;

@@ -1,22 +1,30 @@
 # media-prefers-color-scheme
 
-Require implementation of certain styles for selectors with colors.
+Require a `prefers-color-scheme` override for colors.
 
-**Sources:**
+## Why
 
-- [Docs](https://drafts4.csswg.org/mediaqueries-5/#prefers-color-scheme)
-- [less mixin](https://brehaut.net/blog/2018/a_dark_mode_less_mixin)
-- [Webkit](https://trac.webkit.org/changeset/237156/webkit)
-- [Safari TP](https://webkit.org/blog/8475/release-notes-for-safari-technology-preview-68)
-- [Mojave](https://www.apple.com/lae/macos/mojave)
+People set a dark or light scheme at the operating system level for light sensitivity, migraine, low vision, or comfort. A stylesheet that sets colors without honouring that preference forces its own scheme on them. The rule asks that every rule setting a color have a matching rule inside a `prefers-color-scheme` query.
 
-A color set through a custom property, such as `color: var(--text)`, is not checked because the theme lives where the property is defined. A `@media (prefers-color-scheme)` block nested inside the rule also satisfies the rule.
+## WCAG 2.2
+
+No success criterion requires a dark theme. Whichever scheme is shown, it has to meet the contrast criteria:
+
+- [1.4.3 Contrast (Minimum) (Level AA)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum)
+- [1.4.11 Non-text Contrast (Level AA)](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast)
+
+## Sources
+
+- [MDN: prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme)
+- [Media Queries Level 5: prefers-color-scheme](https://drafts.csswg.org/mediaqueries-5/#prefers-color-scheme)
+
+A color set through a custom property, such as `color: var(--text)`, is not checked because the theme lives where the property is defined. A `@media (prefers-color-scheme)` block nested inside the rule also satisfies the rule. The override selector is matched regardless of whitespace.
 
 ## Options
 
 ### true
 
-The following pattern is considered a violation:
+The following patterns are considered violations:
 
 ```css
 .foo {
@@ -70,5 +78,11 @@ The following patterns are _not_ considered violations:
   .bar {
     background-color: gray;
   }
+}
+```
+
+```css
+.baz {
+  color: var(--text);
 }
 ```

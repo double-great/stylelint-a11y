@@ -67,3 +67,5 @@ export default function noTextAlignJustify(actual) {
     });
   };
 }
+
+noTextAlignJustify.meta = meta;

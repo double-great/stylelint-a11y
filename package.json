@@ -3,6 +3,12 @@
   "version": "3.8.0",
   "description": "Plugin for stylelint with a11y rules",
   "main": "src/index.js",
+  "files": [
+    "src",
+    "!src/**/__tests__",
+    "recommended.js",
+    "strict.js"
+  ],
   "type": "module",
   "exports": {
     ".": "./src/index.js",
@@ -33,11 +39,8 @@
     "test:unit": "jest src",
     "test:integration": "jest test/integration",
     "test:e2e": "jest test/e2e",
-    "test:performance": "jest test/e2e/performance.test.js",
     "test:system": "jest test/system",
-    "test:regression": "jest test/system/performance-regression.test.js",
     "test:compatibility": "jest test/system/compatibility.test.js",
-    "test:ci": "jest test/system/ci-integration.test.js",
     "test:all": "jest",
     "coverage": "node --experimental-vm-modules --disable-warning=ExperimentalWarning node_modules/jest/bin/jest.js --coverage --runner=jest-runner src test/integration"
   },

@@ -46,7 +46,7 @@ describe('System Compatibility Testing', () => {
       // Test that meta objects are accessible without errors
       const { default: plugin } = await import('../../src/index.js');
 
-      plugin.forEach((rule) => {
+      plugin.forEach(({ rule }) => {
         expect(rule.meta).toBeDefined();
         expect(rule.meta.url).toBeDefined();
         expect(typeof rule.meta.fixable).toBe('boolean');

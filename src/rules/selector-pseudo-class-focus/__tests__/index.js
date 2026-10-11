@@ -66,6 +66,15 @@ testRule({
       ],
     },
     {
+      code: '/* stylelint-disable-next-line a11y/selector-pseudo-class-focus */\na:hover { }\nb:hover { }',
+      fixed:
+        '/* stylelint-disable-next-line a11y/selector-pseudo-class-focus */\na:hover { }\nb:hover, b:focus { }',
+      message: messages.expected('b:hover'),
+      line: 3,
+      column: 1,
+      description: 'leaves a rule covered by a disable comment unfixed and fixes the rest',
+    },
+    {
       code: 'a:hover { } a:focus { } b:hover { } b { }',
       fixed: 'a:hover { } a:focus { } b:hover, b:focus { } b { }',
       message: messages.expected('b:hover'),

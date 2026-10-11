@@ -57,8 +57,8 @@ For stricter accessibility checks:
 
 ## Rules
 
-| Rule ID                                                                                    | Description                                                                |                      |
-| :----------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | -------------------- |
+| Rule ID                                                                                    | Description                                                                | Config, fixable      |
+| :----------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------- |
 | [content-property-no-static-value](./src/rules/content-property-no-static-value/README.md) | Disallow static text in the `content` property                             |                      |
 | [font-size-is-readable](./src/rules/font-size-is-readable/README.md)                       | Disallow font sizes smaller than 15px                                      |                      |
 | [line-height-is-vertical-rhythmed](./src/rules/line-height-is-vertical-rhythmed/README.md) | Require line heights that fit a baseline grid                              |                      |
@@ -238,7 +238,7 @@ Run tests with the following commands:
 - `npm run test:unit` - Run unit tests only
 - `npm run test:integration` - Run integration tests
 - `npm run test:e2e` - Run end-to-end tests with real projects
-- `npm run test:performance` - Run performance benchmarks
+- `npm run test:system` - Run the stylelint compatibility tests
 - `npm run test:all` - Run complete test suite
 
 ### Testing Infrastructure
@@ -248,7 +248,7 @@ This project includes testing at a few levels:
 - [Unit tests](./src/rules) - Individual rule functionality
 - [Integration tests](./test/integration) - Plugin integration with stylelint
 - [E2E tests](./test/e2e) - Real-world project testing with intentional violations
-- [Performance tests](./test/e2e/performance.test.js) - Benchmark testing for large codebases
+- [System tests](./test/system) - Compatibility with the supported stylelint versions
 
 ### Other Commands
 

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Every rule README follows one template: what the rule does, why the pattern is a barrier, the WCAG 2.2 success criteria it maps to, sources, behaviour notes, options, and examples
+- The npm package contains only the plugin source, the two configs, and the docs; the `test/` tree is no longer published
+- Dependabot is the only dependency updater; the twice-monthly workflow that ran npm-check-updates opened duplicate pull requests and needed a push token
+- The advanced testing workflow runs the stylelint compatibility matrix, the cross-platform run, and the dependency audit; the performance, memory, matrix, and summary jobs that asserted on timings or placeholders are gone, along with the `test:performance`, `test:regression`, and `test:ci` scripts
+- `npm test` prints nothing beyond Jest's own summary; the end-to-end tests capture the stylelint CLI output they assert on instead of letting it reach the console
+- Each rule function carries its own `meta` object, which is what Stylelint reads, so `src/index.js` no longer maintains a parallel map of them
+- Tests cover that `--fix` leaves a violation covered by a `stylelint-disable` comment alone and still fixes the rest of the file
+- The CI compatibility and cross-platform matrices test Node 22 and 24; Node 20 is below the `engines` floor and leaves Stylelint 18's support range
+
 ## [3.8.0] - 2026-10-10
 
 ### Changed

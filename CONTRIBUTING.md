@@ -24,7 +24,7 @@ When adding a new accessibility rule to this plugin, please follow this checklis
 
 - [ ] **Implement the rule** (`src/rules/[rule-name]/index.js`)
   - [ ] Export a function that follows stylelint's rule API
-  - [ ] Include proper rule metadata (ruleName, messages)
+  - [ ] Include proper rule metadata (`ruleName`, `messages`, `meta`) and attach `meta` to the rule function
   - [ ] Implement the rule logic
   - [ ] Use stylelint's built-in utilities where appropriate
   - [ ] Handle edge cases and nested selectors
@@ -38,17 +38,14 @@ When adding a new accessibility rule to this plugin, please follow this checklis
   - [ ] Ensure good test coverage
 
 - [ ] **Create rule documentation** (`src/rules/[rule-name]/README.md`)
-  - [ ] Provide clear description of what the rule does
-  - [ ] Explain why this accessibility rule is important
-  - [ ] Include links to WCAG guidelines or other authoritative sources
-  - [ ] Show examples of violations
-  - [ ] Show examples of valid code
+  - [ ] Follow the [rule README template](#rule-readme-template)
+  - [ ] Map the rule to WCAG 2.2 success criteria, or say plainly that none applies
+  - [ ] Show examples of violations and of valid code
   - [ ] Document any options the rule accepts
   - [ ] Note if the rule is auto-fixable
 
 - [ ] **Register the rule**
   - [ ] Import the rule in `src/rules/index.js` and add it to the exported object, in alphabetical order
-  - [ ] Import the rule's `meta` in `src/index.js` and add it to `ruleMetaMap`
 
 - [ ] **Update plugin configuration**
   - [ ] Add the rule to `strict.js`
@@ -64,7 +61,6 @@ When adding a new accessibility rule to this plugin, please follow this checklis
   - [ ] Run unit tests: `npm run test:unit`
   - [ ] Run integration tests: `npm run test:integration`
   - [ ] Run all tests: `npm test`
-  - [ ] Ensure no performance regressions: `npm run test:performance`
 
 - [ ] **Code quality checks**
   - [ ] Run linting: `npm run lint`
@@ -128,9 +124,82 @@ export default function myNewRule(actual, options) {
     });
   };
 }
+
+myNewRule.meta = meta;
 ```
 
-`ruleName`, `messages`, and `meta` are named exports so the tests and `src/index.js` can import them. Drop the secondary options descriptor when the rule takes no options.
+`ruleName`, `messages`, and `meta` are named exports so the tests can import them. Stylelint reads `meta` from the rule function, so the last line attaches it there. Drop the secondary options descriptor when the rule takes no options.
+
+A fixable rule sets `meta.fixable` to `true` and passes a `fix` callback to `report()` instead of editing the tree directly. Stylelint calls the callback only when `--fix` is on and the violation is not covered by a disable comment:
+
+```javascript
+report({
+  message: messages.expected(rule.selector),
+  node: rule,
+  ruleName,
+  result,
+  fix: () => {
+    rule.selector = `${rule.selector}, ${rule.selector.replace(/:hover/gi, ':focus')}`;
+  },
+});
+```
+
+## Rule README Template
+
+Every rule README follows the same outline so readers can compare rules and so the WCAG mapping is explicit. Leave out a section that does not apply rather than leaving it empty.
+
+````markdown
+# rule-name
+
+One sentence saying what the rule disallows or requires. It matches the description in the rules table of the main README. A fixable rule says so here.
+
+## Why
+
+One or two short paragraphs on the barrier the pattern creates and who it affects.
+
+## WCAG 2.2
+
+- [1.2.3 Criterion Name (Level AA)](https://www.w3.org/WAI/WCAG22/Understanding/criterion-slug)
+- A related technique or failure, when one exists
+
+If no success criterion applies, say so and name the closest guidance.
+
+## Sources
+
+- Specifications, MDN, WAI, WebAIM, The A11Y Project
+
+Behaviour notes: what the rule checks, what it ignores, and any exemption.
+
+## Options
+
+### true
+
+The following pattern is considered a violation:
+
+```css
+.foo {
+}
+```
+
+The following patterns are _not_ considered violations:
+
+```css
+.foo {
+}
+```
+
+## Optional secondary options
+
+### `optionName: type`
+
+What the option changes and its default, with a violation example for a non-default value.
+
+## Note
+
+Overlap with a core stylelint rule, when one exists, and when to prefer which.
+````
+
+Success criteria link to the Understanding documents at `https://www.w3.org/WAI/WCAG22/Understanding/<slug>`.
 
 ## Code Style
 
@@ -146,7 +215,7 @@ We maintain high test coverage. Please ensure your changes include appropriate t
 - Unit tests for individual rules
 - Integration tests for plugin functionality
 - E2E tests for real-world scenarios
-- Performance tests for efficiency
+- System tests for compatibility with the supported stylelint versions
 
 Run the test suite with:
 

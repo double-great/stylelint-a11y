@@ -14,11 +14,7 @@ The E2E tests in this directory are designed to test stylelint-a11y against real
 
 ### Test Output
 
-The console output may show:
-
-- JSON arrays of violations (this is expected)
-- Some error messages during test runs (also expected)
-- Performance metrics from the performance tests
+The stylelint output is captured and asserted on, so a passing run prints nothing beyond Jest's summary.
 
 ### In CI/GitHub Actions
 

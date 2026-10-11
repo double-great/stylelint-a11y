@@ -103,3 +103,5 @@ export default function noOutlineNone(actual) {
     });
   };
 }
+
+noOutlineNone.meta = meta;

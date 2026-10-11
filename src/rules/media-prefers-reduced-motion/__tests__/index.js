@@ -78,6 +78,15 @@ testRule({
       description: 'rejects when only the first motion property has an override',
     },
     {
+      code: 'b { animation: spin 1s; }\n/* stylelint-disable-next-line a11y/media-prefers-reduced-motion */\na { transition: all 1s; }',
+      fixed:
+        '@media screen and (prefers-reduced-motion: reduce) {\nb { animation: none;\n}\n}\nb { animation: spin 1s; }\n/* stylelint-disable-next-line a11y/media-prefers-reduced-motion */\na { transition: all 1s; }',
+      message: messages.expected('b'),
+      line: 1,
+      column: 1,
+      description: 'leaves a rule covered by a disable comment unfixed and fixes the rest',
+    },
+    {
       code: '@media (hover: hover) { &:hover { transition: all 0.15s; } }',
       fixed:
         '@media (hover: hover) { &:hover { transition: all 0.15s;@media screen and (prefers-reduced-motion: reduce) {\n&:hover { transition: none;\n}\n} } }',

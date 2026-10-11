@@ -94,3 +94,5 @@ export default function contentPropertyNoStaticValue(actual, options) {
     });
   };
 }
+
+contentPropertyNoStaticValue.meta = meta;

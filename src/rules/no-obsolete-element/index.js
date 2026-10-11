@@ -81,3 +81,5 @@ export default function noObsoleteElement(actual) {
     });
   };
 }
+
+noObsoleteElement.meta = meta;

@@ -84,3 +84,5 @@ export default function noDisplayNone(actual) {
     });
   };
 }
+
+noDisplayNone.meta = meta;

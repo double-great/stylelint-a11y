@@ -75,3 +75,5 @@ export default function fontSizeIsReadable(actual, options) {
     });
   };
 }
+
+fontSizeIsReadable.meta = meta;

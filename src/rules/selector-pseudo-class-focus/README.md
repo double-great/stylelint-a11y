@@ -1,17 +1,24 @@
 # selector-pseudo-class-focus
 
-Checks the presence of a pseudo-class for selectors with `:hover`.
+Require a `:focus` or `:focus-visible` companion for `:hover` selectors. The `--fix` option adds a `:focus` variant of the selector.
 
-```css
-a:hover,
-a:focus {
-}
-```
+## Why
 
-This rule considers the `:focus` and `:focus-visible` pseudo-classes defined in the CSS Specifications. Either one satisfies the rule as a companion to `:hover`. The companion can appear anywhere in the stylesheet, and every selector in a list that uses `:hover` needs one. A `:hover` inside `:not()` is ignored because it does not style the hovered element.
+A hover style tells a mouse user that something is interactive and shows which element they are on. Keyboard users never hover, so the same affordance has to appear on focus or they get nothing. Every `:hover` selector should have a `:focus` or `:focus-visible` counterpart somewhere in the stylesheet.
+
+## WCAG 2.2
+
+- [2.1.1 Keyboard (Level A)](https://www.w3.org/WAI/WCAG22/Understanding/keyboard)
+- [2.4.7 Focus Visible (Level AA)](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible)
+
+## Sources
+
+- [MDN: :focus-visible](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible)
+- [Sara Soueidan: A guide to designing accessible, WCAG-conformant focus indicators](https://www.sarasoueidan.com/blog/focus-indicators/)
+
+Either `:focus` or `:focus-visible` satisfies the rule as the companion to `:hover`. The companion can appear anywhere in the stylesheet, and every selector in a list that uses `:hover` needs one. `:hover` is matched case-insensitively, and a `:hover` inside `:not()` is ignored because it does not style the hovered element.
 
 Selectors are compared as text, so a nested `&:hover` needs a nested `&:focus` or `&:focus-visible` companion in the same parent block rather than a full selector written elsewhere.
-The `--fix` option on the command line can automatically fix all of the problems reported by this rule by adding a `:focus` variant of the selector.
 
 ## Options
 
@@ -33,11 +40,6 @@ a:focus {
 ```
 
 ```css
-a:focus {
-}
-```
-
-```css
 a:hover {
 }
 a:focus {
@@ -51,8 +53,18 @@ a:focus-visible {
 ```
 
 ```css
-a:hover {
+@media (hover: hover) {
+  a:hover {
+  }
 }
 a:focus-visible {
+}
+```
+
+With `--fix`, the violation above becomes:
+
+```css
+a:hover,
+a:focus {
 }
 ```
