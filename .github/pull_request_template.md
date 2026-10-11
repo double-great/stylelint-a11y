@@ -1,74 +1,24 @@
 ## Summary
 
-<!-- Provide a brief summary of what this PR accomplishes -->
+<!-- What this change does and why it is needed -->
 
-- **What it does**:
-- **Why it's needed**:
-- **Breaking changes**: Yes/No
+## Changes
 
-## ✨ What's New
+<!-- The main changes, one per line -->
 
-<!-- List the main features or fixes introduced in this PR -->
+-
 
-### Feature/Fix Category
+## Tests
 
-- **Feature/Fix 1** - Description
-- **Feature/Fix 2** - Description
+<!-- Which suites you ran, and any new tests -->
 
-## 📊 Changes Overview
+- [ ] `npm test` passes
 
-<!-- Provide statistics about the changes -->
+## Checklist
 
-- **Files changed**: X files
-- **Lines changed**: +X insertions, -Y deletions
-- **Tests added/modified**: Yes/No
+- [ ] CHANGELOG updated under Unreleased, if the change is user-facing
+- [ ] Rule README or main README updated, if behaviour or docs changed
 
-## 🧪 Test Coverage
-
-<!-- Mark which test suites are passing -->
-
-- [ ] Unit tests passing
-- [ ] Integration tests passing (if applicable)
-- [ ] E2E tests passing (if applicable)
-- [ ] Performance tests passing (if applicable)
-
-## 📝 Documentation
-
-<!-- List documentation updates -->
-
-- [ ] README updated (if needed)
-- [ ] CHANGELOG updated
-- [ ] Rule documentation updated (if applicable)
-
-## 🔄 Version
-
-<!-- Indicate the type of version change -->
-
-- [ ] **Major** (breaking changes)
-- [ ] **Minor** (new features, no breaking changes)
-- [ ] **Patch** (bug fixes only)
-
-## ✅ Checklist
-
-<!-- Ensure all items are checked before requesting review -->
-
-- [ ] All tests passing
-- [ ] Documentation updated
-- [ ] CHANGELOG updated (if user-facing changes)
-- [ ] No unintended breaking changes
-- [ ] Linting clean (`npm run lint`)
-- [ ] Formatting checked (`npm run format:check`)
-
-## 📸 Screenshots/Examples
-
-<!-- If applicable, add screenshots or code examples demonstrating the changes -->
-
-## 🔗 Related Issues
-
-<!-- Link any related issues this PR addresses -->
+## Related issue
 
 Closes #
-
-## 💬 Additional Notes
-
-<!-- Any additional context, decisions, or trade-offs made -->
