@@ -183,7 +183,7 @@ describe('CI/CD Integration', () => {
       const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 
       // Check that we have appropriate peer dependency constraints
-      expect(packageJson.peerDependencies.stylelint).toMatch(/>=16\.0\.0/);
+      expect(packageJson.peerDependencies.stylelint).toMatch(/>=16\.7\.0/);
 
       // Verify we're using a modern PostCSS version
       expect(packageJson.dependencies.postcss).toBeDefined();

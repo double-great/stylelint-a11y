@@ -7,7 +7,7 @@ import { testCSS } from '../helpers/simple-test-utils.js';
 
 describe('System Compatibility Testing', () => {
   describe('Stylelint Version Compatibility', () => {
-    it('should work with minimum supported stylelint version (16.0.0)', async () => {
+    it('should work with minimum supported stylelint version (16.7.0)', async () => {
       // Test that plugin loads and works with minimum version requirements
       const result = await testCSS('.test:focus { outline: none; }', {
         'a11y/no-outline-none': true,
