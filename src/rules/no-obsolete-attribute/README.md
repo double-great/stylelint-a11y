@@ -2,19 +2,27 @@
 
 Disallow selectors that target obsolete HTML attributes.
 
-**Sources:**
+## Why
 
-- [W3G Obsolete features](https://www.w3.org/TR/html5/obsolete.html#obsolete)
-- [W3C Non-conforming features](https://w3c.github.io/html/obsolete.html#non-conforming-features)
-- [W3G Features removed](https://www.w3.org/TR/html52/changes.html#features-removed)
+A selector such as `body[link]` or `img[align]` only matches if the markup still uses the attribute. Those attributes are obsolete in the HTML Living Standard, and most of them carry presentation in the markup instead of structure, which is what the stylesheet should own. Flagging the selector surfaces the markup that needs updating.
 
-A selector inside `:not()` is ignored because it names an element the rule does not style.
+## WCAG 2.2
+
+No success criterion names obsolete attributes. Presentational attributes work against:
+
+- [1.3.1 Info and Relationships (Level A)](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships)
+
+## Sources
+
+- [HTML Living Standard: Obsolete features](https://html.spec.whatwg.org/multipage/obsolete.html)
+
+Obsolete attributes are matched inside compound and descendant selectors. A selector inside `:not()` is ignored because it names an element the rule does not style.
 
 ## Options
 
 ### true
 
-The following pattern is considered a violation:
+The following patterns are considered violations:
 
 ```css
 body[link] {
@@ -38,6 +46,14 @@ a[name] {
 
 ```css
 div body[link].old {
+  color: pink;
+}
+```
+
+The following pattern is _not_ considered a violation:
+
+```css
+li:not([type]) {
   color: pink;
 }
 ```

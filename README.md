@@ -57,8 +57,8 @@ For stricter accessibility checks:
 
 ## Rules
 
-| Rule ID                                                                                    | Description                                                                |                      |
-| :----------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | -------------------- |
+| Rule ID                                                                                    | Description                                                                | Config, fixable      |
+| :----------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------- |
 | [content-property-no-static-value](./src/rules/content-property-no-static-value/README.md) | Disallow static text in the `content` property                             |                      |
 | [font-size-is-readable](./src/rules/font-size-is-readable/README.md)                       | Disallow font sizes smaller than 15px                                      |                      |
 | [line-height-is-vertical-rhythmed](./src/rules/line-height-is-vertical-rhythmed/README.md) | Require line heights that fit a baseline grid                              |                      |

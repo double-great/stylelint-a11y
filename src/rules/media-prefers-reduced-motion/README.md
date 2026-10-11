@@ -1,20 +1,31 @@
 # media-prefers-reduced-motion
 
-Require certain styles if the animation or transition in media features.
+Require a `prefers-reduced-motion` override for transitions and animations. The `--fix` option adds the override.
 
-Safari 10.1 [introduced](https://webkit.org/blog/7551/responsive-design-for-motion/) the Reduced Motion Media Query. It is a non-vendor-prefixed declaration that allows developers to "create styles that avoid large areas of motion for users that specify a preference for reduced motion in System Preferences."
+## Why
 
-The `--fix` option on the command line can automatically fix all of the problems reported by this rule.
+Motion on screen can trigger nausea, dizziness, and migraine for people with vestibular disorders, and it distracts people with attention or cognitive disabilities. Operating systems expose a reduce-motion setting, and `prefers-reduced-motion` lets a stylesheet honour it. The rule asks that every `transition`, `animation`, or `animation-name` have a `none` override inside a reduce query.
 
-The override has to live in a query for people who asked for less motion. A `prefers-reduced-motion: no-preference` query does not count as an override, but motion declared only inside such a query is accepted.
+## WCAG 2.2
 
-Only the `transition`, `animation`, and `animation-name` properties are checked. Other longhands such as `transition-duration` and `animation-duration`, and `scroll-behavior`, are ignored.
+- [2.3.3 Animation from Interactions (Level AAA)](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions)
+- [2.2.2 Pause, Stop, Hide (Level A)](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide) for animation that runs longer than five seconds
+- [C39: Using the CSS reduce-motion query to prevent motion](https://www.w3.org/WAI/WCAG22/Techniques/css/C39)
+
+## Sources
+
+- [MDN: prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion)
+- [WebKit: Responsive design for motion](https://webkit.org/blog/7551/responsive-design-for-motion/)
+
+The override has to live in a query for people who asked for less motion. A `prefers-reduced-motion: no-preference` query does not count as an override, but motion declared only inside such a query is accepted. The override can be a sibling `@media` block or a block nested inside the rule.
+
+Only the `transition`, `animation`, and `animation-name` properties are checked. Other longhands such as `transition-duration` and `animation-duration`, and `scroll-behavior`, are ignored. The `none` keyword is matched case-insensitively.
 
 ## Options
 
 ### true
 
-The following pattern is considered a violation:
+The following patterns are considered violations:
 
 ```css
 .foo {
@@ -43,7 +54,7 @@ div {
 
 ```css
 .foo {
-  transition: none;
+  transition: all 0.3s;
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .foo {
@@ -54,11 +65,22 @@ div {
 
 ```css
 .bar {
-  animation: none;
-}
-@media screen and (prefers-reduced-motion) {
-  .bar {
+  animation: slide 1s;
+  @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
+}
+```
+
+With `--fix`, the first violation above becomes:
+
+```css
+@media screen and (prefers-reduced-motion: reduce) {
+  .foo {
+    animation: none;
+  }
+}
+.foo {
+  animation: 1s ease-in;
 }
 ```

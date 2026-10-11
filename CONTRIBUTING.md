@@ -38,11 +38,9 @@ When adding a new accessibility rule to this plugin, please follow this checklis
   - [ ] Ensure good test coverage
 
 - [ ] **Create rule documentation** (`src/rules/[rule-name]/README.md`)
-  - [ ] Provide clear description of what the rule does
-  - [ ] Explain why this accessibility rule is important
-  - [ ] Include links to WCAG guidelines or other authoritative sources
-  - [ ] Show examples of violations
-  - [ ] Show examples of valid code
+  - [ ] Follow the [rule README template](#rule-readme-template)
+  - [ ] Map the rule to WCAG 2.2 success criteria, or say plainly that none applies
+  - [ ] Show examples of violations and of valid code
   - [ ] Document any options the rule accepts
   - [ ] Note if the rule is auto-fixable
 
@@ -145,6 +143,63 @@ report({
   },
 });
 ```
+
+## Rule README Template
+
+Every rule README follows the same outline so readers can compare rules and so the WCAG mapping is explicit. Leave out a section that does not apply rather than leaving it empty.
+
+````markdown
+# rule-name
+
+One sentence saying what the rule disallows or requires. It matches the description in the rules table of the main README. A fixable rule says so here.
+
+## Why
+
+One or two short paragraphs on the barrier the pattern creates and who it affects.
+
+## WCAG 2.2
+
+- [1.2.3 Criterion Name (Level AA)](https://www.w3.org/WAI/WCAG22/Understanding/criterion-slug)
+- A related technique or failure, when one exists
+
+If no success criterion applies, say so and name the closest guidance.
+
+## Sources
+
+- Specifications, MDN, WAI, WebAIM, The A11Y Project
+
+Behaviour notes: what the rule checks, what it ignores, and any exemption.
+
+## Options
+
+### true
+
+The following pattern is considered a violation:
+
+```css
+.foo {
+}
+```
+
+The following patterns are _not_ considered violations:
+
+```css
+.foo {
+}
+```
+
+## Optional secondary options
+
+### `optionName: type`
+
+What the option changes and its default, with a violation example for a non-default value.
+
+## Note
+
+Overlap with a core stylelint rule, when one exists, and when to prefer which.
+````
+
+Success criteria link to the Understanding documents at `https://www.w3.org/WAI/WCAG22/Understanding/<slug>`.
 
 ## Code Style
 
