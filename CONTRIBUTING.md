@@ -24,7 +24,7 @@ When adding a new accessibility rule to this plugin, please follow this checklis
 
 - [ ] **Implement the rule** (`src/rules/[rule-name]/index.js`)
   - [ ] Export a function that follows stylelint's rule API
-  - [ ] Include proper rule metadata (ruleName, messages)
+  - [ ] Include proper rule metadata (`ruleName`, `messages`, `meta`) and attach `meta` to the rule function
   - [ ] Implement the rule logic
   - [ ] Use stylelint's built-in utilities where appropriate
   - [ ] Handle edge cases and nested selectors
@@ -48,7 +48,6 @@ When adding a new accessibility rule to this plugin, please follow this checklis
 
 - [ ] **Register the rule**
   - [ ] Import the rule in `src/rules/index.js` and add it to the exported object, in alphabetical order
-  - [ ] Import the rule's `meta` in `src/index.js` and add it to `ruleMetaMap`
 
 - [ ] **Update plugin configuration**
   - [ ] Add the rule to `strict.js`
@@ -128,9 +127,25 @@ export default function myNewRule(actual, options) {
     });
   };
 }
+
+myNewRule.meta = meta;
 ```
 
-`ruleName`, `messages`, and `meta` are named exports so the tests and `src/index.js` can import them. Drop the secondary options descriptor when the rule takes no options.
+`ruleName`, `messages`, and `meta` are named exports so the tests can import them. Stylelint reads `meta` from the rule function, so the last line attaches it there. Drop the secondary options descriptor when the rule takes no options.
+
+A fixable rule sets `meta.fixable` to `true` and passes a `fix` callback to `report()` instead of editing the tree directly. Stylelint calls the callback only when `--fix` is on and the violation is not covered by a disable comment:
+
+```javascript
+report({
+  message: messages.expected(rule.selector),
+  node: rule,
+  ruleName,
+  result,
+  fix: () => {
+    rule.selector = `${rule.selector}, ${rule.selector.replace(/:hover/gi, ':focus')}`;
+  },
+});
+```
 
 ## Code Style
 

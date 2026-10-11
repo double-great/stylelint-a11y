@@ -84,3 +84,5 @@ export default function lineHeightIsVerticalRhythmed(actual, options) {
     });
   };
 }
+
+lineHeightIsVerticalRhythmed.meta = meta;

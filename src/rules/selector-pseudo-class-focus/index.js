@@ -113,3 +113,5 @@ export default function selectorPseudoClassFocus(actual) {
     });
   };
 }
+
+selectorPseudoClassFocus.meta = meta;

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Each rule function carries its own `meta` object, which is what Stylelint reads, so `src/index.js` no longer maintains a parallel map of them
+- Tests cover that `--fix` leaves a violation covered by a `stylelint-disable` comment alone and still fixes the rest of the file
+
 ## [3.8.0] - 2026-10-10
 
 ### Changed

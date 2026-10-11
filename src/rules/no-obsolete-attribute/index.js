@@ -99,3 +99,5 @@ export default function noObsoleteAttribute(actual) {
     });
   };
 }
+
+noObsoleteAttribute.meta = meta;

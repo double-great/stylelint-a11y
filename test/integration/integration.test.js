@@ -1,4 +1,6 @@
 import { getWarnings, passesLint, ruleTriggersOn, testCSS } from '../helpers/simple-test-utils.js';
+import { existsSync } from 'fs';
+import { fileURLToPath } from 'url';
 
 import myPlugin from '../../src/index.js';
 import recommendedConfig from '../../recommended.js';
@@ -17,24 +19,37 @@ describe('Integration Testing', () => {
       });
     });
 
-    it('should export meta objects for all rules', () => {
+    it('should carry meta on every rule function', () => {
       myPlugin.forEach((plugin) => {
-        expect(plugin.meta).toBeDefined();
-        expect(plugin.meta.url).toBeDefined();
-        expect(plugin.meta.url).toMatch(/^https:\/\/github\.com\/double-great\/stylelint-a11y/);
-        expect(typeof plugin.meta.fixable).toBe('boolean');
-        expect(typeof plugin.meta.deprecated).toBe('boolean');
+        const { meta } = plugin.rule;
+
+        expect(meta).toBeDefined();
+        expect(typeof meta.fixable).toBe('boolean');
+        expect(typeof meta.deprecated).toBe('boolean');
       });
     });
 
-    it('should correctly identify fixable rules', () => {
-      const fixableRules = myPlugin.filter((plugin) => plugin.meta.fixable);
-      const fixableRuleNames = fixableRules.map((plugin) => plugin.ruleName);
+    it('should point meta.url at the README of the rule', () => {
+      myPlugin.forEach((plugin) => {
+        const name = plugin.ruleName.replace('a11y/', '');
+        const readme = new URL(`../../src/rules/${name}/README.md`, import.meta.url);
 
-      expect(fixableRuleNames).toContain('a11y/media-prefers-reduced-motion');
-      expect(fixableRuleNames).toContain('a11y/selector-pseudo-class-focus');
-      // Should only have 2 fixable rules
-      expect(fixableRules).toHaveLength(2);
+        expect(plugin.rule.meta.url).toBe(
+          `https://github.com/double-great/stylelint-a11y/blob/main/src/rules/${name}/README.md`
+        );
+        expect(existsSync(fileURLToPath(readme))).toBe(true);
+      });
+    });
+
+    it('should mark exactly the rules that pass a fix callback as fixable', () => {
+      const fixableRuleNames = myPlugin
+        .filter((plugin) => plugin.rule.meta.fixable)
+        .map((plugin) => plugin.ruleName);
+
+      expect(fixableRuleNames).toEqual([
+        'a11y/media-prefers-reduced-motion',
+        'a11y/selector-pseudo-class-focus',
+      ]);
     });
 
     it('should integrate with stylelint API', async () => {

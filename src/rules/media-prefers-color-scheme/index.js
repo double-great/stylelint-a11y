@@ -140,3 +140,5 @@ export default function mediaPrefersColorScheme(actual) {
     });
   };
 }
+
+mediaPrefersColorScheme.meta = meta;

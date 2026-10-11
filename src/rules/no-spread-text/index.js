@@ -91,3 +91,5 @@ export default function noSpreadText(actual, options) {
     });
   };
 }
+
+noSpreadText.meta = meta;
