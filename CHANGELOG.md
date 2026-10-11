@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `npm test` prints nothing beyond Jest's own summary; the end-to-end tests capture the stylelint CLI output they assert on instead of letting it reach the console
 - Each rule function carries its own `meta` object, which is what Stylelint reads, so `src/index.js` no longer maintains a parallel map of them
 - Tests cover that `--fix` leaves a violation covered by a `stylelint-disable` comment alone and still fixes the rest of the file
 - The CI compatibility and cross-platform matrices test Node 22 and 24; Node 20 is below the `engines` floor and leaves Stylelint 18's support range

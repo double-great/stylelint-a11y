@@ -1,7 +1,7 @@
-import { execSync } from 'child_process';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
+import { execStylelint } from '../helpers/exec-stylelint.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,16 +24,12 @@ describe('CLI Integration Tests', () => {
         })
       );
 
-      try {
-        execSync(`npx stylelint "${testCssFile}" --config "${testConfigFile}"`, {
-          cwd: projectRoot,
-          encoding: 'utf8',
-        });
+      const result = execStylelint(`npx stylelint "${testCssFile}" --config "${testConfigFile}"`, {
+        cwd: projectRoot,
+      });
 
-        throw new Error('Expected stylelint to exit with non-zero code');
-      } catch (error) {
-        expect(error.status).toBeGreaterThan(0);
-      }
+      expect(result.exitCode).toBeGreaterThan(0);
+      expect(result.stdout + result.stderr).toContain('a11y/no-outline-none');
     } finally {
       // Cleanup
       await fs.unlink(testCssFile).catch(() => {});
@@ -55,13 +51,14 @@ describe('CLI Integration Tests', () => {
         })
       );
 
-      const result = execSync(`npx stylelint "${testCssFile}" --config "${testConfigFile}"`, {
-        cwd: projectRoot,
-        encoding: 'utf8',
-      });
+      const result = execStylelint(
+        `npx stylelint "${testCssFile}" --config "${testConfigFile}"`,
+        { cwd: projectRoot },
+        false
+      );
 
       // Should succeed without errors
-      expect(typeof result).toBe('string');
+      expect(result.exitCode).toBe(0);
     } finally {
       // Cleanup
       await fs.unlink(testCssFile).catch(() => {});
