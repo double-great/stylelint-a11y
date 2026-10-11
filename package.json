@@ -74,5 +74,10 @@
     "fsevents@2.3.3": true,
     "@parcel/watcher@2.6.0": true,
     "unrs-resolver@1.12.2": true
+  },
+  "overrides": {
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "^4.1.0"
+    }
   }
 }
