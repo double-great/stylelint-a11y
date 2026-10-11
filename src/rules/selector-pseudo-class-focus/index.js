@@ -47,7 +47,7 @@ function hasAlready(rule, selector, stylesheetSelectors) {
   });
 }
 
-export default function selectorPseudoClassFocus(actual, _, context) {
+export default function selectorPseudoClassFocus(actual) {
   return (root, result) => {
     const validOptions = validateOptions(result, ruleName, { actual });
 
@@ -93,22 +93,21 @@ export default function selectorPseudoClassFocus(actual, _, context) {
 
       const isAccepted = hasAlready(rule, selector, stylesheetSelectors);
 
-      if (context.fix && !isAccepted) {
-        rule.parent.nodes.forEach((node) => {
-          if (node.type === 'rule' && node.selector === selector) {
-            node.selector = `${node.selector}, ${node.selector.replace(/:hover/gi, ':focus')}`;
-          }
-        });
-
-        return;
-      }
-
       if (!isAccepted) {
+        const fix = () => {
+          rule.parent.nodes.forEach((node) => {
+            if (node.type === 'rule' && node.selector === selector) {
+              node.selector = `${node.selector}, ${node.selector.replace(/:hover/gi, ':focus')}`;
+            }
+          });
+        };
+
         report({
           message: messages.expected(selector),
           node: rule,
           ruleName,
           result,
+          fix,
         });
       }
     });

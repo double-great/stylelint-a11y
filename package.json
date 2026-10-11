@@ -47,7 +47,7 @@
     "trailingComma": "es5"
   },
   "peerDependencies": {
-    "stylelint": ">=16.0.0"
+    "stylelint": ">=16.7.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

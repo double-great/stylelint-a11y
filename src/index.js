@@ -38,6 +38,10 @@ const rulesPlugins = Object.keys(rules).map((ruleName) => {
   // Add meta object to the plugin
   plugin.meta = ruleMetaMap[ruleName];
 
+  // Prevent the following error:
+  // Error: The "<rule>" rule requires "meta.fixable" to be truthy if the "fix" callback is being passed
+  rules[ruleName].meta = ruleMetaMap[ruleName];
+
   return plugin;
 });
 
