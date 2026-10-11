@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.8.0] - 2026-10-10
+
+### Changed
+
+- The minimum supported Stylelint version is 16.7.0, up from 16.0.0. The `peerDependencies` range, the README, and the CI compatibility matrix reflect the change
+- `media-prefers-reduced-motion` and `selector-pseudo-class-focus` pass a `fix` callback to `report()` instead of reading the deprecated `context.fix` option, which Stylelint 18 removes
+
 ## [3.7.1] - 2026-10-10
 
 - Update and remove dependencies
