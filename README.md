@@ -238,7 +238,7 @@ Run tests with the following commands:
 - `npm run test:unit` - Run unit tests only
 - `npm run test:integration` - Run integration tests
 - `npm run test:e2e` - Run end-to-end tests with real projects
-- `npm run test:performance` - Run performance benchmarks
+- `npm run test:system` - Run the stylelint compatibility tests
 - `npm run test:all` - Run complete test suite
 
 ### Testing Infrastructure
@@ -248,7 +248,7 @@ This project includes testing at a few levels:
 - [Unit tests](./src/rules) - Individual rule functionality
 - [Integration tests](./test/integration) - Plugin integration with stylelint
 - [E2E tests](./test/e2e) - Real-world project testing with intentional violations
-- [Performance tests](./test/e2e/performance.test.js) - Benchmark testing for large codebases
+- [System tests](./test/system) - Compatibility with the supported stylelint versions
 
 ### Other Commands
 

@@ -63,7 +63,6 @@ When adding a new accessibility rule to this plugin, please follow this checklis
   - [ ] Run unit tests: `npm run test:unit`
   - [ ] Run integration tests: `npm run test:integration`
   - [ ] Run all tests: `npm test`
-  - [ ] Ensure no performance regressions: `npm run test:performance`
 
 - [ ] **Code quality checks**
   - [ ] Run linting: `npm run lint`
@@ -161,7 +160,7 @@ We maintain high test coverage. Please ensure your changes include appropriate t
 - Unit tests for individual rules
 - Integration tests for plugin functionality
 - E2E tests for real-world scenarios
-- Performance tests for efficiency
+- System tests for compatibility with the supported stylelint versions
 
 Run the test suite with:
 
