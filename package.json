@@ -3,6 +3,12 @@
   "version": "3.8.0",
   "description": "Plugin for stylelint with a11y rules",
   "main": "src/index.js",
+  "files": [
+    "src",
+    "!src/**/__tests__",
+    "recommended.js",
+    "strict.js"
+  ],
   "type": "module",
   "exports": {
     ".": "./src/index.js",

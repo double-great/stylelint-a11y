@@ -1,7 +1,0 @@
-.vscode/
-eslint.config.js
-.github/
-jest.config.js
-jest.setup.js
-**/__tests__/*
-.coverage

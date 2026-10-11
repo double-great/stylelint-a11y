@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The npm package contains only the plugin source, the two configs, and the docs; the `test/` tree is no longer published
 - Dependabot is the only dependency updater; the twice-monthly workflow that ran npm-check-updates opened duplicate pull requests and needed a push token
 - The advanced testing workflow runs the stylelint compatibility matrix, the cross-platform run, and the dependency audit; the performance, memory, matrix, and summary jobs that asserted on timings or placeholders are gone, along with the `test:performance`, `test:regression`, and `test:ci` scripts
 - `npm test` prints nothing beyond Jest's own summary; the end-to-end tests capture the stylelint CLI output they assert on instead of letting it reach the console
